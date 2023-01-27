@@ -35,10 +35,15 @@ export class Tab1Page {
         if(v.pubblica===true){
           this.partite.push({
             'codice': v.codice,
-            'ip': v.ip,
             'numPartecipanti': v.numPartecipanti,
             'proprietario': v.proprietario,
-            'pubblica': v.pubblica
+            'pubblica': v.pubblica,
+            'messaggi': v.messaggi,
+            'datiPartita':{
+              'ultimoNumero': v.datiPartita.ultimoNumero,
+              'bingo': v.datiPartita.bingo,
+              'cinquina': v.datiPartita.cinquina
+            }
           })
         }
       })
