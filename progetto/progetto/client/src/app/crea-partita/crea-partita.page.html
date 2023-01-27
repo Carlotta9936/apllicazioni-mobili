@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      <img src="../../assets/logo.png">
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<p id="titolo">Crea partita</p>
+
+<ion-content class="bottoni">
+    <ion-button class="tipo" (click)="this.crea.setPublic()" > Pubblica </ion-button>
+    <ion-button class="tipo" (click)="this.crea.setPrivate()"> Privata </ion-button>
+</ion-content>
+
+
+
+
+<ion-content>
+  <ion-tabs>
+    <ion-tab-bar slot="bottom">
+      <ion-tab-button [routerLink]="['../tabs/tab1']">
+        <ion-icon name="game-controller-outline"></ion-icon>
+        <ion-label>Home Page</ion-label>
+      </ion-tab-button>
+  
+      <ion-tab-button [routerLink]="['../tabs/tab2']">
+        <ion-icon name="wallet-outline"></ion-icon>
+        <ion-label>Market</ion-label>
+      </ion-tab-button>
+  
+      <ion-tab-button [routerLink]="['../tabs/tab3']">
+        <ion-icon name="person-outline"></ion-icon>
+        <ion-label>Profilo</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  
+  </ion-tabs>
+  
+</ion-content>

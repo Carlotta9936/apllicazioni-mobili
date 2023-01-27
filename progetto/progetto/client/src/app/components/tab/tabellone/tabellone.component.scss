@@ -1,0 +1,13 @@
+#tabellone{
+    display:grid;
+    grid-template-columns: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%;
+}
+
+#estratto{
+    text-align: center;
+    border-color: chartreuse;
+    border-style: dotted;
+    height: 8%;
+    width: 50%;
+    margin-left: 25%;
+}

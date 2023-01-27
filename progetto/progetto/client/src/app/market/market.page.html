@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      <img src="../../assets/logo.png">
+    </ion-title>  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <h1> Aquista timbri nuovi </h1>
+
+  <div id="timbri" >
+    <app-acquisto-timbro *ngFor="let timbro of timbriAcq" [titolo]="timbro.nome" [img]="timbro.url" [prezzo]="10" (click)="compraTimbro(timbro.id, 10)"></app-acquisto-timbro>
+  </div>
+
+  <h1> Acquista nuovi crediti </h1>
+  <div id="crediti">
+    <app-acquisto-crediti [titolo]='"Dieci crediti"' [img]='"dieci"' [prezzoFalso]="10" [prezzo]="9" (click)="compraCrediti(10)"> </app-acquisto-crediti>
+    <app-acquisto-crediti [titolo]='"Cinquanta crediti"' [img]='"cinquanta"' [prezzoFalso]="50" [prezzo]="40" (click)="compraCrediti(50)"> </app-acquisto-crediti>
+    <app-acquisto-crediti [titolo]='"Cento crediti"' [img]='"cento"' [prezzoFalso]="100" [prezzo]="70" (click)="compraCrediti(100)"> </app-acquisto-crediti>
+  </div>
+
+</ion-content>

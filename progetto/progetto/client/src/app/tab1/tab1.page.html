@@ -1,0 +1,59 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      <img src="../../assets/logo.png">
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content [fullscreen]="true">
+  <app-crediti [routerLink]="['/../../tabs/tab2']"> </app-crediti>
+  <ion-card id="crea">
+    <ion-button (click)="this.creaPartita()">Crea Partita</ion-button>
+  </ion-card>
+  <br>
+  <br>
+  <ion-card id="pubbliche">
+    <ion-grid [fixed]="true">
+      <ion-row id="intestazione">
+        <ion-col>nome partita</ion-col>
+        <ion-col>numero partecipanti</ion-col>
+        <ion-col>entra</ion-col>
+      </ion-row>
+      <div *ngIf="this.partite.length==0; then thenBlock else elseBlock"></div>
+      <ng-template #thenBlock>
+        <p>Al momento non ci sono partite pubbliche disponibili. Creane una tu!</p>
+      </ng-template>
+      <ng-template #elseBlock>
+        <ion-row class="righe" *ngFor="let partita of partite">
+          <ion-col>{{this.partita.codice}}</ion-col>
+          <ion-col>{{this.partita.numPartecipanti}}</ion-col>
+          <ion-col><ion-button (click)="this.entra(this.partita.codice)">entra</ion-button></ion-col>
+        </ion-row>
+      </ng-template>
+    </ion-grid>
+  </ion-card>
+  <br>
+  <br>
+  
+  <ion-card id="privata">
+    <p id="cerca">Cerca una partita</p>
+    <ion-searchbar animated="true" placeholder="Inserisci qui il codice della partita" [(ngModel)]="searchTerm" (keydown.enter)="cercaPartita()"></ion-searchbar>
+    <ion-grid [fixed]="true" *ngIf="partitaCercata !== undefined">
+      <ion-row id="intestazione">
+        <ion-col>nome partita</ion-col>
+        <ion-col>numero partecipanti</ion-col>
+        <ion-col>entra</ion-col>
+      </ion-row>
+      <ion-row class="righe">
+        <ion-col>{{this.partitaCercata.codice}}</ion-col>
+        <ion-col>{{this.partitaCercata.numPartecipanti}}</ion-col>
+        <ion-col><ion-button (click)="this.entra(this.partitaCercata.codice)">entra</ion-button></ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+</ion-content>
+
+
