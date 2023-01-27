@@ -40,7 +40,7 @@
     <div *ngIf="this.propr.proprietario===false; then thenBlock1 else elseBlock1"></div>
     <ng-template #thenBlock1>
     <ion-tab-bar slot="bottom">
-      <ion-tab-button [routerLink]="['/../../tabs/tab1']" (click)="this.esci(this.codice)" (click)="this.stopSub()">
+      <ion-tab-button [routerLink]="['/../../tabs/tab1']" (click)="this.esci(this.codice)">
         <ion-icon name="game-controller-outline"></ion-icon>
         <ion-label>Home Page</ion-label>
       </ion-tab-button>
@@ -58,7 +58,7 @@
     </ng-template>
     <ng-template #elseBlock1>
       <ion-tab-bar slot="bottom">
-        <ion-tab-button [routerLink]="['/../../tabs/tab1']" (click)="this.elimina.cancelPartita(this.codice)" (click)="this.stopSub()">
+        <ion-tab-button [routerLink]="['/../../tabs/tab1']" (click)="this.elimina.cancelPartita(this.codice)">
           <ion-icon name="game-controller-outline"></ion-icon>
           <ion-label>Home Page</ion-label>
         </ion-tab-button>
