@@ -35,6 +35,7 @@ export class Tab1Page {
         if(v.pubblica===true){
           this.partite.push({
             'codice': v.codice,
+            'iniziata': v.iniziata,
             'numPartecipanti': v.numPartecipanti,
             'proprietario': v.proprietario,
             'pubblica': v.pubblica,

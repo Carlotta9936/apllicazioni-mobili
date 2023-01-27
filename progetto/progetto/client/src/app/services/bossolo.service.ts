@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
+import { PartitaDBService } from './partita-db.service';
 import { SocketService } from './socket.service';
 
 @Injectable({
@@ -17,34 +18,39 @@ export class BossoloService {
 
   speaker: any;
 
-  constructor(public socket: SocketService, 
-              public auth: AuthService //per test
+  constructor(public auth: AuthService, //per test
+              public partita: PartitaDBService
     ){
     //creo un array con tutti i numeri estraibili 
     //e inizializzo il tabellone a false
       this.tabelloneVuoto();
    }
 
-   //Crea un tabellone vuoto
-   tabelloneVuoto():  any{
-    this.tabellone = [];
-    this.bossolo = [];
-    for(let i=1;i<91;i++){
-      this.bossolo.push(i);
-      this.tabellone.push(false);
-    }
-    console.log("Tab", this.tabellone)
-   } 
+  //Crea un tabellone vuoto
+  tabelloneVuoto():  any{
+  this.tabellone = [];
+  this.bossolo = [];
+  for(let i=1;i<91;i++){
+    this.bossolo.push(i);
+    this.tabellone.push(false);
+  }
+  console.log("Tab", this.tabellone)
+  } 
 
-   //Estrae un numero da 0 a lunghezza di Bossolo, il numero estratto sarà bossolo[RandomNumber]
-   estraiNumero(): number{
-    return Math.floor(Math.random() * (this.bossolo.length));
+  //Estrae un numero da 0 a lunghezza di Bossolo, il numero estratto sarà bossolo[RandomNumber]
+  estraiNumero(): number{
+    let num= Math.floor(Math.random() * (this.bossolo.length));
+    console.log("numm",num);
+    this.ascoltaNumero(num);
+    return num;
   }
 
   //Comunica l'estrazione a tutti
   estrazione(): void{
     //this.socket.estraiNumero(this.bossolo[this.estraiNumero()], this.auth.get('user'));
-    window.location.reload;
+    let num=this.estraiNumero();
+    this.partita.estrazioneNumero(num);
+    //window.location.reload;
   }
 
   //Timer per l'estrazione di un numero
@@ -71,6 +77,7 @@ export class BossoloService {
 
   //Colora il numero nel tabellone
   segnaNumero(numero: any): void{
+    console.log("COLORA");
     this.tabellone[numero]=true;
   }
 
@@ -82,16 +89,17 @@ export class BossoloService {
   }
 
   //Comunica con l'Observable a tutti gli iscritti il numero appena uscito
-  ritornaNumero(): Observable<number>{
+  /*ritornaNumero(): Observable<number>{
     const numeroEstratto=new Observable<number>((observer)=>{
       this.speaker = setInterval(() => {
+        this.ascoltaNumero(Number(this.estratto));
         //let numero=Number(this.estratto);
         console.log("NuMeRo", Number(this.estratto));
         observer.next(Number(this.estratto));
       }, 1000)
     })
     return numeroEstratto;
-  }
+  }*/
 
   //Spegne l'Interval per la comunicazione dei numeri
   spegniSpeaker(): void{

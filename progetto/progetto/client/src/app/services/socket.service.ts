@@ -8,7 +8,7 @@ import { io } from "socket.io-client";
   providedIn: 'root'
 })
 export class SocketService {
-  public message$: BehaviorSubject<string> = new BehaviorSubject('');
+  /*public message$: BehaviorSubject<string> = new BehaviorSubject('');
 
   constructor() {}
 
@@ -49,7 +49,7 @@ export class SocketService {
 
   public estraiNumero(numero: number, room: string): void{
     this.socket.emit('message', 'Estratto: ' + numero);
-  }
+  }*/
 }
 
   

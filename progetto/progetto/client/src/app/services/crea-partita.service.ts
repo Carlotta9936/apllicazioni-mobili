@@ -25,6 +25,7 @@ export class CreaPartitaService {
   public creaPartita(proprietario: string, pubblica: boolean, cod: string): any{
     //let codice= this.route.snapshot.paramMap.get('codice'); 
     let codice= cod;
+    let iniziata = false;
     let numPartecipanti: number= 1;
     let messaggi:[]=[];
     let ultimoNumero= -1;
@@ -32,19 +33,20 @@ export class CreaPartitaService {
     let bingo= false;
     let datiPartita: Partita= {ultimoNumero, cinquina, bingo};
     let partita: PartitaData ={
-      pubblica, codice, numPartecipanti, proprietario, messaggi, datiPartita
+      pubblica, iniziata, codice, numPartecipanti, proprietario, messaggi, datiPartita
     };
-    console.log(partita);
     this.database.creaPartita(partita);
   }
 
 
   //Crea partita del DB
   async creaPartitaDB(partita: boolean): Promise<void> {
-    console.log("1")
+    console.log("1");
     this.codice=this.creaCodice();
+
     //const ipAddress = await this.getIPAddress();
     //console.log(`Your IP address is: ${ipAddress}`);
+
     this.creaPartita(this.username,partita,this.codice);
     }
 
@@ -65,22 +67,39 @@ export class CreaPartitaService {
     }
     //controllo sul db che il codice generato non sia già stato salvato nel db
     //il controllo serve perché se no sovrascrive i dati dell'altra partita
-    const partita = ref(this.db, 'partita/'+ result);
-    onValue(partita, (snapshot) => {
-      try{
-        let p = snapshot.val();
-        if(p != null){
-          console.log("Trovato");
-          return this.creaCodice();
-        } else {
-          console.log("NOn trovato");
+    //this.database.getPartita(result).then((value) => {
+
+      const partita = ref(this.db, 'partita/'+ result);
+      onValue(partita, (snapshot) => {
+        try{
+          let p = snapshot.val();
+          if(p != null){
+            console.log("Trovato");
+            return this.creaCodice();
+          } else {
+            console.log("NOn trovato");
+          }
+        } catch(e){
+          console.log("alternativa");
         }
-      } catch(e){
-        console.log("alternativa");
-      }
-    });
-    return result;
+      });
+      return result;
+    //});
   }
+
+      
+
+
+    /*
+    console.log("Partita", value);
+      if(value===null || value === undefined){
+        console.log("we"+ result);
+        return result;
+      } else 
+        return this.creaCodice();
+    })
+    */
+
 
   getRandomChar(): string {
     const code = Math.floor(Math.random() * (90 - 65 + 1)) + 65;

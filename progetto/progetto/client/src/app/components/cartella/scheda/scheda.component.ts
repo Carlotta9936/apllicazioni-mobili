@@ -7,6 +7,7 @@ import { DatabaseService } from 'src/app/services/database.service';
 import { SocketService } from 'src/app/services/socket.service';
 import { GeneratoreCartellaService } from 'src/app/services/generatore-cartella.service';
 import { Observable, Subscription } from 'rxjs';
+import { PartitaDBService } from 'src/app/services/partita-db.service';
 
 @Component({
   selector: 'app-scheda',
@@ -32,21 +33,24 @@ export class SchedaComponent implements OnInit, OnDestroy {
 
   obs: Subscription[] = [];
 
-  constructor(public generatore: GeneratoreCartellaService, private http: HttpClient, public database: DatabaseService, public bossolo: BossoloService) {
+  constructor(public generatore: GeneratoreCartellaService, private http: HttpClient, public database: DatabaseService, public bossolo: BossoloService, public partita: PartitaDBService) {
   }
 
   ngOnInit() {
     this.getScheda();
+    /*
     let sub = this.bossolo.ritornaNumero()
     .subscribe((estratto)=>{
+    })
+    this.obs?.push(sub)*/
+  
+    let sub = this.partita.ascoltaNumero().subscribe((estratto: number) => {
       console.log("number"+estratto);
       if(this.numeri.includes(estratto)){
         this.segnaNumero(Number(estratto));
       }
     })
-    this.obs?.push(sub)
-      
-    
+    this.obs?.push(sub);
   }
 
   ngOnDestroy(): void {
@@ -98,7 +102,6 @@ export class SchedaComponent implements OnInit, OnDestroy {
         casella.stato = "estratta";
       }
     });
-
   }
 
   onCasellaSegnata(value: any): void{

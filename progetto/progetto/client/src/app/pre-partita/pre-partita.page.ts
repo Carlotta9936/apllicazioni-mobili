@@ -7,8 +7,8 @@ import { BossoloService } from '../services/bossolo.service';
 import { CreaPartitaService } from '../services/crea-partita.service';
 import { DatabaseService } from '../services/database.service';
 import { EliminaPartitaService } from '../services/elimina-partita.service';
+import { PartitaDBService } from '../services/partita-db.service';
 import { ProprietarioService } from '../services/proprietario.service';
-import { SocketService } from '../services/socket.service';
 
 @Component({
   selector: 'app-pre-partita',
@@ -28,13 +28,15 @@ export class PrePartitaPage implements OnInit {
   obs?: Subscription;
 
   constructor(public crea: CreaPartitaService, public elimina: EliminaPartitaService, private route: ActivatedRoute, 
-    private database: DatabaseService, private router: Router, private socket: SocketService, 
+    private database: DatabaseService, private router: Router, 
     public alert: AlertService, public auth: AuthService, public propr: ProprietarioService,
-     public bossolo: BossoloService) { }
+    public bossolo: BossoloService, public partita: PartitaDBService) { }
 
   ngOnInit() {
     this.codice=this.crea.getCodiceUrl();
-    this.controllaProprietario();  
+    this.partita.setPartita(this.codice);
+    this.controllaProprietario();
+
     //this.messaggi();
     //this.socket.stanza(this.codice,this.auth.get("user"));
   }
@@ -57,8 +59,17 @@ export class PrePartitaPage implements OnInit {
         console.log("errore"+e);
       }
     });
-  }
+  };
 
+
+  /*console.log("Proprietario", this.partita.getProprietario(), this.auth.get("user"), this.partita.getProprietario() === this.auth.get("user"))
+  if(this.partita.getProprietario() === this.auth.get("user")){
+  }else{
+  }*/
+  
+
+
+  /*
   public messaggi():void{
     this.obs = this.socket.getNewMessage().subscribe((message: string) => {
       if(message!=""){
@@ -91,13 +102,14 @@ export class PrePartitaPage implements OnInit {
               if(this.propr.proprietario==true){
                 this.alert.presentAlert("non ci sono abbastanza giocatori per poter iniziare la partita. Il numero minimo è: 3");
               }
-            }*/
+            }
           }
         }
       }
     });
     this.messageList=[];
   }
+  */
 
   public sendMessage():void {
     //this.socket.sendMessage(this.auth.get("user")+': '+this.newMessage);
@@ -109,6 +121,9 @@ export class PrePartitaPage implements OnInit {
     //this.socket.sendMessage("server: start");
     this.chat=false;
     this.bossolo.startTimer();
+    this.startPartita=true;
+    this.iniziata=true;
+    
     //console.log("LEng", this.socket.socket.)
 
   }

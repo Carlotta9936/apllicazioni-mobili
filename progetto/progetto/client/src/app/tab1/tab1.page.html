@@ -22,7 +22,7 @@
         <ion-col>numero partecipanti</ion-col>
         <ion-col>entra</ion-col>
       </ion-row>
-      <div *ngIf="this.partite.length==0; then thenBlock else elseBlock"></div>
+      <div *ngIf="this.partite.length===0; then thenBlock else elseBlock"></div>
       <ng-template #thenBlock>
         <p>Al momento non ci sono partite pubbliche disponibili. Creane una tu!</p>
       </ng-template>

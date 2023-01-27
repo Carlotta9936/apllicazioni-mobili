@@ -90,6 +90,24 @@ export class DatabaseService {
     })
   }
 
+  public estrazioneNumero(codice: string, numero: number): void{
+    set(ref(this.database, 'partita/'+codice+'/datiPartita'), {
+      ultimoNumero: numero,
+    })
+  }
+
+  public ascoltaNumero(codice: string): Promise<number> {
+    const ascoltaNumero = new Promise<number>((resolve, reject) => {
+      const cod = ref(this.database, 'partita/'+ codice+'/datiPartita');
+      onValue(cod, (snapshot) => {
+        const c = snapshot.val().ultimoNumero;
+        console.log(c);
+        resolve(c);
+      }); 
+    })
+    return ascoltaNumero;
+  }
+
   
   //Ricerca tutti le partite nel DB
   public async getPartite(): Promise<any> {
@@ -108,9 +126,9 @@ export class DatabaseService {
   public creaPartita(partita: PartitaData){
     set(ref(this.database, 'partita/'+partita.codice),{
       pubblica: partita.pubblica,
+      iniziata: partita.iniziata,
       codice: partita.codice,
       numPartecipanti: partita.numPartecipanti,
-      //ip: partita.ip,
       proprietario: partita.proprietario,
       messaggi: partita.messaggi,
       datiPartita:{
