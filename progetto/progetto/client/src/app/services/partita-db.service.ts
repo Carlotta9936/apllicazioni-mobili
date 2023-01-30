@@ -14,7 +14,6 @@ export class PartitaDBService {
 
   constructor(public database: DatabaseService) { }
 
-
   setPartita(codice: string): void{
     this.database.getPartita(codice).then((value: PartitaData) => {
       this.partita = value;
@@ -29,19 +28,20 @@ export class PartitaDBService {
     return this.partita?.proprietario!;
   }
   
+  //Legge dal DB il numero appena uscito
   estrazioneNumero(numero: number): void{
     return this.database.estrazioneNumero(this.partita?.codice, numero);
   }
   
+  //Comunica con l'Observable a tutti gli iscritti il numero appena uscito
   ascoltaNumero(): any{
     const numeroEstratto=new Observable<number>((observer)=>{
       console.log("Nuovo observer");
       this.speaker = setInterval(() => {
         this.database.ascoltaNumero(this.partita?.codice).then((value) => {
-          console.log("VQLUE", value);
+          console.log("ascolta numero:", value);
           observer.next(value);
         })
-
       }, 1000);
     });
     return numeroEstratto;

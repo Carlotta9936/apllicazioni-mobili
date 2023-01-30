@@ -91,7 +91,7 @@ export class DatabaseService {
   }
 
   public estrazioneNumero(codice: string, numero: number): void{
-    set(ref(this.database, 'partita/'+codice+'/datiPartita'), {
+    update(ref(this.database, 'partita/'+codice+'/datiPartita'), {
       ultimoNumero: numero,
     })
   }
@@ -101,7 +101,7 @@ export class DatabaseService {
       const cod = ref(this.database, 'partita/'+ codice+'/datiPartita');
       onValue(cod, (snapshot) => {
         const c = snapshot.val().ultimoNumero;
-        console.log(c);
+        console.log("C", c);
         resolve(c);
       }); 
     })
