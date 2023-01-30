@@ -11,7 +11,7 @@ import { PartitaDBService } from 'src/app/services/partita-db.service';
 })
 export class TabelloneComponent implements OnInit, OnDestroy {
 
-  estratto: number=0;
+  estratto: number=-1;
   numeri: number[]=[];
   estratti: boolean[]=[];
   numeriEstratti: number = 0;
@@ -43,6 +43,7 @@ export class TabelloneComponent implements OnInit, OnDestroy {
     console.log("Colora");
     this.partita.ascoltaNumero()
       .subscribe((value : number) => {
+        this.estratto= value;
         this.estratti[value] = true;
     });
   }

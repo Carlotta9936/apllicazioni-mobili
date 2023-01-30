@@ -79,6 +79,14 @@ export class DatabaseService {
     return codicePromise;
   } 
 
+
+  //setto la partita a iniziata
+  public partitaIniziata(codice: string): void{
+    update(ref(this.database, 'partita/'+codice), {
+      iniziata: true
+    })
+  }
+
   /** Metodi per partita
     * ! Metodo da togliere
   */

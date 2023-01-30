@@ -1,5 +1,5 @@
 <h1>Schede</h1>
-<ion-button (click)="compraScheda()">Compra una scheda</ion-button>
+<ion-button *ngIf="this.iniziata==false" (click)="compraScheda()">Compra una scheda</ion-button>
 <div *ngFor="let scheda of numeroSchede"> 
     <app-scheda (abilitaBingo)="abilitaBingo($event)" (abilitaCinquina)="abilitaCinquina($event)"></app-scheda>
  </div>
