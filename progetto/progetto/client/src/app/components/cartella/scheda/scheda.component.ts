@@ -44,18 +44,24 @@ export class SchedaComponent implements OnInit, OnDestroy {
     })
     this.obs?.push(sub)*/
   
-    let sub = this.partita.ascoltaNumero().subscribe((estratto: number) => {
-      console.log("number"+estratto);
-      if(this.numeri.includes(estratto)){
-        this.segnaNumero(Number(estratto));
-      }
+    this.partita.ascoltaNumero()
+      .subscribe((estratto: number) => {
+        console.log("number"+estratto);
+        if(this.numeri.includes(estratto)){
+          this.segnaNumero(Number(estratto));
+        }
     })
-    this.obs?.push(sub);
+    //this.obs?.push(sub);
   }
+
+
+
+
 
   ngOnDestroy(): void {
     console.log("DISTRUGGI");
-    this.obs[this.obs.length-1].unsubscribe();
+    this.partita.ascoltaNumero().unsubscribe();
+    //this.obs[this.obs.length-1].unsubscribe();
     this.bossolo.spegniSpeaker();
   }
 

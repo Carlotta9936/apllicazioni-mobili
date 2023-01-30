@@ -36,7 +36,6 @@ export class PrePartitaPage implements OnInit {
     this.codice=this.crea.getCodiceUrl();
     this.partita.setPartita(this.codice);
     this.controllaProprietario();
-
     //this.messaggi();
     //this.socket.stanza(this.codice,this.auth.get("user"));
   }
@@ -123,6 +122,7 @@ export class PrePartitaPage implements OnInit {
     this.bossolo.startTimer();
     this.startPartita=true;
     this.iniziata=true;
+    
     
     //console.log("LEng", this.socket.socket.)
 

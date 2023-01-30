@@ -37,6 +37,28 @@ export class BossoloService {
   console.log("Tab", this.tabellone)
   } 
 
+  //Timer per l'estrazione di un numero
+  startTimer():void {
+    this.interval = setInterval(() => {
+      if(this.bossolo.length!=0){
+        /*if(this.timeLeft > 0) {
+          this.timeLeft--;
+          //console.log("tempo"+this.timeLeft);
+        } else {
+          this.timeLeft = 1;
+        }*/
+        this.estrazione();
+      }else{
+        this.stopTimer();
+      }
+    },4000)
+  }
+
+  //Stoppa l'Interval per l'estrazione del numero
+  stopTimer(): void{
+    clearInterval(this.interval);
+  }
+
   //Estrae un numero da 0 a lunghezza di Bossolo, il numero estratto sarà bossolo[RandomNumber]
   estraiNumero(): number{
     let num= Math.floor(Math.random() * (this.bossolo.length));
@@ -53,28 +75,6 @@ export class BossoloService {
     //window.location.reload;
   }
 
-  //Timer per l'estrazione di un numero
-  startTimer():void {
-    this.interval = setInterval(() => {
-      if(this.bossolo.length!=0){
-        if(this.timeLeft > 0) {
-          this.timeLeft--;
-          //console.log("tempo"+this.timeLeft);
-        } else {
-          this.timeLeft = 1;
-          this.estrazione();
-        }
-      }else{
-        this.stopTimer();
-      }
-    },1000)
-  }
-
-  //Stoppa l'Interval per l'estrazione del numero
-  stopTimer(): void{
-    clearInterval(this.interval);
-  }
-
   //Colora il numero nel tabellone
   segnaNumero(numero: any): void{
     console.log("COLORA");
@@ -89,7 +89,7 @@ export class BossoloService {
   }
 
   //Comunica con l'Observable a tutti gli iscritti il numero appena uscito
-  /*ritornaNumero(): Observable<number>{
+  ritornaNumero(): Observable<number>{
     const numeroEstratto=new Observable<number>((observer)=>{
       this.speaker = setInterval(() => {
         this.ascoltaNumero(Number(this.estratto));
@@ -99,7 +99,7 @@ export class BossoloService {
       }, 1000)
     })
     return numeroEstratto;
-  }*/
+  }
 
   //Spegne l'Interval per la comunicazione dei numeri
   spegniSpeaker(): void{
