@@ -5,7 +5,6 @@ import { DatabaseService } from '../services/database.service';
 import { ControlloCreditiService } from '../services/controllo-crediti.service';
 import { Router } from '@angular/router';
 import { AlertService } from '../services/alert.service';
-import { SocketService } from '../services/socket.service';
 import { ProprietarioService } from '../services/proprietario.service';
 
 
@@ -21,7 +20,7 @@ export class Tab1Page {
   searchTerm = '';
 
 
-  constructor(public crea: CreaPartitaService, public database: DatabaseService, public crediti: ControlloCreditiService, private router: Router, private alert: AlertService, private socket: SocketService, public propr: ProprietarioService) { }
+  constructor(public crea: CreaPartitaService, public database: DatabaseService, public crediti: ControlloCreditiService, private router: Router, private alert: AlertService, public propr: ProprietarioService) { }
 
   ngOnInit(){
     window.location.reload;

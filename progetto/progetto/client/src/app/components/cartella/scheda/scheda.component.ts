@@ -4,7 +4,6 @@ import { Casella } from 'src/app/interfaces/Casella';
 import { Partita } from 'src/app/interfaces/Partita';
 import { BossoloService } from 'src/app/services/bossolo.service';
 import { DatabaseService } from 'src/app/services/database.service';
-import { SocketService } from 'src/app/services/socket.service';
 import { GeneratoreCartellaService } from 'src/app/services/generatore-cartella.service';
 import { Observable, Subscription } from 'rxjs';
 import { PartitaDBService } from 'src/app/services/partita-db.service';
