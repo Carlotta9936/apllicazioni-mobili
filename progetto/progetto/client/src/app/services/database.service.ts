@@ -111,7 +111,8 @@ export class DatabaseService {
     })
     return ascoltaNumero;
   }
-/*
+
+  /*
   public ascoltaNumero(codice: string): Observable<number> {
     const ascoltaNumero = new Observable<number>((observer) => {
       const cod = ref(this.database, 'partita/'+ codice+'/datiPartita');

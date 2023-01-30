@@ -37,7 +37,6 @@ export class PartitaDBService {
   ascoltaNumero(): any{
     const numeroEstratto=new Observable<number>((observer)=>{
       this.speaker = setInterval(() => {
-        console.log("Nuovo observer");
         this.database.ascoltaNumero(this.partita?.codice).then((value) => {
           console.log("ascolta numero:", value);
           observer.next(value);
@@ -45,5 +44,17 @@ export class PartitaDBService {
       }, 1000);
     });
     return numeroEstratto;
+/*
+    const numeroEstratto=new Observable<number>((observer)=>{
+      let num = -1;
+      this.database.ascoltaNumero(this.partita?.codice).subscribe((numero) => {
+        num = numero
+        console.log("ascolto numero:", num);
+        observer.next(num);
+      })
+    });
+
+    return numeroEstratto;
+    */
   }
 }

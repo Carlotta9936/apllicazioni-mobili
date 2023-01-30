@@ -46,7 +46,4 @@ export class TabelloneComponent implements OnInit, OnDestroy {
         this.estratti[value] = true;
     });
   }
-
-
-  
 }

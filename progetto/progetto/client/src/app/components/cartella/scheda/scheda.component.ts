@@ -33,26 +33,13 @@ export class SchedaComponent implements OnInit, OnDestroy {
 
   obs: Subscription[] = [];
 
-  constructor(public generatore: GeneratoreCartellaService, private http: HttpClient, public database: DatabaseService, public bossolo: BossoloService, public partita: PartitaDBService) {
+  constructor(public generatore: GeneratoreCartellaService, public database: DatabaseService, 
+    public bossolo: BossoloService, public partita: PartitaDBService) {
   }
 
   ngOnInit() {
     this.getScheda();
-    /*
-    let sub = this.bossolo.ritornaNumero()
-    .subscribe((estratto)=>{
-    })
-    this.obs?.push(sub)*/
-    setInterval(() => {
-      this.partita.ascoltaNumero()
-    }, 1000);
-    /*  .subscribe((estratto: number) => {
-        console.log("number"+estratto);
-        if(this.numeri.includes(estratto)){
-          this.segnaNumero(Number(estratto));
-        }
-    })*/
-    //this.obs?.push(sub);
+    this.listenNumero();
   }
 
 
@@ -60,7 +47,6 @@ export class SchedaComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     console.log("DISTRUGGI");
     this.partita.ascoltaNumero().unsubscribe();
-    //this.obs[this.obs.length-1].unsubscribe();
     this.bossolo.spegniSpeaker();
   }
 
@@ -88,12 +74,17 @@ export class SchedaComponent implements OnInit, OnDestroy {
 
   //Utilizza un Observer per controllare l'ultimo numero estratto
   public listenNumero():void{
+    this.partita.ascoltaNumero()
+      .subscribe((value : number) => { 
+        console.log("scheda", value);
+        this.segnaNumero(value);
+    });
     
   }
 
   //Bisogna spegnere il subscribe
   public stopListener(): void{
-    
+    this.partita.ascoltaNumero().unsubscribe();
   }
 
 
@@ -101,6 +92,7 @@ export class SchedaComponent implements OnInit, OnDestroy {
 
   //Controlla se l'ultimo numero estratto è presente nella cartella
   segnaNumero(numero: any): void {
+    console.log("Segna numero", numero);
     this.caselle.forEach(casella => {
       if(casella.numero === numero && casella.stato==="numero"){
         console.log("Ce  l'hai")
