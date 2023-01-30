@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { SchedaComponent } from '../scheda/scheda.component';
 
 @Component({
@@ -7,6 +7,7 @@ import { SchedaComponent } from '../scheda/scheda.component';
   styleUrls: ['./schede.component.scss'],
 })
 export class SchedeComponent implements OnInit {
+  @Input() iniziata?: boolean;
 
   numeroSchede: number[] = [];
 

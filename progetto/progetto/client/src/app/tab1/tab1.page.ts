@@ -32,7 +32,7 @@ export class Tab1Page {
   public caricaPartite(): void{
     this.database.getPartite().then((value) => {
       Object.values(value).forEach((v: any) => {
-        if(v.pubblica===true){
+        if(v.pubblica===true && v.iniziata===false){
           this.partite.push({
             'codice': v.codice,
             'iniziata': v.iniziata,
@@ -65,7 +65,7 @@ export class Tab1Page {
   public async cercaPartita(){
     this.database.getPartite().then((value) => {
       Object.values(value).forEach((v: any) => {
-        if(v.codice===this.searchTerm){
+        if(v.codice===this.searchTerm && v.iniziata===false){
           this.partitaCercata = v;
         }
       });
@@ -82,7 +82,7 @@ export class Tab1Page {
           //aggiorno il numero dei partecipanti
           this.database.aggiornaPartecipanti(codice, numPartecipanti+1);
           
-          this.router.navigate(['pre-partita/'+codice]);
+          this.router.navigate(['partita/'+codice]);
         }catch (e){
           console.log("errore"+e);
         }

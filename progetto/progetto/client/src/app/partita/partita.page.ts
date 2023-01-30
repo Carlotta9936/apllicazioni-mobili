@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { BossoloService } from '../services/bossolo.service';
 import { CreaPartitaService } from '../services/crea-partita.service';
@@ -19,7 +20,7 @@ export class PartitaPage implements OnInit {
 
   constructor(public crea: CreaPartitaService, public database: DatabaseService, 
     public auth: AuthService, public propr: ProprietarioService, public bossolo: BossoloService,
-    public partita: PartitaDBService) { }
+    public partita: PartitaDBService, private router: Router) { }
 
   ngOnInit() {
     this.codice=this.crea.getCodiceUrl();
@@ -48,6 +49,9 @@ export class PartitaPage implements OnInit {
   };
 
   start(): void {
+    //setto la partita a iniziata in modo che non sia più visibile nella pagina iniziale
+    this.database.partitaIniziata(this.codice!);
+    this.iniziata=true;
     this.bossolo.startTimer();
     this.partita.ascoltaNumero().subscribe();
   }
@@ -56,6 +60,20 @@ export class PartitaPage implements OnInit {
     this.database.eliminaPartita(codice);
     //this.bossolo.stopTimer();
     //this.router.navigate(['/tabs/tab1']);
+  }
+
+  public esci(codice: string):void{
+    //chiamata al db per prendere il numero dei partecipanti
+    this.database.getPartita(codice).then((promise) => {
+      try{
+        let numPartecipanti= promise.numPartecipanti;
+        //aggiorno il numero dei partecipanti
+        this.database.aggiornaPartecipanti(codice, numPartecipanti-1);
+        this.router.navigate(['/tabs/tab1']);
+      }catch (e){
+        console.log("errore"+e);
+      }
+    });
   }
 
   //Tabellone

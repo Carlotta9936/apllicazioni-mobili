@@ -1,5 +1,4 @@
-<!--<ion-button (click)="estrazione()">Estrazione</ion-button>-->
-<h5 id="estratto" *ngIf="estratto!==0">{{estratto}}</h5>
+<h5 id="estratto" *ngIf="estratto!==-1">{{this.estratto}}</h5>
 <div id="tabellone">
   <app-cella *ngFor="let numero of numeri" [numero]="numero" [estratto]="estratti[numero]"></app-cella>
 </div>
