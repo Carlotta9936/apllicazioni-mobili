@@ -19,6 +19,6 @@ import { CellaComponent } from '../components/tab/cella/cella.component';
     IonicModule,
     PrePartitaPageRoutingModule,
   ],
-  declarations: [PrePartitaPage, SchedeComponent, SchedaComponent, CasellaComponent, TabelloneComponent, CellaComponent]
+  declarations: [PrePartitaPage/*, SchedeComponent, SchedaComponent, CasellaComponent, TabelloneComponent, CellaComponent*/]
 })
 export class PrePartitaPageModule {}

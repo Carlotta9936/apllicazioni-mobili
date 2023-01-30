@@ -33,6 +33,11 @@ const routes: Routes = [
     path: 'pre-partita/:codice',
     loadChildren: () => import('./pre-partita/pre-partita.module').then( m => m.PrePartitaPageModule), canActivate: [GuardiaService]
   },
+  {
+    path: 'partita/:codice',
+    loadChildren: () => import('./partita/partita.module').then( m => m.PartitaPageModule)
+  },
+
 
   
 

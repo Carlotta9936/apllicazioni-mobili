@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title><p> Codice partita: {{this.codice}} </p></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="this.propr.proprietario===true; then thenBlock else elseBlock"></div>
+  <ng-template #thenBlock>
+    <div *ngIf="this.iniziata===false">
+      <ion-button (click)="this.start()">START PARTITA</ion-button>
+      <!--manca controllo numero giocatori-->
+      <ion-button (click)="this.end(this.codice!)">ANNULLA PARTITA</ion-button>
+  </div>
+  </ng-template>
+  <ng-template #elseBlock>
+    <p>Proprietario: {{this.userProprietario}}</p>
+    <ion-button (click)="this.end(this.codice!)">Esci</ion-button>
+  </ng-template>
+  <app-tabellone>  </app-tabellone>
+</ion-content>
+
+

@@ -43,21 +43,20 @@ export class SchedaComponent implements OnInit, OnDestroy {
     .subscribe((estratto)=>{
     })
     this.obs?.push(sub)*/
-  
-    this.partita.ascoltaNumero()
-      .subscribe((estratto: number) => {
+    setInterval(() => {
+      this.partita.ascoltaNumero()
+    }, 1000);
+    /*  .subscribe((estratto: number) => {
         console.log("number"+estratto);
         if(this.numeri.includes(estratto)){
           this.segnaNumero(Number(estratto));
         }
-    })
+    })*/
     //this.obs?.push(sub);
   }
 
 
-
-
-
+  
   ngOnDestroy(): void {
     console.log("DISTRUGGI");
     this.partita.ascoltaNumero().unsubscribe();

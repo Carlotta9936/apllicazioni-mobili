@@ -111,12 +111,12 @@ export class CreaPartitaService {
   setPublic():void {
     this.pubblica = true;
     this.creaPartitaDB(true);
-    this.router.navigate(['pre-partita/'+this.codice]);
+    this.router.navigate(['partita/'+this.codice]);
   }
   
   //Setta la partita in modalità privata
   setPrivate(): void{
-    this.router.navigate(['pre-partita/'+this.codice]);
+    this.router.navigate(['partita/'+this.codice]);
     this.pubblica = false;
     this.creaPartitaDB(false);
   }

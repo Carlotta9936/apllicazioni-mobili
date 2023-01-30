@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BossoloService } from 'src/app/services/bossolo.service';
 import { HttpClient } from '@angular/common/http';
 import { DatabaseService } from 'src/app/services/database.service';
+import { PartitaDBService } from 'src/app/services/partita-db.service';
 
 @Component({
   selector: 'app-tabellone',
@@ -21,7 +22,7 @@ export class TabelloneComponent implements OnInit, OnDestroy {
   timeLeft: number = 1;
   interval?: any;
 
-  constructor(public bossolo: BossoloService, private http: HttpClient, public database: DatabaseService) { 
+  constructor(public bossolo: BossoloService, public partita: PartitaDBService) { 
     for(let i=1;i<=90;i++){
       this.numeri.push(i);
     }
@@ -35,6 +36,15 @@ export class TabelloneComponent implements OnInit, OnDestroy {
   
   ngOnInit() {
     console.log("VAI");
+    this.coloraTabellone();
+  }
+
+  coloraTabellone() {
+    console.log("Colora");
+    this.partita.ascoltaNumero()
+      .subscribe((value : number) => {
+        this.estratti[value] = true;
+    });
   }
 
 

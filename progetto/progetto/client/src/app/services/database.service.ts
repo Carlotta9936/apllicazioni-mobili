@@ -3,7 +3,7 @@ import { User } from '../interfaces/User';
 import { Partita } from '../interfaces/Partita';
 import { collection, doc, docData, Firestore, query, where, getDocs} from '@angular/fire/firestore';
 import { DataServiceService } from './data-service.service';
-import { getDatabase, set, ref, onValue, remove, update} from "firebase/database";
+import { getDatabase, set, ref, onValue, remove, update, child, get} from "firebase/database";
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import { PartitaData } from '../interfaces/PartitaData';
@@ -67,13 +67,14 @@ export class DatabaseService {
   //ritorna i dati di una partita dato il codice
   getPartita(codice: string): Promise<any>{    
     const codicePromise = new Promise<any>((resolve, reject) => {
-      const cod = ref(this.database, 'partita/'+ codice);
-      onValue(cod, (snapshot) => {
-        console.log("codice" + cod);
-        const c = snapshot.val();
-        console.log(c);
-        resolve(c);
-      }); 
+      const cod = ref(this.database);
+      get(child(cod, 'partita/'+ codice+'/')).then((snapshot) => {
+        if(snapshot.exists()){
+          const c = snapshot.val();
+          console.log(c);
+          resolve(c);
+        }
+      })
     })
     return codicePromise;
   } 
@@ -98,15 +99,33 @@ export class DatabaseService {
 
   public ascoltaNumero(codice: string): Promise<number> {
     const ascoltaNumero = new Promise<number>((resolve, reject) => {
-      const cod = ref(this.database, 'partita/'+ codice+'/datiPartita');
-      onValue(cod, (snapshot) => {
-        const c = snapshot.val().ultimoNumero;
-        console.log("C", c);
-        resolve(c);
-      }); 
+      const cod = ref(this.database);
+      get(child(cod,  'partita/'+ codice+'/datiPartita')).then((snapshot) => {
+        if(snapshot.exists()){
+          console.log("mi @mi")
+          const c = snapshot.val().ultimoNumero;
+          console.log("C", c);
+          resolve(c);
+        }
+      }) 
     })
     return ascoltaNumero;
   }
+/*
+  public ascoltaNumero(codice: string): Observable<number> {
+    const ascoltaNumero = new Observable<number>((observer) => {
+      const cod = ref(this.database, 'partita/'+ codice+'/datiPartita');
+      onValue(cod, (snapshot) => {
+        if(snapshot.exists()){
+          console.log("mi @mi")
+          const c = snapshot.val().ultimoNumero;
+          console.log("C", c);
+          observer.next(c);
+        }
+      }) 
+    })
+    return ascoltaNumero;
+  }*/
 
   
   //Ricerca tutti le partite nel DB

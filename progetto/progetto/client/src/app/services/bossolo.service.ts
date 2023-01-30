@@ -33,25 +33,23 @@ export class BossoloService {
   for(let i=1;i<91;i++){
     this.bossolo.push(i);
     this.tabellone.push(false);
+    if(i===86){
+      console.log("T", this.tabellone[86])
+    }
   }
   console.log("Tab", this.tabellone)
-  } 
+  }
+
 
   //Timer per l'estrazione di un numero
   startTimer():void {
     this.interval = setInterval(() => {
       if(this.bossolo.length!=0){
-        /*if(this.timeLeft > 0) {
-          this.timeLeft--;
-          //console.log("tempo"+this.timeLeft);
-        } else {
-          this.timeLeft = 1;
-        }*/
         this.estrazione();
       }else{
         this.stopTimer();
       }
-    },4000)
+    },1000)
   }
 
   //Stoppa l'Interval per l'estrazione del numero
@@ -61,28 +59,38 @@ export class BossoloService {
 
   //Estrae un numero da 0 a lunghezza di Bossolo, il numero estratto sarà bossolo[RandomNumber]
   estraiNumero(): number{
+    console.log("BOSSOLO", this.bossolo);
     let num= Math.floor(Math.random() * (this.bossolo.length));
-    console.log("numm",num);
-    this.ascoltaNumero(num);
-    return num;
+    console.log("index",num);
+    console.log("Estratto", this.bossolo[num]);
+    let numeroEstratto = this.bossolo[num]
+    this.bossolo.splice(num, 1);
+    //this.ascoltaNumero(this.bossolo[num]);
+    return numeroEstratto;
+
   }
 
   //Comunica l'estrazione a tutti
   estrazione(): void{
-    //this.socket.estraiNumero(this.bossolo[this.estraiNumero()], this.auth.get('user'));
+    //Si occupa dell'estrazione del numero dal bossolo
     let num=this.estraiNumero();
+    console.log("o è f@ke");
+    //Aggiorno nel DB
     this.partita.estrazioneNumero(num);
-    //window.location.reload;
   }
+
+  //Per il proprietario
+  /*------------------------------------------------------------------*/
+  //Per i giocatori
 
   //Colora il numero nel tabellone
   segnaNumero(numero: any): void{
     console.log("COLORA");
-    this.tabellone[numero]=true;
+    this.tabellone[this.tabellone.findIndex(numero)]=true;
   }
 
   //Ascolta il numero fa tutte le modifiche
-  ascoltaNumero(index: number): any{
+ /* ascoltaNumero(index: number): any{
     //let numero= this.bossolo[index];
     this.segnaNumero(index);
     this.bossolo.splice(index,1);
@@ -99,7 +107,7 @@ export class BossoloService {
       }, 1000)
     })
     return numeroEstratto;
-  }
+  }*/
 
   //Spegne l'Interval per la comunicazione dei numeri
   spegniSpeaker(): void{
