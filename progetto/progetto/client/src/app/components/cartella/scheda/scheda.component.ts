@@ -29,11 +29,7 @@ export class SchedaComponent implements OnInit, OnDestroy {
   seconda?: number[] = [];
   terza?: number[] = [];
 
-  timeLeft: number = 3;
-  interval?: any;
-
-  obs: Subscription[] = [];
-
+  //EventEmitter per comunicare con il component padre la possibilità di fare cinquina
   @Output() abilitaBingo = new EventEmitter<boolean>();
   @Output() abilitaCinquina = new EventEmitter<boolean>();
 
@@ -42,19 +38,40 @@ export class SchedaComponent implements OnInit, OnDestroy {
     public bossolo: BossoloService, public partita: PartitaDBService) {
   }
 
+  //Azioni all'avvio del component
   ngOnInit() {
     this.getScheda();
     this.listenNumero();
   }
-
-
   
+  //Azioni quando distruggi il component
   ngOnDestroy(): void {
     console.log("DISTRUGGI");
-    this.partita.ascoltaNumero().unsubscribe();
-    this.bossolo.spegniSpeaker();
+    this.stopListener();
+  }
+  
+  //Utilizza un Observer per controllare l'ultimo numero estratto
+  public listenNumero():void{
+    this.partita.ascoltaNumero()
+      .subscribe((value : number) => { 
+        //console.log("scheda", value);
+        this.segnaNumero(value);
+    });
+    
   }
 
+  //Bisogna spegnere il subscribe
+  public stopListener(): void{
+    this.partita.ascoltaNumero().unsubscribe;
+  }
+
+  /** Chiama il generatore di cartelle che restituisce:
+  * [0] Tutti i numeri (compresi gli 0) per la creazione della cartella
+  * [1] Solo i numeri, per controllare il bingo
+  * [2] I numeri della prima riga, per controllare la cinquina
+  * [3] I numeri della seconda riga, per controllare la cinquina
+  * [4] I numeri della terza riga, per controllare la cinquina
+  */
   getScheda(): any{
     let data = this.generatore.getCartella();
     //Numeri per le cartelle
@@ -76,22 +93,6 @@ export class SchedaComponent implements OnInit, OnDestroy {
     this.seconda = data[3];
     this.terza = data[4];
   }
-
-  //Utilizza un Observer per controllare l'ultimo numero estratto
-  public listenNumero():void{
-    this.partita.ascoltaNumero()
-      .subscribe((value : number) => { 
-        //console.log("scheda", value);
-        this.segnaNumero(value);
-    });
-    
-  }
-
-  //Bisogna spegnere il subscribe
-  public stopListener(): void{
-    this.partita.ascoltaNumero().unsubscribe();
-  }
-
 
   // ~ Controlli se caselle segnate ~
 
@@ -122,6 +123,7 @@ export class SchedaComponent implements OnInit, OnDestroy {
       }
     })
 
+    //Controllo cinquine
     if(this.prima?.includes(value)) this.controlloCinquina(this.prima, value);
     else if(this.seconda?.includes(value)) this.controlloCinquina(this.seconda, value);
     else this.controlloCinquina(this.terza!, value);
@@ -142,13 +144,14 @@ export class SchedaComponent implements OnInit, OnDestroy {
   }
 
   bingo(): void {
-    //Dovrà abilitare il bottone bingo
     console.log("BINGOOOOOO");
+    //Abilità il bottone bingo nel component 'Schede'
     this.abilitaBingo.emit(false);
   }
-
+  
   cinquina(): void {
     console.log("CINQUINAAAAA");
+    //Abilità il bottone cinquina nel component 'Schede'
     this.abilitaCinquina.emit(false);
   }
 

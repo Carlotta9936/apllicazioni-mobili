@@ -20,9 +20,11 @@ export class SchedeComponent implements OnInit {
   }
 
   compraScheda(): any{
+    /**
+     * TODO: controllo crediti per comprare la scheda
+     */
     this.numeroSchede.push(0);
   }
-
 
   abilitaBingo(value: any): void {
     console.log("Bingo abilitato")
@@ -31,13 +33,12 @@ export class SchedeComponent implements OnInit {
   }
 
   abilitaCinquina(value: any): void {
-    console.log("T", this.cinquina)
     if(this.cinquina){
       console.log("Cinquina abilitata")
       this.cinquina =value;
     }
   }
-  
+
   fineCinquina(): void {
     console.log("FINE CINQUINA");
     console.log("FINE CINQUINA");

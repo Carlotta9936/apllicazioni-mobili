@@ -17,7 +17,6 @@ export class PartitaPage implements OnInit {
   userProprietario?:string;
   iniziata: boolean = false;
 
-
   constructor(public crea: CreaPartitaService, public database: DatabaseService, 
     public auth: AuthService, public propr: ProprietarioService, public bossolo: BossoloService,
     public partita: PartitaDBService, private router: Router) { }
@@ -58,8 +57,8 @@ export class PartitaPage implements OnInit {
 
   end(codice: string): void {
     this.database.eliminaPartita(codice);
-    //this.bossolo.stopTimer();
-    //this.router.navigate(['/tabs/tab1']);
+    this.bossolo.stopTimer();
+    this.router.navigate(['/tabs/tab1']);
   }
 
   public esci(codice: string):void{
@@ -75,16 +74,5 @@ export class PartitaPage implements OnInit {
       }
     });
   }
-
-  //Tabellone
-
-  //Solo se sei il proprietario
-  estrazioneNumeri(): void{
-
-  }
-
-  //Schede
-
-
 
 }

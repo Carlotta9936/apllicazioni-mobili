@@ -86,19 +86,7 @@ export class DatabaseService {
       iniziata: true
     })
   }
-
-  /** Metodi per partita
-    * ! Metodo da togliere
-  */
-  public aggiornaPartita(partita: Partita): void{
-    set(ref(this.database, 'game/'+'AAA'), {
-      ultimoNumero: partita.ultimoNumero, 
-      //numeriEstratti: partita.numeriEstratti+1,
-      cinquina: partita.cinquina,
-      bingo: partita.bingo
-    })
-  }
-
+  
   public estrazioneNumero(codice: string, numero: number): void{
     update(ref(this.database, 'partita/'+codice+'/datiPartita'), {
       ultimoNumero: numero,
