@@ -102,7 +102,6 @@ export class DatabaseService {
       const cod = ref(this.database);
       get(child(cod,  'partita/'+ codice+'/datiPartita')).then((snapshot) => {
         if(snapshot.exists()){
-          console.log("mi @mi")
           const c = snapshot.val().ultimoNumero;
           console.log("C", c);
           resolve(c);
@@ -118,7 +117,6 @@ export class DatabaseService {
       const cod = ref(this.database, 'partita/'+ codice+'/datiPartita');
       onValue(cod, (snapshot) => {
         if(snapshot.exists()){
-          console.log("mi @mi")
           const c = snapshot.val().ultimoNumero;
           console.log("C", c);
           observer.next(c);

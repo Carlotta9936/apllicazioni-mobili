@@ -82,7 +82,7 @@ export class Tab1Page {
           //aggiorno il numero dei partecipanti
           this.database.aggiornaPartecipanti(codice, numPartecipanti+1);
           
-          this.router.navigate(['pre-partita/'+codice]);
+          this.router.navigate(['partita/'+codice]);
         }catch (e){
           console.log("errore"+e);
         }

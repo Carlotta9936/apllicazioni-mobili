@@ -9,6 +9,8 @@ import { SchedaComponent } from '../scheda/scheda.component';
 export class SchedeComponent implements OnInit {
 
   numeroSchede: number[] = [];
+  bingo: boolean = true;
+  cinquina: boolean = true;
 
   constructor() { }
 
@@ -21,7 +23,50 @@ export class SchedeComponent implements OnInit {
   }
 
 
-  fine(): void {
-    
+  abilitaBingo(value: any): void {
+    console.log("Bingo abilitato")
+    console.log("VV", value)
+    this.bingo = value;
   }
+
+  abilitaCinquina(value: any): void {
+    console.log("T", this.cinquina)
+    if(this.cinquina){
+      console.log("Cinquina abilitata")
+      this.cinquina =value;
+    }
+  }
+  
+  fineCinquina(): void {
+    console.log("FINE CINQUINA");
+    console.log("FINE CINQUINA");
+    console.log("FINE CINQUINA");
+    console.log("FINE CINQUINA");
+    console.log("FINE CINQUINA");
+    console.log("FINE CINQUINA");
+    console.log("FINE CINQUINA");
+    console.log("FINE CINQUINA");
+    console.log("FINE CINQUINA");
+    console.log("FINE CINQUINA");
+    console.log("FINE CINQUINA");
+    console.log("FINE CINQUINA");
+    console.log("FINE CINQUINA");
+  }
+
+  
+  fineBingo(): void {
+    console.log("FINE PARTITA")
+    console.log("FINE PARTITA")
+    console.log("FINE PARTITA")
+    console.log("FINE PARTITA")
+    console.log("FINE PARTITA")
+    console.log("FINE PARTITA")
+    console.log("FINE PARTITA")
+    console.log("FINE PARTITA")
+    console.log("FINE PARTITA")
+    console.log("FINE PARTITA")
+    console.log("FINE PARTITA")
+    console.log("FINE PARTITA")
+  }
+
 }

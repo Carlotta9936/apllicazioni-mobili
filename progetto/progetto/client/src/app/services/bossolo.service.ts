@@ -59,10 +59,10 @@ export class BossoloService {
 
   //Estrae un numero da 0 a lunghezza di Bossolo, il numero estratto sarà bossolo[RandomNumber]
   estraiNumero(): number{
-    console.log("BOSSOLO", this.bossolo);
+    //console.log("BOSSOLO", this.bossolo);
     let num= Math.floor(Math.random() * (this.bossolo.length));
-    console.log("index",num);
-    console.log("Estratto", this.bossolo[num]);
+    //console.log("index",num);
+    //console.log("Estratto", this.bossolo[num]);
     let numeroEstratto = this.bossolo[num]
     this.bossolo.splice(num, 1);
     //this.ascoltaNumero(this.bossolo[num]);
@@ -74,7 +74,6 @@ export class BossoloService {
   estrazione(): void{
     //Si occupa dell'estrazione del numero dal bossolo
     let num=this.estraiNumero();
-    console.log("o è f@ke");
     //Aggiorno nel DB
     this.partita.estrazioneNumero(num);
   }

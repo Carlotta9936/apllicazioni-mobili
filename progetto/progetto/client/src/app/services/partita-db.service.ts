@@ -38,7 +38,6 @@ export class PartitaDBService {
     const numeroEstratto=new Observable<number>((observer)=>{
       this.speaker = setInterval(() => {
         this.database.ascoltaNumero(this.partita?.codice).then((value) => {
-          console.log("ascolta numero:", value);
           observer.next(value);
         })
       }, 1000);
