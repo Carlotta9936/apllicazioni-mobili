@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { BossoloService } from '../services/bossolo.service';
 import { CreaPartitaService } from '../services/crea-partita.service';
@@ -16,10 +17,14 @@ export class PartitaPage implements OnInit {
   codice?: string;
   userProprietario?:string;
   iniziata: boolean = false;
+  
+  bingoSub!: Subscription;
+
+  @Input() bingoEvent = new EventEmitter();
 
   constructor(public crea: CreaPartitaService, public database: DatabaseService, 
     public auth: AuthService, public propr: ProprietarioService, public bossolo: BossoloService,
-    public partita: PartitaDBService, private router: Router) { }
+    public partita: PartitaDBService, private router: Router) {  }
 
   ngOnInit() {
     this.codice=this.crea.getCodiceUrl();
@@ -52,8 +57,22 @@ export class PartitaPage implements OnInit {
     this.database.partitaIniziata(this.codice!);
     this.iniziata=true;
     this.bossolo.startTimer();
-    this.partita.ascoltaNumero().subscribe();
+    this.ascoltaBingo();
   }
+
+  finePartita(): void{
+    //Stop estrazione numeri
+    this.bossolo.stopTimer();
+    console.log("STOOOOOOOOOOOOOOOOOOOOOP")
+    //Stop ascolto vincitore partita
+    this.bingoSub.unsubscribe();
+    //Stop ascolto numero estratto
+    //this.partita.spegniAscoltoNumero();
+    //this.partita.spegniAscoltoBingo();
+    //this.partita.ascoltaBingo().unsubscribe();
+
+  }
+
 
   end(codice: string): void {
     this.database.eliminaPartita(codice);
@@ -73,6 +92,16 @@ export class PartitaPage implements OnInit {
         console.log("errore"+e);
       }
     });
+  }
+
+  ascoltaBingo(): void {
+    this.bingoSub = this.partita.ascoltaBingo()
+      .subscribe((value) => {
+      if(value !== false){
+        console.log("Qualcuno ha fatto bingo", value);
+        this.finePartita();
+        }
+      })
   }
 
 }

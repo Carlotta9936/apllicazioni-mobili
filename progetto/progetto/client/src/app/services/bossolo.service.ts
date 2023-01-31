@@ -33,6 +33,7 @@ export class BossoloService {
     this.interval = setInterval(() => {
       if(this.bossolo.length!=0){
         this.estrazione();
+        console.log("Estrazione");
       }else{
         this.stopTimer();
       }
@@ -41,6 +42,7 @@ export class BossoloService {
 
   //Stoppa l'Interval per l'estrazione del numero
   stopTimer(): void{
+    console.log("Stop timer");
     clearInterval(this.interval);
   }
 

@@ -5,7 +5,7 @@ import { Partita } from 'src/app/interfaces/Partita';
 import { BossoloService } from 'src/app/services/bossolo.service';
 import { DatabaseService } from 'src/app/services/database.service';
 import { GeneratoreCartellaService } from 'src/app/services/generatore-cartella.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscriber, Subscription } from 'rxjs';
 import { PartitaDBService } from 'src/app/services/partita-db.service';
 import { ECDH } from 'crypto';
 
@@ -32,6 +32,9 @@ export class SchedaComponent implements OnInit, OnDestroy {
   @Output() abilitaBingo = new EventEmitter<boolean>();
   @Output() abilitaCinquina = new EventEmitter<boolean>();
 
+  numSub!: Subscription;
+  bingoSub!: Subscription;
+
 
   constructor(public generatore: GeneratoreCartellaService, public database: DatabaseService, 
     public bossolo: BossoloService, public partita: PartitaDBService) {
@@ -41,6 +44,7 @@ export class SchedaComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getScheda();
     this.listenNumero();
+    this.ascoltoBingo();
   }
   
   //Azioni quando distruggi il component
@@ -51,17 +55,28 @@ export class SchedaComponent implements OnInit, OnDestroy {
   
   //Utilizza un Observer per controllare l'ultimo numero estratto
   public listenNumero():void{
-    this.partita.ascoltaNumero()
+    this.numSub = this.partita.ascoltaNumero()
       .subscribe((value : number) => { 
-        //console.log("scheda", value);
+        console.log("scheda", value);
         this.segnaNumero(value);
     });
-    
   }
 
   //Bisogna spegnere il subscribe
   public stopListener(): void{
-    this.partita.ascoltaNumero().unsubscribe;
+    console.log("Stop listener")
+    this.numSub.unsubscribe();
+    this.bingoSub.unsubscribe();
+    //this.partita.spegniAscoltoBingo();
+  }
+
+  ascoltoBingo(): void{
+    this.bingoSub = this.partita.ascoltaBingo().subscribe((value) => {
+      if(value !== false){
+        console.log("STOP");
+        this.stopListener();
+      }
+    })
   }
 
   /** Chiama il generatore di cartelle che restituisce:

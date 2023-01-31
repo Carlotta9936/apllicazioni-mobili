@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
+import { PartitaDBService } from 'src/app/services/partita-db.service';
 import { SchedaComponent } from '../scheda/scheda.component';
 
 @Component({
@@ -8,12 +10,13 @@ import { SchedaComponent } from '../scheda/scheda.component';
 })
 export class SchedeComponent implements OnInit {
   @Input() iniziata?: boolean;
+  @Input() finePartita: boolean = false;
 
   numeroSchede: number[] = [];
   bingo: boolean = true;
   cinquina: boolean = true;
 
-  constructor() { }
+  constructor(public partita: PartitaDBService, private Auth:AuthService) { }
 
   ngOnInit() {
     this.compraScheda();
@@ -28,7 +31,7 @@ export class SchedeComponent implements OnInit {
 
   abilitaBingo(value: any): void {
     console.log("Bingo abilitato")
-    console.log("VV", value)
+   // console.log("VV", value)
     this.bingo = value;
   }
 
@@ -58,17 +61,8 @@ export class SchedeComponent implements OnInit {
   
   fineBingo(): void {
     console.log("FINE PARTITA")
-    console.log("FINE PARTITA")
-    console.log("FINE PARTITA")
-    console.log("FINE PARTITA")
-    console.log("FINE PARTITA")
-    console.log("FINE PARTITA")
-    console.log("FINE PARTITA")
-    console.log("FINE PARTITA")
-    console.log("FINE PARTITA")
-    console.log("FINE PARTITA")
-    console.log("FINE PARTITA")
-    console.log("FINE PARTITA")
+    //Avverte il DB che è stato effettuato Bingo
+    this.partita.bingo(this.Auth.get('user'));
   }
 
 }

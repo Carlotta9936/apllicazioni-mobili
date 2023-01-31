@@ -1,14 +1,12 @@
 import { BootstrapOptions, Injectable } from '@angular/core';
 import { User } from '../interfaces/User';
-import { Partita } from '../interfaces/Partita';
 import { collection, doc, docData, Firestore, query, where, getDocs} from '@angular/fire/firestore';
 import { DataServiceService } from './data-service.service';
 import { getDatabase, set, ref, onValue, remove, update, child, get} from "firebase/database";
-import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import { PartitaData } from '../interfaces/PartitaData';
-import { Observable } from 'rxjs';
 import { Timbro } from '../interfaces/Timbro';
+import { observable, Observable } from 'rxjs';
 
 
 @Injectable({
@@ -126,13 +124,14 @@ export class DatabaseService {
   //Ricerca tutti le partite nel DB
   public async getPartite(): Promise<any> {
     const partite = new Promise<string>((resolve, reject) => {
-      const partiteDB = ref(this.database, 'partita/');
-      onValue(partiteDB, (snapshot) => {
-        console.log("S", snapshot.val());
-        resolve(snapshot.val());
+      const partiteDB = ref(this.database);
+      get(child(partiteDB,  'partita/')).then((snapshot) => {
+        if(snapshot.exists()){
+          console.log("S", snapshot.val());
+          resolve(snapshot.val());
+        }
       })
     })
-
     return partite;
   }
     
@@ -208,4 +207,36 @@ export class DatabaseService {
     });
   }
   
+  dichiaraBingo(user: string, codice: string): void {
+    update(ref(this.database, 'partita/'+codice+'/datiPartita/'), {
+      bingo: user
+    })
+  }
+  
+  ascoltaBingo(codice: string): Promise<any>{
+    const ascoltaBingo = new Promise<number>((resolve, reject) => {
+      const cod = ref(this.database);
+      get(child(cod,  'partita/'+ codice+'/datiPartita')).then((snapshot) => {
+        if(snapshot.exists()){
+          const c = snapshot.val().bingo;
+          console.log("Bingo", c);
+          resolve(c);
+        }
+      }) 
+    })
+
+   /* const ascoltaBingo = new Observable<any>((observer) => {
+      const cod = ref(this.database, 'partita/'+codice+'/datiPartita/');
+      onValue(cod, (snapshot) => {
+          const c = snapshot.val();
+          console.log("Bingo", c);
+          if(c !== null){
+            console.log("dentro l'if")
+            observer.next(c);
+          }
+      })
+    })*/
+    return ascoltaBingo;
+  }
+
 }

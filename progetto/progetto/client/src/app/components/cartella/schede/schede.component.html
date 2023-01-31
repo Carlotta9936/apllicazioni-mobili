@@ -3,5 +3,5 @@
 <div *ngFor="let scheda of numeroSchede"> 
     <app-scheda (abilitaBingo)="abilitaBingo($event)" (abilitaCinquina)="abilitaCinquina($event)"></app-scheda>
  </div>
-<ion-button [disabled]="this.bingo" (click)="fineBingo()"> BINGO </ion-button>
+<ion-button [disabled]="false" (click)="fineBingo()"> BINGO </ion-button>
 <ion-button [disabled]="this.cinquina" (click)="fineCinquina()"> CINQUINA </ion-button>
