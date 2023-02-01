@@ -1,5 +1,6 @@
 {
   "root": true,
+  "project": ["bingo/client/tsconfig.json"],
   "ignorePatterns": ["projects/**/*"],
   "overrides": [
     {

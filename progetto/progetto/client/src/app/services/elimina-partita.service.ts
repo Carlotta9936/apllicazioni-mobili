@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { DatabaseService } from './database.service';
-import { SocketService } from '../services/socket.service';
 import { AuthService } from './auth.service';
 import { BossoloService } from './bossolo.service';
 
@@ -10,7 +9,7 @@ import { BossoloService } from './bossolo.service';
 })
 export class EliminaPartitaService {
 
-  constructor(public database: DatabaseService, private router: Router, private socket: SocketService, public auth: AuthService, public bossolo: BossoloService) { }
+  constructor(public database: DatabaseService, private router: Router, public auth: AuthService, public bossolo: BossoloService) { }
 
   //metodo che permette di annullare una partita
   cancelPartita(codice: string):void{

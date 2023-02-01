@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { BossoloService } from '../services/bossolo.service';
 import { CreaPartitaService } from '../services/crea-partita.service';
@@ -18,10 +19,14 @@ export class PartitaPage implements OnInit {
   iniziata: boolean = false;
   chat: boolean= true;
 
+  
+  bingoSub!: Subscription;
+  cinquinaSub!: Subscription;
+  cinquina: boolean = false;
 
   constructor(public crea: CreaPartitaService, public database: DatabaseService, 
     public auth: AuthService, public propr: ProprietarioService, public bossolo: BossoloService,
-    public partita: PartitaDBService, private router: Router) { }
+    public partita: PartitaDBService, private router: Router) {  }
 
   ngOnInit() {
     this.codice=this.crea.getCodiceUrl();
@@ -54,13 +59,28 @@ export class PartitaPage implements OnInit {
     this.database.partitaIniziata(this.codice!);
     this.iniziata=true;
     this.bossolo.startTimer();
-    this.partita.ascoltaNumero().subscribe();
+    this.ascoltaBingo();
+    this.ascoltaCinquina();
   }
+
+  finePartita(): void{
+    //Stop estrazione numeri
+    this.bossolo.stopTimer();
+    console.log("STOOOOOOOOOOOOOOOOOOOOOP")
+    //Stop ascolto vincitore partita
+    this.bingoSub.unsubscribe();
+    //Stop ascolto numero estratto
+    //this.partita.spegniAscoltoNumero();
+    //this.partita.spegniAscoltoBingo();
+    //this.partita.ascoltaBingo().unsubscribe();
+
+  }
+
 
   end(codice: string): void {
     this.database.eliminaPartita(codice);
-    //this.bossolo.stopTimer();
-    //this.router.navigate(['/tabs/tab1']);
+    this.bossolo.stopTimer();
+    this.router.navigate(['/tabs/tab1']);
   }
 
   public esci(codice: string):void{
@@ -88,13 +108,34 @@ export class PartitaPage implements OnInit {
 
   //Tabellone
 
-  //Solo se sei il proprietario
-  estrazioneNumeri(): void{
+/*  //Solo se sei il proprietario
+  estrazioneNumeri(): void{*/
 
+  ascoltaBingo(): void {
+    this.bingoSub = this.partita.ascoltaBingo()
+      .subscribe((value) => {
+      if(value !== false){
+        console.log("Qualcuno ha fatto bingo", value);
+        this.finePartita();
+        }
+      })
   }
 
-  //Schede
+  ascoltaCinquina(): void{
+    this.cinquinaSub = this.partita.ascoltaCinquina()
+    .subscribe((value) => {
+      if(value!=false){
+        console.log("Qualcuno ha fatto cinquina", value);
+        this.cinquina = true;
+        setTimeout(this.togliMessaggio, 1000);
+        this.cinquinaSub.unsubscribe();
+      }
+    })
+  }
 
-
+  togliMessaggio(): void{
+    console.log("Togli");
+    this.cinquina = false
+  }
 
 }

@@ -22,6 +22,10 @@
 
 <app-tabellone>  </app-tabellone>
 <app-schede [iniziata]="this.iniziata"> </app-schede>
+<p>{{this.cinquina}}</p>
+<div *ngIf="this.cinquina">
+  <app-cinquina (click)="togliMessaggio()"> </app-cinquina>
+</div>
 
 
 <ion-content>

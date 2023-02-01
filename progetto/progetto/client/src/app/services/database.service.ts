@@ -2,14 +2,14 @@ import { BootstrapOptions, Injectable } from '@angular/core';
 import { list } from '@angular/fire/database';
 import { User } from '../interfaces/User';
 import { Partita } from '../interfaces/Partita';
-import { collection, doc, docData, Firestore, query, where, getDocs,ChildUpdateFields} from '@angular/fire/firestore';
+import { collection, doc, docData, Firestore, query, where, getDocs} from '@angular/fire/firestore';
 import { DataServiceService } from './data-service.service';
-import { getDatabase, set, ref, onValue, remove, update, child, get, push, onChildAdded} from "firebase/database";
+import { getDatabase, set, ref, onValue, remove, update, child, get, push} from "firebase/database";
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import { PartitaData } from '../interfaces/PartitaData';
-import { Observable } from 'rxjs';
 import { Timbro } from '../interfaces/Timbro';
+import { observable, Observable } from 'rxjs';
 
 
 @Injectable({
@@ -113,19 +113,7 @@ export class DatabaseService {
       iniziata: true
     })
   }
-
-  /** Metodi per partita
-    * ! Metodo da togliere
-  */
-  public aggiornaPartita(partita: Partita): void{
-    set(ref(this.database, 'game/'+'AAA'), {
-      ultimoNumero: partita.ultimoNumero, 
-      //numeriEstratti: partita.numeriEstratti+1,
-      cinquina: partita.cinquina,
-      bingo: partita.bingo
-    })
-  }
-
+  
   public estrazioneNumero(codice: string, numero: number): void{
     update(ref(this.database, 'partita/'+codice+'/datiPartita'), {
       ultimoNumero: numero,
@@ -137,7 +125,6 @@ export class DatabaseService {
       const cod = ref(this.database);
       get(child(cod,  'partita/'+ codice+'/datiPartita')).then((snapshot) => {
         if(snapshot.exists()){
-          console.log("mi @mi")
           const c = snapshot.val().ultimoNumero;
           console.log("C", c);
           resolve(c);
@@ -153,7 +140,6 @@ export class DatabaseService {
       const cod = ref(this.database, 'partita/'+ codice+'/datiPartita');
       onValue(cod, (snapshot) => {
         if(snapshot.exists()){
-          console.log("mi @mi")
           const c = snapshot.val().ultimoNumero;
           console.log("C", c);
           observer.next(c);
@@ -167,13 +153,14 @@ export class DatabaseService {
   //Ricerca tutti le partite nel DB
   public async getPartite(): Promise<any> {
     const partite = new Promise<string>((resolve, reject) => {
-      const partiteDB = ref(this.database, 'partita/');
-      onValue(partiteDB, (snapshot) => {
-        console.log("S", snapshot.val());
-        resolve(snapshot.val());
+      const partiteDB = ref(this.database);
+      get(child(partiteDB,  'partita/')).then((snapshot) => {
+        if(snapshot.exists()){
+          console.log("S", snapshot.val());
+          resolve(snapshot.val());
+        }
       })
     })
-
     return partite;
   }
     
@@ -259,6 +246,58 @@ export class DatabaseService {
     });
   }
   
+  dichiaraBingo(user: string, codice: string): void {
+    update(ref(this.database, 'partita/'+codice+'/datiPartita/'), {
+      bingo: user
+    })
+  }
+
+  dichiaraCinquina(user: string, codice: string): void {
+    update(ref(this.database, 'partita/'+codice+'/datiPartita/'), {
+      cinquina: user
+    })
+  }
+  
+  ascoltaBingo(codice: string): Promise<any>{
+    const ascoltaBingo = new Promise<any>((resolve, reject) => {
+      const cod = ref(this.database);
+      get(child(cod,  'partita/'+ codice+'/datiPartita')).then((snapshot) => {
+        if(snapshot.exists()){
+          const c = snapshot.val().bingo;
+          console.log("Bingo", c);
+          resolve(c);
+        }
+      }) 
+    })
+
+   /* const ascoltaBingo = new Observable<any>((observer) => {
+      const cod = ref(this.database, 'partita/'+codice+'/datiPartita/');
+      onValue(cod, (snapshot) => {
+          const c = snapshot.val();
+          console.log("Bingo", c);
+          if(c !== null){
+            console.log("dentro l'if")
+            observer.next(c);
+          }
+      })
+    })*/
+    return ascoltaBingo;
+  }
+
+  ascoltaCinquina(codice: string): Promise<any>{
+    const ascoltaCinquina = new Promise<any>((resolve, reject) => {
+      const cod = ref(this.database);
+      get(child(cod,  'partita/'+ codice+'/datiPartita')).then((snapshot) => {
+        if(snapshot.exists()){
+          const c = snapshot.val().cinquina;
+          console.log("Bingo", c);
+          resolve(c);
+        }
+      }) 
+    })
+    return ascoltaCinquina;
+  }
+
 }
 function addCommentElement(postElement: any, key: string | null, text: any, author: any) {
   throw new Error('Function not implemented.');

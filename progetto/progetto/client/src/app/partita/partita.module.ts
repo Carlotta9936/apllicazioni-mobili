@@ -13,6 +13,7 @@ import { SchedeComponent } from '../components/cartella/schede/schede.component'
 import { CellaComponent } from '../components/tab/cella/cella.component';
 import { TabelloneComponent } from '../components/tab/tabellone/tabellone.component';
 import { ChatComponent } from '../components/chat/chat.component';
+import { CinquinaComponent } from '../components/cinquina/cinquina.component';
 
 @NgModule({
   imports: [
@@ -21,6 +22,6 @@ import { ChatComponent } from '../components/chat/chat.component';
     IonicModule,
     PartitaPageRoutingModule
   ],
-  declarations: [PartitaPage, SchedeComponent, SchedaComponent, CasellaComponent, TabelloneComponent, CellaComponent, ChatComponent]
+  declarations: [PartitaPage, SchedeComponent, SchedaComponent, CasellaComponent, TabelloneComponent, CellaComponent, ChatComponent, CinquinaComponent]
 })
 export class PartitaPageModule {}
