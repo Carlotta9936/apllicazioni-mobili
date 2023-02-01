@@ -212,9 +212,15 @@ export class DatabaseService {
       bingo: user
     })
   }
+
+  dichiaraCinquina(user: string, codice: string): void {
+    update(ref(this.database, 'partita/'+codice+'/datiPartita/'), {
+      cinquina: user
+    })
+  }
   
   ascoltaBingo(codice: string): Promise<any>{
-    const ascoltaBingo = new Promise<number>((resolve, reject) => {
+    const ascoltaBingo = new Promise<any>((resolve, reject) => {
       const cod = ref(this.database);
       get(child(cod,  'partita/'+ codice+'/datiPartita')).then((snapshot) => {
         if(snapshot.exists()){
@@ -237,6 +243,20 @@ export class DatabaseService {
       })
     })*/
     return ascoltaBingo;
+  }
+
+  ascoltaCinquina(codice: string): Promise<any>{
+    const ascoltaCinquina = new Promise<any>((resolve, reject) => {
+      const cod = ref(this.database);
+      get(child(cod,  'partita/'+ codice+'/datiPartita')).then((snapshot) => {
+        if(snapshot.exists()){
+          const c = snapshot.val().cinquina;
+          console.log("Bingo", c);
+          resolve(c);
+        }
+      }) 
+    })
+    return ascoltaCinquina;
   }
 
 }

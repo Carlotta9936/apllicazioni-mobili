@@ -19,8 +19,8 @@ export class PartitaPage implements OnInit {
   iniziata: boolean = false;
   
   bingoSub!: Subscription;
-
-  @Input() bingoEvent = new EventEmitter();
+  cinquinaSub!: Subscription;
+  cinquina: boolean = false;
 
   constructor(public crea: CreaPartitaService, public database: DatabaseService, 
     public auth: AuthService, public propr: ProprietarioService, public bossolo: BossoloService,
@@ -58,6 +58,7 @@ export class PartitaPage implements OnInit {
     this.iniziata=true;
     this.bossolo.startTimer();
     this.ascoltaBingo();
+    this.ascoltaCinquina();
   }
 
   finePartita(): void{
@@ -102,6 +103,23 @@ export class PartitaPage implements OnInit {
         this.finePartita();
         }
       })
+  }
+
+  ascoltaCinquina(): void{
+    this.cinquinaSub = this.partita.ascoltaCinquina()
+    .subscribe((value) => {
+      if(value!=false){
+        console.log("Qualcuno ha fatto cinquina", value);
+        this.cinquina = true;
+        setTimeout(this.togliMessaggio, 1000);
+        this.cinquinaSub.unsubscribe();
+      }
+    })
+  }
+
+  togliMessaggio(): void{
+    console.log("Togli");
+    this.cinquina = false
   }
 
 }

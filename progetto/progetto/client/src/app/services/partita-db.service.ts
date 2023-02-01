@@ -82,8 +82,22 @@ export class PartitaDBService {
     return ascoltaBingo;
   }
 
-  /*spegniAscoltoBingo(): void {
-    console.log("Spegni");
-    clearInterval(this.bingoSpeaker);
-  }*/
+  //Aggiorna il DB per dichiarare cinquina
+  cinquina(user: string): void {
+    this.database.dichiaraCinquina(user, this.partita?.codice);
+  }
+
+  //Legge il DB per leggere se è stata fatta cinquina
+  ascoltaCinquina(): Observable<any>{
+    console.log("Ascolto cinquina on");
+    const ascoltaCinquina = new Observable<any>((observer) => {
+      setInterval(() => {
+        this.database.ascoltaCinquina(this.partita?.codice).then((value) => {
+          observer.next(value);
+        })
+      }, 1000)
+    })
+
+    return ascoltaCinquina;
+  }
 }
