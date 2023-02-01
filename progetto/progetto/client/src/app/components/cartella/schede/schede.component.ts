@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
+import { CreaPartitaService } from 'src/app/services/crea-partita.service';
 import { PartitaDBService } from 'src/app/services/partita-db.service';
 import { SchedaComponent } from '../scheda/scheda.component';
 
@@ -18,10 +19,11 @@ export class SchedeComponent implements OnInit {
   cinquina: boolean = true;
 
   cinquinaDichiarata: boolean = false;
-
   cinquinaSub!: Subscription;
 
-  constructor(public partita: PartitaDBService, private Auth:AuthService) { }
+  codice: string = this.crea.getCodiceUrl();
+
+  constructor(public partita: PartitaDBService, private Auth:AuthService, public crea: CreaPartitaService) { }
 
   ngOnInit() {
     this.compraScheda();
@@ -49,8 +51,8 @@ export class SchedeComponent implements OnInit {
   }
 
   ascoltaCinquina(): void {
-    this.cinquinaSub = this.partita.ascoltaCinquina().subscribe((value) => {
-      console.log("value!=false", value!=false)
+    this.cinquinaSub = this.partita.ascoltaCinquina(this.codice).subscribe((value) => {
+      //console.log("value!=false", value!=false)
       if(value!=false){
         this.cinquinaDichiarata = true;
         this.cinquina = true;
@@ -62,13 +64,13 @@ export class SchedeComponent implements OnInit {
   fineCinquina(): void {
     console.log("FINE CINQUINA");
     //Avverte il DB che è stato effettuata cinquina
-    this.partita.cinquina(this.Auth.get('user'));
+    this.partita.dichiaraCinquina(this.Auth.get('user'), this.codice);
   }
 
   fineBingo(): void {
     console.log("FINE PARTITA")
     //Avverte il DB che è stato effettuato Bingo
-    this.partita.bingo(this.Auth.get('user'));
+    this.partita.dichiaraBingo(this.Auth.get('user'), this.codice);
   }
 
 }

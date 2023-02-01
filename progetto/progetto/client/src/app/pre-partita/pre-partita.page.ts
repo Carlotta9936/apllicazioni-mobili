@@ -34,7 +34,7 @@ export class PrePartitaPage implements OnInit {
 
   ngOnInit() {
     this.codice=this.crea.getCodiceUrl();
-    this.partita.setPartita(this.codice);
+    //this.partita.setPartita(this.codice);
     this.controllaProprietario();
     //this.messaggi();
     //this.socket.stanza(this.codice,this.auth.get("user"));

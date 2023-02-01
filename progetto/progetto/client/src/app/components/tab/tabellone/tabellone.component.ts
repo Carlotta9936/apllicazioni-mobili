@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { DatabaseService } from 'src/app/services/database.service';
 import { PartitaDBService } from 'src/app/services/partita-db.service';
 import { Observable, Subscription } from 'rxjs';
+import { CreaPartitaService } from 'src/app/services/crea-partita.service';
 
 @Component({
   selector: 'app-tabellone',
@@ -28,7 +29,7 @@ export class TabelloneComponent implements OnInit, OnDestroy {
   numeroSub!: Subscription;
   bingoSub!: Subscription;
 
-  constructor(public bossolo: BossoloService, public partita: PartitaDBService) { 
+  constructor(public bossolo: BossoloService, public partita: PartitaDBService, public crea: CreaPartitaService, public database: DatabaseService) { 
     for(let i=1;i<=90;i++){
       this.numeri.push(i);
     }
@@ -48,15 +49,15 @@ export class TabelloneComponent implements OnInit, OnDestroy {
 
   coloraTabellone() {
     console.log("Colora");
-    this.numeroSub = this.partita.ascoltaNumero().subscribe((value : number) => {
-        console.log("PP");
+    this.numeroSub = this.partita.ascoltaNumero(this.crea.getCodiceUrl())
+      .subscribe((value: number) => {
         this.estratto= value;
         this.estratti[value] = true;
-    });
+      })
   }
 
   ascoltoBingo(): void{
-    this.bingoSub = this.partita.ascoltaBingo().subscribe((value) => {
+    this.bingoSub = this.partita.ascoltaBingo(this.crea.getCodiceUrl()).subscribe((value) => {
       if(value !== false){
         console.log("STOP");
         //this.partita.spegniAscoltoNumero();

@@ -106,50 +106,6 @@ export class DatabaseService {
     return codicePromise;
   } 
 
-
-  //setto la partita a iniziata
-  public partitaIniziata(codice: string): void{
-    update(ref(this.database, 'partita/'+codice), {
-      iniziata: true
-    })
-  }
-  
-  public estrazioneNumero(codice: string, numero: number): void{
-    update(ref(this.database, 'partita/'+codice+'/datiPartita'), {
-      ultimoNumero: numero,
-    })
-  }
-
-  public ascoltaNumero(codice: string): Promise<number> {
-    const ascoltaNumero = new Promise<number>((resolve, reject) => {
-      const cod = ref(this.database);
-      get(child(cod,  'partita/'+ codice+'/datiPartita')).then((snapshot) => {
-        if(snapshot.exists()){
-          const c = snapshot.val().ultimoNumero;
-          console.log("C", c);
-          resolve(c);
-        }
-      }) 
-    })
-    return ascoltaNumero;
-  }
-
-  /*
-  public ascoltaNumero(codice: string): Observable<number> {
-    const ascoltaNumero = new Observable<number>((observer) => {
-      const cod = ref(this.database, 'partita/'+ codice+'/datiPartita');
-      onValue(cod, (snapshot) => {
-        if(snapshot.exists()){
-          const c = snapshot.val().ultimoNumero;
-          console.log("C", c);
-          observer.next(c);
-        }
-      }) 
-    })
-    return ascoltaNumero;
-  }*/
-
-  
   //Ricerca tutti le partite nel DB
   public async getPartite(): Promise<any> {
     const partite = new Promise<string>((resolve, reject) => {
@@ -239,88 +195,11 @@ export class DatabaseService {
 
     return timbriPromise;
   } 
-
+  
   aggiungiTimbro(user: string, timbro: number): void {
     update(ref(this.database, 'users/'+user), {
       codiceTimbri: timbro
     });
   }
-  
-  dichiaraBingo(user: string, codice: string): void {
-    update(ref(this.database, 'partita/'+codice+'/datiPartita/'), {
-      bingo: user
-    })
-  }
 
-  dichiaraCinquina(user: string, codice: string): void {
-    update(ref(this.database, 'partita/'+codice+'/datiPartita/'), {
-      cinquina: user
-    })
-  }
-  
-  ascoltaBingo(codice: string): Promise<any>{
-    const ascoltaBingo = new Promise<any>((resolve, reject) => {
-      const cod = ref(this.database);
-      get(child(cod,  'partita/'+ codice+'/datiPartita')).then((snapshot) => {
-        if(snapshot.exists()){
-          const c = snapshot.val().bingo;
-          console.log("Bingo", c);
-          resolve(c);
-        }
-      }) 
-    })
-
-   /* const ascoltaBingo = new Observable<any>((observer) => {
-      const cod = ref(this.database, 'partita/'+codice+'/datiPartita/');
-      onValue(cod, (snapshot) => {
-          const c = snapshot.val();
-          console.log("Bingo", c);
-          if(c !== null){
-            console.log("dentro l'if")
-            observer.next(c);
-          }
-      })
-    })*/
-    return ascoltaBingo;
-  }
-
-  ascoltaCinquina(codice: string): Promise<any>{
-    const ascoltaCinquina = new Promise<any>((resolve, reject) => {
-      const cod = ref(this.database);
-      get(child(cod,  'partita/'+ codice+'/datiPartita')).then((snapshot) => {
-        if(snapshot.exists()){
-          const c = snapshot.val().cinquina;
-          console.log("Bingo", c);
-          resolve(c);
-        }
-      }) 
-    })
-    return ascoltaCinquina;
-  }
-
-
-  startPartita(codice: string): void{
-    update(ref(this.database, 'partita/'+codice+'/'), {
-      iniziata: true
-    })
-  }
-
-  ascoltoInizioPartita(codice: string): Observable<any>{
-    const ascoltoInizioPartita = new Observable<any>((observer) => {
-      const cod = ref(this.database, 'partita/'+codice+'/iniziata');
-        onValue(cod, (snapshot) => {
-            const c = snapshot.val();
-            console.log("ascolto inizio partita", c);
-            if(c !== null){
-              console.log("dentro l'if")
-              observer.next(c);
-            }
-        })
-    })
-    return ascoltoInizioPartita;
-  }
 }
-function addCommentElement(postElement: any, key: string | null, text: any, author: any) {
-  throw new Error('Function not implemented.');
-}
-

@@ -8,6 +8,7 @@ import { GeneratoreCartellaService } from 'src/app/services/generatore-cartella.
 import { Observable, Subscriber, Subscription } from 'rxjs';
 import { PartitaDBService } from 'src/app/services/partita-db.service';
 import { ECDH } from 'crypto';
+import { CreaPartitaService } from 'src/app/services/crea-partita.service';
 
 @Component({
   selector: 'app-scheda',
@@ -35,9 +36,8 @@ export class SchedaComponent implements OnInit, OnDestroy {
   numSub!: Subscription;
   bingoSub!: Subscription;
 
-
   constructor(public generatore: GeneratoreCartellaService, public database: DatabaseService, 
-    public bossolo: BossoloService, public partita: PartitaDBService) {
+    public bossolo: BossoloService, public partita: PartitaDBService, public crea: CreaPartitaService) {
   }
 
   //Azioni all'avvio del component
@@ -55,11 +55,11 @@ export class SchedaComponent implements OnInit, OnDestroy {
   
   //Utilizza un Observer per controllare l'ultimo numero estratto
   public listenNumero():void{
-    this.numSub = this.partita.ascoltaNumero()
-      .subscribe((value : number) => { 
+    this.numSub = this.partita.ascoltaNumero(this.crea.getCodiceUrl())
+      .subscribe((value) => {
         console.log("scheda", value);
         this.segnaNumero(value);
-    });
+      })
   }
 
   //Bisogna spegnere il subscribe
@@ -71,7 +71,7 @@ export class SchedaComponent implements OnInit, OnDestroy {
   }
 
   ascoltoBingo(): void{
-    this.bingoSub = this.partita.ascoltaBingo().subscribe((value) => {
+    this.bingoSub = this.partita.ascoltaBingo(this.crea.getCodiceUrl()).subscribe((value) => {
       if(value !== false){
         console.log("STOP");
         this.stopListener();
