@@ -18,6 +18,8 @@ export class PartitaPage implements OnInit {
   codice?: string;
   userProprietario?:string;
   iniziata: boolean = false;
+  chat: boolean= true;
+
   
   //Subscruption per ascoltare eventuali vincitori
   bingoSub!: Subscription;
@@ -118,6 +120,20 @@ export class PartitaPage implements OnInit {
       }
     });
   }
+
+  public visualizzaChat():void{
+    if(this.chat==true){
+      this.chat=false;
+    }else{
+      this.chat=true;
+    }
+
+  }
+
+  //Tabellone
+
+/*  //Solo se sei il proprietario
+  estrazioneNumeri(): void{*/
 
   ascoltaBingo(): void {
     this.bingoSub = this.partita.ascoltaBingo()
