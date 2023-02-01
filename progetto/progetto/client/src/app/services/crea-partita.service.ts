@@ -36,6 +36,7 @@ export class CreaPartitaService {
       pubblica, iniziata, codice, numPartecipanti, proprietario, messaggi, datiPartita
     };
     this.database.creaPartita(partita);
+    this.database.chat(codice, proprietario);
   }
 
 
@@ -43,21 +44,9 @@ export class CreaPartitaService {
   async creaPartitaDB(partita: boolean): Promise<void> {
     console.log("1");
     this.codice=this.creaCodice();
-
-    //const ipAddress = await this.getIPAddress();
-    //console.log(`Your IP address is: ${ipAddress}`);
-
     this.creaPartita(this.username,partita,this.codice);
-    }
+  }
 
-
-  /*async getIPAddress(): Promise<string> {
-    console.log("async")
-    const response = await fetch('https://api.ipify.org?format=json');
-    const data = await response.json();
-    console.log(data.ip);
-    return data.ip;
-  }*/
   
   //Crea codice
   creaCodice(): any{

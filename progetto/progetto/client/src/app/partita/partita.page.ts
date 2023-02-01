@@ -16,6 +16,7 @@ export class PartitaPage implements OnInit {
   codice?: string;
   userProprietario?:string;
   iniziata: boolean = false;
+  chat: boolean= true;
 
 
   constructor(public crea: CreaPartitaService, public database: DatabaseService, 
@@ -74,6 +75,15 @@ export class PartitaPage implements OnInit {
         console.log("errore"+e);
       }
     });
+  }
+
+  public visualizzaChat():void{
+    if(this.chat==true){
+      this.chat=false;
+    }else{
+      this.chat=true;
+    }
+
   }
 
   //Tabellone

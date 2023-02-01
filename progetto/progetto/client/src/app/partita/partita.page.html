@@ -3,6 +3,10 @@
     <ion-title><p> Codice partita: {{this.codice}} </p></ion-title>
   </ion-toolbar>
 </ion-header>
+<div *ngIf="this.chat===true">
+  <app-chat [codice]="this.codice!"></app-chat>
+</div>
+<ion-button (click)="this.visualizzaChat()">CHAT</ion-button>
 <div *ngIf="this.propr.proprietario===true; then thenBlock else elseBlock"></div>
 <ng-template #thenBlock>
   <div *ngIf="this.iniziata===false">

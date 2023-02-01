@@ -1,9 +1,10 @@
 import { BootstrapOptions, Injectable } from '@angular/core';
+import { list } from '@angular/fire/database';
 import { User } from '../interfaces/User';
 import { Partita } from '../interfaces/Partita';
-import { collection, doc, docData, Firestore, query, where, getDocs} from '@angular/fire/firestore';
+import { collection, doc, docData, Firestore, query, where, getDocs,ChildUpdateFields} from '@angular/fire/firestore';
 import { DataServiceService } from './data-service.service';
-import { getDatabase, set, ref, onValue, remove, update, child, get} from "firebase/database";
+import { getDatabase, set, ref, onValue, remove, update, child, get, push, onChildAdded} from "firebase/database";
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import { PartitaData } from '../interfaces/PartitaData';
@@ -49,6 +50,32 @@ export class DatabaseService {
 
     //Ritorno l'oggetto utente appena creato
     return u;
+  }
+
+  //crea chat
+  chat(codice: string, proprietario: string): void{
+    console.log("creato");
+    set(ref(this.database, "chat/"+codice),codice);  
+    this.inviaMessaggio(codice,"[Server]: "+ proprietario+" ha creato la partita");
+  }
+
+
+  inviaMessaggio(codice: string, messaggio: string):void{
+    const chat=ref(this.database, "chat/"+codice);
+    const aggiungi=push(chat);
+    set(aggiungi,messaggio);
+  }
+
+  //legge i messaggi di una chat
+  getChat(codice: string): Promise<any>{
+    const risultato= new Promise<any>((resolve, reject)=>{
+      const partita= ref(this.database, "chat/"+codice);
+      onValue(partita,(snapshot)=>{
+        const messaggi= snapshot.val();
+        resolve(messaggi);
+      });
+    });
+    return risultato;
   }
 
   //Ritorna tutti gli utenti per il login
@@ -186,6 +213,16 @@ export class DatabaseService {
   public eliminaPartita(cod: string){
     const partitaRef = ref(this.database, 'partita/'+cod);
     remove(partitaRef).then(() => {
+      this.eliminaChat(cod);
+      console.log("eliminato: "+cod);
+    }).catch((error) => {
+      console.log("errore");
+    });
+  }
+
+  public eliminaChat(cod: string){
+    const partita= ref(this.database, 'chat/'+ cod);
+    remove(partita).then(()=>{
       console.log("eliminato: "+cod);
     }).catch((error) => {
       console.log("errore");
@@ -223,3 +260,7 @@ export class DatabaseService {
   }
   
 }
+function addCommentElement(postElement: any, key: string | null, text: any, author: any) {
+  throw new Error('Function not implemented.');
+}
+
