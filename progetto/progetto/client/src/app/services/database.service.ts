@@ -320,7 +320,4 @@ export class DatabaseService {
     return ascoltoInizioPartita;
   }
 }
-function addCommentElement(postElement: any, key: string | null, text: any, author: any) {
-  throw new Error('Function not implemented.');
-}
 

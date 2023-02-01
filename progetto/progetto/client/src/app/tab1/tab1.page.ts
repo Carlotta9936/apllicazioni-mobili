@@ -6,6 +6,7 @@ import { ControlloCreditiService } from '../services/controllo-crediti.service';
 import { Router } from '@angular/router';
 import { AlertService } from '../services/alert.service';
 import { ProprietarioService } from '../services/proprietario.service';
+import { AuthService } from '../services/auth.service';
 
 
 @Component({
@@ -20,7 +21,7 @@ export class Tab1Page {
   searchTerm = '';
 
 
-  constructor(public crea: CreaPartitaService, public database: DatabaseService, public crediti: ControlloCreditiService, private router: Router, private alert: AlertService, public propr: ProprietarioService) { }
+  constructor(public crea: CreaPartitaService, public database: DatabaseService, public crediti: ControlloCreditiService, private router: Router, private alert: AlertService, public propr: ProprietarioService, public auth: AuthService) { }
 
   ngOnInit(){
     window.location.reload;
@@ -80,6 +81,7 @@ export class Tab1Page {
           let numPartecipanti= promise.numPartecipanti;
           //aggiorno il numero dei partecipanti
           this.database.aggiornaPartecipanti(codice, numPartecipanti+1);
+          this.database.inviaMessaggio(codice,"[SERVER]: "+ this.auth.get("user")+" si è aggiunto alla partita");
           
           this.router.navigate(['partita/'+codice]);
         }catch (e){

@@ -114,6 +114,7 @@ export class PartitaPage implements OnInit {
         let numPartecipanti= promise.numPartecipanti;
         //aggiorno il numero dei partecipanti
         this.database.aggiornaPartecipanti(codice, numPartecipanti-1);
+        this.database.inviaMessaggio(codice,"[SERVER]: "+ this.auth.get("user")+" si è scollegato");
         this.router.navigate(['/tabs/tab1']);
       }catch (e){
         console.log("errore"+e);
