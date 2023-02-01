@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Auth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
@@ -18,9 +19,17 @@ export class PartitaPage implements OnInit {
   userProprietario?:string;
   iniziata: boolean = false;
   
+  //Subscruption per ascoltare eventuali vincitori
   bingoSub!: Subscription;
   cinquinaSub!: Subscription;
+  //Variabile per chiamare il component della cinquina
   cinquina: boolean = false;
+  //Variabile per chiamare il component del bingo
+  schermataFinale: boolean = false;
+  //Variabili che vanno passate alle schermate della vincita
+  risultato!: string;
+  vincitoreBingo!: string;
+  vincitoreCinquina!: string;
 
   constructor(public crea: CreaPartitaService, public database: DatabaseService, 
     public auth: AuthService, public propr: ProprietarioService, public bossolo: BossoloService,
@@ -30,6 +39,19 @@ export class PartitaPage implements OnInit {
     this.codice=this.crea.getCodiceUrl();
     this.controllaProprietario();
     this.partita.setPartita(this.codice!);
+    this.partita.ascoltoInizioPartita(this.codice!).subscribe((value: boolean) => {
+      if(value === true && !this.propr.proprietario) {
+        console.log("STart 2")
+        this.start2();
+      }
+    })
+  }
+
+  start2(): void{
+    this.iniziata=true;
+    this.partita.inizioPartita();
+    this.ascoltaBingo();
+    this.ascoltaCinquina();
   }
 
   public controllaProprietario():void{
@@ -56,6 +78,7 @@ export class PartitaPage implements OnInit {
     //setto la partita a iniziata in modo che non sia più visibile nella pagina iniziale
     this.database.partitaIniziata(this.codice!);
     this.iniziata=true;
+    this.partita.inizioPartita();
     this.bossolo.startTimer();
     this.ascoltaBingo();
     this.ascoltaCinquina();
@@ -67,6 +90,7 @@ export class PartitaPage implements OnInit {
     console.log("STOOOOOOOOOOOOOOOOOOOOOP")
     //Stop ascolto vincitore partita
     this.bingoSub.unsubscribe();
+    this.schermataFinale = true;
     //Stop ascolto numero estratto
     //this.partita.spegniAscoltoNumero();
     //this.partita.spegniAscoltoBingo();
@@ -100,6 +124,12 @@ export class PartitaPage implements OnInit {
       .subscribe((value) => {
       if(value !== false){
         console.log("Qualcuno ha fatto bingo", value);
+        if(value === this.auth.get("user")){
+          this.risultato = "VITTORIA";
+        } else {
+          this.risultato = "SCONFITTA";
+        }
+        this.vincitoreBingo = value;
         this.finePartita();
         }
       })
@@ -108,8 +138,12 @@ export class PartitaPage implements OnInit {
   ascoltaCinquina(): void{
     this.cinquinaSub = this.partita.ascoltaCinquina()
     .subscribe((value) => {
+      console.log("ASCOLTO CINQUINA");
+      console.log("ASCOLTO CINQUINA");
+      console.log("ASCOLTO CINQUINA");
       if(value!=false){
         console.log("Qualcuno ha fatto cinquina", value);
+        this.vincitoreCinquina = value;
         this.cinquina = true;
         setTimeout(this.togliMessaggio, 1000);
         this.cinquinaSub.unsubscribe();

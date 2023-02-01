@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Partita } from '../interfaces/Partita';
 import { PartitaData } from '../interfaces/PartitaData';
 import { DatabaseService } from './database.service';
@@ -12,6 +12,9 @@ export class PartitaDBService {
   partita?: PartitaData;
   speaker?: any;
   bingoSpeaker?: any;
+
+
+  inizioPartitaSub!: Subscription;
 
   constructor(public database: DatabaseService) {}
 
@@ -33,6 +36,21 @@ export class PartitaDBService {
   //Aggiorna nel DB il numero appena uscito
   estrazioneNumero(numero: number): void{
     return this.database.estrazioneNumero(this.partita?.codice, numero);
+  }
+
+  inizioPartita(): void {
+    this.database.startPartita(this.partita?.codice);
+  }
+  ascoltoInizioPartita(codice: string): any{
+    console.log("Codice ", codice);
+    const inizioPartita = new Observable<number>((observer) => {
+      this.inizioPartitaSub = this.database.ascoltoInizioPartita(codice).subscribe((value) => {
+        console.log("PARTITA INIZIATA:", value);
+        observer.next(value);
+      })
+    })
+
+    return inizioPartita;
   }
   
   //Comunica con l'Observable a tutti gli iscritti il numero appena uscito

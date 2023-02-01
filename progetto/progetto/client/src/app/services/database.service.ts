@@ -259,4 +259,25 @@ export class DatabaseService {
     return ascoltaCinquina;
   }
 
+
+  startPartita(codice: string): void{
+    update(ref(this.database, 'partita/'+codice+'/'), {
+      iniziata: true
+    })
+  }
+
+  ascoltoInizioPartita(codice: string): Observable<any>{
+    const ascoltoInizioPartita = new Observable<any>((observer) => {
+      const cod = ref(this.database, 'partita/'+codice+'/iniziata');
+        onValue(cod, (snapshot) => {
+            const c = snapshot.val();
+            console.log("ascolto inizio partita", c);
+            if(c !== null){
+              console.log("dentro l'if")
+              observer.next(c);
+            }
+        })
+    })
+    return ascoltoInizioPartita;
+  }
 }
