@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { CreaPartitaService } from './crea-partita.service';
 import { PartitaDBService } from './partita-db.service';
 
 @Injectable({
@@ -11,7 +12,7 @@ export class BossoloService {
   tabellone: boolean[]=[];  //Un array di boolean, serve per colorare il tabellone
   interval?: any;           //Timer per l'estrazione
 
-  constructor(public partita: PartitaDBService){
+  constructor(public partita: PartitaDBService, public crea: CreaPartitaService){
     //creo un array con tutti i numeri estraibili 
     //e inizializzo il tabellone a false
       this.tabelloneVuoto();
@@ -59,6 +60,6 @@ export class BossoloService {
     //Si occupa dell'estrazione del numero dal bossolo
     let num=this.estraiNumero();
     //Aggiorno nel DB
-    this.partita.estrazioneNumero(num);
+    this.partita.estrazioneNumero(this.crea.getCodiceUrl(), num);
   }
 }

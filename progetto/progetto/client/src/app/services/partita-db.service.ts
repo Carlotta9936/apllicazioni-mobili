@@ -1,121 +1,119 @@
 import { Injectable } from '@angular/core';
+import { getDatabase, set, ref, onValue, remove, update, child, get, push} from "firebase/database";
 import { Observable, Subscription } from 'rxjs';
 import { Partita } from '../interfaces/Partita';
 import { PartitaData } from '../interfaces/PartitaData';
+import { DataServiceService } from './data-service.service';
 import { DatabaseService } from './database.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PartitaDBService {
-
+/*
   partita?: PartitaData;
   speaker?: any;
   bingoSpeaker?: any;
 
 
   inizioPartitaSub!: Subscription;
+  estrazioneNumeroSub!: Subscription;*/
 
-  constructor(public database: DatabaseService) {}
+  database;
 
-  //Setto la partita nel service
-  setPartita(codice: string): void{
-    this.database.getPartita(codice).then((value: PartitaData) => {
-      this.partita = value;
-      console.log("pippo",this.partita);
-      return this.partita;
+  constructor() { 
+    this.database = getDatabase();
+  }
+
+  //Metodi per modificare il DB
+  //setto la partita a iniziata
+  startPartita(codice: string): void{
+    update(ref(this.database, 'partita/'+codice+'/'), {
+      iniziata: true
+    })
+  }
+  
+  //Estrazione del numero
+  public estrazioneNumero(codice: string, numero: number): void{
+    update(ref(this.database, 'partita/'+codice+'/datiPartita'), {
+      ultimoNumero: numero,
     })
   }
 
-  getProprietario(): string {
-    console.log("partita",this.partita);
-    console.log("propr:", this.partita?.proprietario!);
-    return this.partita?.proprietario!;
-  }
-  
-  //Aggiorna nel DB il numero appena uscito
-  estrazioneNumero(numero: number): void{
-    return this.database.estrazioneNumero(this.partita?.codice, numero);
-  }
-
-  inizioPartita(): void {
-    this.database.startPartita(this.partita?.codice);
-  }
-  ascoltoInizioPartita(codice: string): any{
-    console.log("Codice ", codice);
-    const inizioPartita = new Observable<number>((observer) => {
-      this.inizioPartitaSub = this.database.ascoltoInizioPartita(codice).subscribe((value) => {
-        console.log("PARTITA INIZIATA:", value);
-        observer.next(value);
-      })
+  //Dichiarazione del bingo
+  dichiaraBingo(user: string, codice: string): void {
+    update(ref(this.database, 'partita/'+codice+'/datiPartita/'), {
+      bingo: user
     })
-
-    return inizioPartita;
   }
-  
-  //Comunica con l'Observable a tutti gli iscritti il numero appena uscito
-  ascoltaNumero(): any{
-    const numeroEstratto=new Observable<number>((observer)=>{
-      this.speaker = setInterval(() => {
-        this.database.ascoltaNumero(this.partita?.codice).then((value) => {
-          console.log("VVV", value);
-          observer.next(value);
+
+  //Dichiarazione della cinquina
+  dichiaraCinquina(user: string, codice: string): void {
+    update(ref(this.database, 'partita/'+codice+'/datiPartita/'), {
+      cinquina: user
+    })
+  }
+
+
+  // OBSERVABLE: tutti le funzioni che leggono dal DB con onValue, ad ogni modifica aggiornano gli iscritti
+  //Ascolto inizio partita
+  ascoltoInizioPartita(codice: string): Observable<any>{
+    const ascoltoInizioPartita = new Observable<any>((observer) => {
+      const cod = ref(this.database, 'partita/'+codice+'/iniziata');
+        onValue(cod, (snapshot) => {
+            const c = snapshot.val();
+            console.log("ascolto inizio partita", c);
+            if(c !== null){
+              console.log("dentro l'if")
+              observer.next(c);
+            }
         })
-      }, 1000);
-    });
-    
-  /*
-    const numeroEstratto=new Observable<number>((observer)=>{
-      let num = -1;
-      this.database.ascoltaNumero(this.partita?.codice).subscribe((numero) => {
-        num = numero
-        console.log("ascolto numero:", num);
-        observer.next(num);
-      })
-    });
-  */
-    return numeroEstratto;
+    })
+    return ascoltoInizioPartita;
   }
 
-  /*spegniAscoltoNumero(): void{
-    console.log("Stop ascolto numero");
-    clearInterval(this.speaker);
-  }*/
-
-  //Aggiorna il DB per dichiarare bingo
-  bingo(user: string): void {
-    this.database.dichiaraBingo(user, this.partita?.codice);
+  //Ascolta il numero appena estratto
+  ascoltaNumero(codice: string): Observable<any>{
+    const ascoltoNumero = new Observable<any>((observer) => {
+      const cod = ref(this.database, 'partita/'+codice+'/datiPartita/ultimoNumero');
+        onValue(cod, (snapshot) => {
+          const c = snapshot.val();
+          console.log("Numero estratto", c);
+          if(c !== null){
+            observer.next(c);
+          }
+        })
+    })
+    return ascoltoNumero;
   }
 
-  //Legge il DB per leggere se è stato fato un bingo
-  ascoltaBingo(): Observable<any> {
-    console.log("Ascolta bingo on");
+  //Ascolto se qualcuno chiama bingo
+  ascoltaBingo(codice: string): Observable<any>{
     const ascoltaBingo = new Observable<any>((observer) => {
-      this.bingoSpeaker = setInterval(() => {
-        this.database.ascoltaBingo(this.partita?.codice).then((value) => {
-          observer.next(value);
+      const cod = ref(this.database, 'partita/'+codice+'/datiPartita/bingo');
+        onValue(cod, (snapshot) => {
+          const c = snapshot.val();
+          console.log("Bingo", c);
+          if(c !== null){
+            observer.next(c);
+          }
         })
-      }, 1000);
     })
     return ascoltaBingo;
   }
 
-  //Aggiorna il DB per dichiarare cinquina
-  cinquina(user: string): void {
-    this.database.dichiaraCinquina(user, this.partita?.codice);
-  }
-
-  //Legge il DB per leggere se è stata fatta cinquina
-  ascoltaCinquina(): Observable<any>{
-    console.log("Ascolto cinquina on");
+  //Ascolto se qualcuno chiama cinquina
+  ascoltaCinquina(codice: string): Observable<any>{
     const ascoltaCinquina = new Observable<any>((observer) => {
-      setInterval(() => {
-        this.database.ascoltaCinquina(this.partita?.codice).then((value) => {
-          observer.next(value);
+      const cod = ref(this.database, 'partita/'+codice+'/datiPartita/cinquina');
+        onValue(cod, (snapshot) => {
+          const c = snapshot.val();
+          console.log("Cinquina", c);
+          if(c !== null){
+            observer.next(c);
+          }
         })
-      }, 1000)
     })
-
     return ascoltaCinquina;
   }
 }

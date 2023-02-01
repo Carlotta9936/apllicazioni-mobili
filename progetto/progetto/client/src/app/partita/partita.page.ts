@@ -40,7 +40,8 @@ export class PartitaPage implements OnInit {
   ngOnInit() {
     this.codice=this.crea.getCodiceUrl();
     this.controllaProprietario();
-    this.partita.setPartita(this.codice!);
+   // this.partita.setPartita(this.codice!);
+    //this.partita.ascoltaNumero(this.codice!);
     this.partita.ascoltoInizioPartita(this.codice!).subscribe((value: boolean) => {
       if(value === true && !this.propr.proprietario) {
         console.log("STart 2")
@@ -51,7 +52,6 @@ export class PartitaPage implements OnInit {
 
   start2(): void{
     this.iniziata=true;
-    this.partita.inizioPartita();
     this.ascoltaBingo();
     this.ascoltaCinquina();
   }
@@ -78,9 +78,8 @@ export class PartitaPage implements OnInit {
 
   start(): void {
     //setto la partita a iniziata in modo che non sia più visibile nella pagina iniziale
-    this.database.partitaIniziata(this.codice!);
+    this.partita.startPartita(this.codice!);
     this.iniziata=true;
-    this.partita.inizioPartita();
     this.bossolo.startTimer();
     this.ascoltaBingo();
     this.ascoltaCinquina();
@@ -137,7 +136,7 @@ export class PartitaPage implements OnInit {
   estrazioneNumeri(): void{*/
 
   ascoltaBingo(): void {
-    this.bingoSub = this.partita.ascoltaBingo()
+    this.bingoSub = this.partita.ascoltaBingo(this.codice!)
       .subscribe((value) => {
       if(value !== false){
         console.log("Qualcuno ha fatto bingo", value);
@@ -153,11 +152,8 @@ export class PartitaPage implements OnInit {
   }
 
   ascoltaCinquina(): void{
-    this.cinquinaSub = this.partita.ascoltaCinquina()
+    this.cinquinaSub = this.partita.ascoltaCinquina(this.codice!)
     .subscribe((value) => {
-      console.log("ASCOLTO CINQUINA");
-      console.log("ASCOLTO CINQUINA");
-      console.log("ASCOLTO CINQUINA");
       if(value!=false){
         console.log("Qualcuno ha fatto cinquina", value);
         this.vincitoreCinquina = value;
