@@ -208,7 +208,9 @@ export class DatabaseService {
   //Metodi per partita
 
   incrementaGiocatori(codice: string): void {
-
+    update(ref(this.database, 'partita/'+codice), {
+      numPartecipanti: increment(1)
+    })
   }
 
   decrementaGiocatori(codice: string): void {
@@ -218,3 +220,4 @@ export class DatabaseService {
   }
 
 }
+

@@ -5,6 +5,7 @@ import { DatabaseService } from '../services/database.service';
 import { TimbriService } from '../services/timbri.service';
 import { AlertService } from '../services/alert.service';
 import { AuthService } from '../services/auth.service';
+import { rejects } from 'assert';
 
 @Component({
   selector: 'app-market',
@@ -13,6 +14,7 @@ import { AuthService } from '../services/auth.service';
 })
 export class MarketPage implements OnInit {
 
+  risp?: any;
   crediti: number;
   timbriAcq: Timbro[] = [];
 
@@ -37,10 +39,13 @@ export class MarketPage implements OnInit {
       }
     }
 
-  compraCrediti(quantita: number): void{
+  async compraCrediti(quantita: number):Promise<void>{
     //Fare transazione con paypal con paypal
-    this.controlloCrediti.aggiornaCrediti(quantita*(-1));
-
+    let risposta= this.alert.alertConferma(this.risp);
+    console.log("risposta", (await risposta).valueOf());
+    if(await (await risposta).valueOf()==true){
+      this.controlloCrediti.aggiornaCrediti(quantita*(-1));
+    }
   }
 
   getTimbri(): any{
