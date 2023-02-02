@@ -17,7 +17,7 @@ export class ChatComponent implements OnInit {
   constructor(public database: DatabaseService, public auth: AuthService) { }
 
   ngOnInit() {
-    //this.stampaMessaggi();
+    this.stampaMessaggi();
   }
 
   sendMessage(){

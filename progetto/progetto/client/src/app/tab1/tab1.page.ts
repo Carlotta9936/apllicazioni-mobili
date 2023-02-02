@@ -58,7 +58,7 @@ export class Tab1Page {
 
   //metodo che manda alla stanza prepartita 
   public creaPartita():void{
-    if(this.crediti.autorizzaOperazione(1)==true){
+    if(+this.auth.get("crediti")>=1){
       this.router.navigate(['crea-partita']);
     }else{
       this.alert.presentAlert('fatti un giro al market, non hai crediti per giocare');

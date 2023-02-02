@@ -25,6 +25,7 @@ export class PartitaPage implements OnInit {
   //Subscruption per ascoltare eventuali vincitori
   bingoSub!: Subscription;
   cinquinaSub!: Subscription;
+  checkSub!: Subscription;
   //Variabile per chiamare il component della cinquina
   cinquina: boolean = false;
   //Variabile per chiamare il component del bingo
@@ -145,9 +146,10 @@ export class PartitaPage implements OnInit {
   estrazioneNumeri(): void{*/
 
   ascoltaStatoHost():void{
-    this.database.checkServer(this.codice!).subscribe((value)=>{
+    this.checkSub=this.database.checkServer(this.codice!).subscribe((value)=>{
       if(value==false){
         this.annullaPartita();
+        this.checkSub.unsubscribe();
       }
     })
   }
@@ -175,7 +177,6 @@ export class PartitaPage implements OnInit {
         console.log("Qualcuno ha fatto cinquina", value);
         this.vincitoreCinquina = value;
         this.cinquina = true;
-        setTimeout(this.togliMessaggio, 1000);
         this.cinquinaSub.unsubscribe();
       }
     })
