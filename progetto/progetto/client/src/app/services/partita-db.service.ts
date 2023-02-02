@@ -159,4 +159,31 @@ export class PartitaDBService {
     })
   }
 
+  incrementaMontepremi(codice: string): void{
+    update(ref(this.database, 'partita/'+codice+'/datiPartita'), {
+      montepremi: increment(1)
+    })  
+  }
+
+  getMontepremi(codice: string): Promise<number>{
+    const montepremiPromise = new Promise<number>((resolve, reject) => {
+      const montepremi = ref(this.database);
+      get(child(montepremi, 'partita/'+codice+'/datiPartita/montepremi')).then((snapshot) => {
+        if(snapshot.exists()){
+          const c = snapshot.val();
+          console.log("Montepremi", c);
+          resolve(c);
+        }
+      })
+    })
+    return montepremiPromise;
+  }
+
+  setPremi(codice: string, premioBingo: number, premioCinquina: number, premioSuperBingo: number): void {
+    update(ref(this.database, 'partita/'+codice+'/datiPartita'), {
+      premioBingo: premioBingo,
+      premioCinquina: premioCinquina
+    })
+  }
+
 }

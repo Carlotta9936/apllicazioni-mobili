@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { BossoloService } from '../services/bossolo.service';
+import { CalcolaPremiService } from '../services/calcola-premi.service';
 import { CreaPartitaService } from '../services/crea-partita.service';
 import { DatabaseService } from '../services/database.service';
 import { PartitaDBService } from '../services/partita-db.service';
@@ -34,7 +35,7 @@ export class PartitaPage implements OnInit {
 
   constructor(public crea: CreaPartitaService, public database: DatabaseService, 
     public auth: AuthService, public propr: ProprietarioService, public bossolo: BossoloService,
-    public partita: PartitaDBService, private router: Router) {  }
+    public partita: PartitaDBService, private router: Router, public calcolaPremi: CalcolaPremiService) {  }
 
   ngOnInit() {
     this.codice=this.crea.getCodiceUrl();
@@ -80,6 +81,7 @@ export class PartitaPage implements OnInit {
     this.partita.startPartita(this.codice!);
     this.iniziata=true;
     this.bossolo.startTimer();
+    this.calcolaPremi.calcolaPremi(this.codice!);
     this.ascoltaBingo();
     this.ascoltaCinquina();
   }

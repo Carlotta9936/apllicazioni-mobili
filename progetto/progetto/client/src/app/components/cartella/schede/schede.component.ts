@@ -35,6 +35,7 @@ export class SchedeComponent implements OnInit {
      * TODO: controllo crediti per comprare la scheda
      */
     this.numeroSchede.push(0);
+    this.partita.incrementaMontepremi(this.codice);
   }
 
   abilitaBingo(value: any): void {
