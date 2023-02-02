@@ -62,4 +62,6 @@ export class BossoloService {
     //Aggiorno nel DB
     this.partita.estrazioneNumero(this.crea.getCodiceUrl(), num);
   }
+
+  
 }

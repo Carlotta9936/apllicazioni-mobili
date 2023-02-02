@@ -19,4 +19,8 @@ export class EliminaPartitaService {
     this.bossolo.stopTimer();
     this.router.navigate(['/tabs/tab1']);
   }
+
+  esciPartita(codice: string): void{
+    
+  }
 }

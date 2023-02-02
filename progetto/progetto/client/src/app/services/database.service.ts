@@ -4,7 +4,7 @@ import { User } from '../interfaces/User';
 import { Partita } from '../interfaces/Partita';
 import { collection, doc, docData, Firestore, query, where, getDocs} from '@angular/fire/firestore';
 import { DataServiceService } from './data-service.service';
-import { getDatabase, set, ref, onValue, remove, update, child, get, push} from "firebase/database";
+import { getDatabase, set, ref, onValue, remove, update, child, get, push, increment} from "firebase/database";
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import { PartitaData } from '../interfaces/PartitaData';
@@ -132,7 +132,10 @@ export class DatabaseService {
       datiPartita:{
         ultimoNumero: partita.datiPartita.ultimoNumero,
         cinquina: partita.datiPartita.cinquina,
-        bingo: partita.datiPartita.bingo
+        bingo: partita.datiPartita.bingo,
+        premioBingo: partita.datiPartita.premioBingo,
+        premioCinquina: partita.datiPartita.premioCinquina,
+        numeriEstratti: partita.datiPartita.numeriEstratti
       }
     });
   }
@@ -200,6 +203,18 @@ export class DatabaseService {
     update(ref(this.database, 'users/'+user), {
       codiceTimbri: timbro
     });
+  }
+
+  //Metodi per partita
+
+  incrementaGiocatori(codice: string): void {
+
+  }
+
+  decrementaGiocatori(codice: string): void {
+    update(ref(this.database, 'partita/'+codice), {
+      numPartecipanti: increment(-1)
+    })
   }
 
 }

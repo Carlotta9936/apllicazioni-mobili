@@ -42,7 +42,10 @@ export class Tab1Page {
             'datiPartita':{
               'ultimoNumero': v.datiPartita.ultimoNumero,
               'bingo': v.datiPartita.bingo,
-              'cinquina': v.datiPartita.cinquina
+              'cinquina': v.datiPartita.cinquina,
+              'premioBingo': v.datiPartita.premioBingo,
+              'premioCinquina': v.datiPartita.premioCinquina,
+              'numeriEstratti': v.datiPartita.numeriEstratti,
             }
           })
         }

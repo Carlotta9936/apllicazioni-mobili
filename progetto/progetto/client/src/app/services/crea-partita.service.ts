@@ -31,7 +31,10 @@ export class CreaPartitaService {
     let ultimoNumero= -1;
     let cinquina = false;
     let bingo= false;
-    let datiPartita: Partita= {ultimoNumero, cinquina, bingo};
+    let premioBingo = 1;
+    let premioCinquina = 1;
+    let numeriEstratti = 0;
+    let datiPartita: Partita= {ultimoNumero, cinquina, bingo, premioBingo, premioCinquina, numeriEstratti};
     let partita: PartitaData ={
       pubblica, iniziata, codice, numPartecipanti, proprietario, messaggi, datiPartita
     };

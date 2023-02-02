@@ -20,7 +20,6 @@ export class PartitaPage implements OnInit {
   iniziata: boolean = false;
   chat: boolean= true;
 
-  
   //Subscruption per ascoltare eventuali vincitori
   bingoSub!: Subscription;
   cinquinaSub!: Subscription;
@@ -89,18 +88,17 @@ export class PartitaPage implements OnInit {
     //Stop estrazione numeri
     this.bossolo.stopTimer();
     console.log("STOOOOOOOOOOOOOOOOOOOOOP")
+    if(this.propr.proprietario){
+      this.partita.finishPartita(this.codice!);
+    }
     //Stop ascolto vincitore partita
     this.bingoSub.unsubscribe();
     this.schermataFinale = true;
-    //Stop ascolto numero estratto
-    //this.partita.spegniAscoltoNumero();
-    //this.partita.spegniAscoltoBingo();
-    //this.partita.ascoltaBingo().unsubscribe();
-
   }
 
 
   end(codice: string): void {
+  
     this.database.eliminaPartita(codice);
     this.bossolo.stopTimer();
     this.router.navigate(['/tabs/tab1']);
