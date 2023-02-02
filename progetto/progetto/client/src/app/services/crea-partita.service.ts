@@ -24,23 +24,25 @@ export class CreaPartitaService {
 
   public creaPartita(proprietario: string, pubblica: boolean, cod: string): any{
     //let codice= this.route.snapshot.paramMap.get('codice'); 
-    let codice= cod;
-    let iniziata = false;
-    let numPartecipanti: number= 1;
-    let messaggi:[]=[];
-    let ultimoNumero= -1;
-    let cinquina = false;
-    let bingo= false;
-    let premioBingo = 0;
-    let premioCinquina = 0;
-    let numeriEstratti = 0;
-    let montepremi = 0;
-    let datiPartita: Partita= {ultimoNumero, cinquina, bingo, premioBingo, premioCinquina, numeriEstratti, montepremi};
     let partita: PartitaData ={
-      pubblica, iniziata, codice, numPartecipanti, proprietario, messaggi, datiPartita
-    };
+      codice: cod,
+      proprietario: proprietario,
+      pubblica: pubblica,
+      iniziata: false,
+      numPartecipanti: 1,
+      serverOnline: true,
+      datiPartita: {
+        ultimoNumero: -1,
+        cinquina: false,
+        bingo: false,
+        premioBingo: 0,
+        premioCinquina: 0,
+        numeriEstratti: 0,
+        montepremi: 0,
+      }
+    }
     this.database.creaPartita(partita);
-    this.database.chat(codice, proprietario);
+    this.database.chat(cod, proprietario);
   }
 
 

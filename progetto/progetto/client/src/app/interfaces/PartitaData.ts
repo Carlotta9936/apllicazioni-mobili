@@ -6,6 +6,6 @@ export interface PartitaData {
     codice: any,
     numPartecipanti: number,
     proprietario: string,
-    messaggi: string[],
+    serverOnline: boolean;
     datiPartita: Partita,
 }

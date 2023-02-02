@@ -41,14 +41,13 @@ export class PartitaPage implements OnInit {
   ngOnInit() {
     this.codice=this.crea.getCodiceUrl();
     this.controllaProprietario();
-   // this.partita.setPartita(this.codice!);
-    //this.partita.ascoltaNumero(this.codice!);
+    this.ascoltaStatoHost();
     this.partita.ascoltoInizioPartita(this.codice!).subscribe((value: boolean) => {
       if(value === true && !this.propr.proprietario) {
         console.log("STart 2")
         this.start2();
       }
-    })
+    });
   }
 
   start2(): void{
@@ -101,25 +100,16 @@ export class PartitaPage implements OnInit {
     this.schermataFinale = true;
   }
 
-  public annullaPartita(codice: string){
-    //se il proprietario sono io non devo avvisarmi
-    this.database.getPartita(codice).then((promise) => {
-      try{
-        console.log("sono qui");
-        //se il proprietario sono io non devo avvisarmi
-        if(promise.proprietario!=this.auth.get("user")){ 
-          this.alert.presentAlert("il server si è disconnesso, PARTITA ANNULLATA");
-          this.router.navigate(['/tabs/tab1']);
-        }
-      }catch (e){
-        console.log("errore"+e);
-      }
-    });
+  public annullaPartita():void{
+    if(!this.propr.proprietario){
+      this.alert.presentAlert("il server si è disconnesso, PARTITA ANNULLATA");
+      this.router.navigate(['/tabs/tab1']);
+    }
   }
 
 
   end(codice: string): void {
-    this.annullaPartita(codice);
+    this.database.serverOffline(codice);
     this.database.eliminaPartita(codice);
     this.bossolo.stopTimer();
     this.router.navigate(['/tabs/tab1']);
@@ -153,6 +143,14 @@ export class PartitaPage implements OnInit {
 
 /*  //Solo se sei il proprietario
   estrazioneNumeri(): void{*/
+
+  ascoltaStatoHost():void{
+    this.database.checkServer(this.codice!).subscribe((value)=>{
+      if(value==false){
+        this.annullaPartita();
+      }
+    })
+  }
 
   ascoltaBingo(): void {
     this.bingoSub = this.partita.ascoltaBingo(this.codice!)

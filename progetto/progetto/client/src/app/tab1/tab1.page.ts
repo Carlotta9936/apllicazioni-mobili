@@ -39,7 +39,7 @@ export class Tab1Page {
             'numPartecipanti': v.numPartecipanti,
             'proprietario': v.proprietario,
             'pubblica': v.pubblica,
-            'messaggi': v.messaggi,
+            'serverOnline': v.serverOnline,
             'datiPartita':{
               'ultimoNumero': v.datiPartita.ultimoNumero,
               'bingo': v.datiPartita.bingo,

@@ -11,15 +11,6 @@ import { DatabaseService } from './database.service';
   providedIn: 'root'
 })
 export class PartitaDBService {
-/*
-  partita?: PartitaData;
-  speaker?: any;
-  bingoSpeaker?: any;
-
-
-  inizioPartitaSub!: Subscription;
-  estrazioneNumeroSub!: Subscription;*/
-
   database;
 
   constructor() { 

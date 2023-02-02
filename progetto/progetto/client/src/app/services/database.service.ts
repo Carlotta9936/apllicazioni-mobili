@@ -10,6 +10,7 @@ import 'firebase/auth';
 import { PartitaData } from '../interfaces/PartitaData';
 import { Timbro } from '../interfaces/Timbro';
 import { observable, Observable } from 'rxjs';
+import { rejects } from 'assert';
 
 
 @Injectable({
@@ -128,8 +129,8 @@ export class DatabaseService {
       iniziata: partita.iniziata,
       codice: partita.codice,
       numPartecipanti: partita.numPartecipanti,
+      serverOnline: partita.serverOnline,
       proprietario: partita.proprietario,
-      messaggi: partita.messaggi,
       datiPartita:{
         ultimoNumero: partita.datiPartita.ultimoNumero,
         cinquina: partita.datiPartita.cinquina,
@@ -156,6 +157,23 @@ export class DatabaseService {
     }); 
     return ritorno;
   } 
+
+
+  serverOffline(codice: string){
+    update(ref(this.database, 'partita/'+codice), {
+      serverOnline: false
+    } );
+  }
+
+  public checkServer(codice: string): Observable<boolean>{
+    const checkStato= new Observable<boolean>((observer)=>{
+      const stato=ref(this.database,'partita/'+codice+'/serverOnline');
+      onValue(stato,(snapshot)=>{
+        observer.next(snapshot.val());
+      })
+    })
+    return checkStato;
+  }
 
 
   public eliminaPartita(cod: string){
