@@ -1,15 +1,6 @@
-<!--<div *ngFor="let message of messageList">
-  <li>
-      {{message}}
-  </li>  
-</div>
-<input [(ngModel)]="newMessage" (keyup)="$event.keyCode === 13 && sendMessage()" />
-<button (click)="sendMessage()">Send Message</button>
---> 
 <div *ngFor="let message of this.messaggi">
   {{this.message}}
 </div>
-
 <ion-item>
   <ion-input [(ngModel)]="newMessage" placeholder="Scrivi qui il tuo messaggio" (keyup)="$event.keyCode === 13 && sendMessage()"></ion-input>
   <button (click)="sendMessage()">Send Message</button>
