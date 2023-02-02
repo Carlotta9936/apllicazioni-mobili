@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { getDatabase, set, ref, onValue, remove, update, child, get, push} from "firebase/database";
+import { resolve } from 'dns';
+import { getDatabase, set, ref, onValue, remove, update, child, get, push, increment} from "firebase/database";
 import { Observable, Subscription } from 'rxjs';
 import { Partita } from '../interfaces/Partita';
 import { PartitaData } from '../interfaces/PartitaData';
@@ -26,10 +27,17 @@ export class PartitaDBService {
   }
 
   //Metodi per modificare il DB
-  //setto la partita a iniziata
+  //setto che stiamo giocando
   startPartita(codice: string): void{
     update(ref(this.database, 'partita/'+codice+'/'), {
       iniziata: true
+    })
+  }
+
+  //Sette che non stiamo giocando
+  finishPartita(codice: string): void{
+    update(ref(this.database, 'partita/'+codice+'/'), {
+      iniziata: false
     })
   }
   
@@ -116,4 +124,73 @@ export class PartitaDBService {
     })
     return ascoltaCinquina;
   }
+
+  //Ritorna i risultati della partita
+  getRisultati(codice: string): Promise<Partita>{
+    const risultatiPromise = new Promise<Partita>((resolve, reject) => {
+      const datiPartita = ref(this.database);
+      get(child(datiPartita, 'partita/'+codice+'/datiPartita')).then((snapshot) => {
+        if(snapshot.exists()){
+          const c = snapshot.val();
+          console.log("Dati partita", c);
+          resolve(c);
+        }
+      })
+    })
+    return risultatiPromise;
+  }
+
+  //Reset dati partita nel DB
+  resetDatiPartita(codice: string): void{
+    update(ref(this.database, 'partita/'+codice+'/datiPartita/'), {
+      cinquina: false,
+      bingo: false,
+      ultimoNumero: -1,
+      montepremi: 0,
+      premioBingo: 0,
+      premioCinquina: 0,
+      numeriEstratti: 0
+    })
+  }
+
+  incrementaNumeriEstratti(codice: string): void{
+    update(ref(this.database, 'partita/'+codice+'/datiPartita'), {
+      numeriEstratti: increment(1)
+    })
+  }
+
+  incrementaMontepremi(codice: string): void{
+    update(ref(this.database, 'partita/'+codice+'/datiPartita'), {
+      montepremi: increment(1)
+    })  
+  }
+
+  getMontepremi(codice: string): Promise<number>{
+    const montepremiPromise = new Promise<number>((resolve, reject) => {
+      const montepremi = ref(this.database);
+      get(child(montepremi, 'partita/'+codice+'/datiPartita/montepremi')).then((snapshot) => {
+        if(snapshot.exists()){
+          const c = snapshot.val();
+          console.log("Montepremi", c);
+          resolve(c);
+        }
+      })
+    })
+    return montepremiPromise;
+  }
+
+  //getPremi(codice: string): Promise<any>
+
+  setPremi(codice: string, premioBingo: number, premioCinquina: number, premioSuperBingo: number): void {
+    update(ref(this.database, 'partita/'+codice+'/datiPartita'), {
+      premioBingo: premioBingo,
+      premioCinquina: premioCinquina,
+      premioSuperBingo: premioSuperBingo
+    })
+  }
+
+  distribuisciPremi(codice: string, datiPartita: Partita): void {
+
+  }
+
 }

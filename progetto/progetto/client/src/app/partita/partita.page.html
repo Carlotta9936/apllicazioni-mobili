@@ -1,43 +1,45 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title><p> Codice partita: {{this.codice}} </p></ion-title>
-  </ion-toolbar>
-</ion-header>
-<div *ngIf="this.chat===true">
-  <app-chat [codice]="this.codice!"></app-chat>
-</div>
-<ion-button (click)="this.visualizzaChat()">CHAT</ion-button>
-<div *ngIf="this.propr.proprietario===true; then thenBlock else elseBlock"></div>
-<ng-template #thenBlock>
-  <div *ngIf="this.iniziata===false">
-    <ion-button (click)="this.start()">START PARTITA</ion-button>
-    <!--manca controllo numero giocatori-->
-</div>
-<ion-button (click)="this.end(this.codice!)">ANNULLA PARTITA</ion-button>
-</ng-template>
-<ng-template #elseBlock>
-  <p>Proprietario: {{this.userProprietario}}</p>
-  <ion-button (click)="this.esci(this.codice!)">Esci</ion-button>
-</ng-template>
+<div id="content">
+  <ion-header>
+      <ion-toolbar>
+      <ion-title><p> Codice partita: {{this.codice}} </p></ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <div *ngIf="this.chat===true">
+    <app-chat [codice]="this.codice!"></app-chat>
+  </div>
+  <ion-button (click)="this.visualizzaChat()">CHAT</ion-button>
+  <div *ngIf="this.propr.proprietario===true; then thenBlock else elseBlock"></div>
+  <ng-template #thenBlock>
+    <div *ngIf="this.iniziata===false">
+      <ion-button (click)="this.start()">START PARTITA</ion-button>
+      <!--manca controllo numero giocatori-->
+  </div>
+  <ion-button (click)="this.end(this.codice!)">ANNULLA PARTITA</ion-button>
+  </ng-template>
+  <ng-template #elseBlock>
+    <p>Proprietario: {{this.userProprietario}}</p>
+    <ion-button (click)="this.esci(this.codice!)">Esci</ion-button>
+  </ng-template>
 
-<app-tabellone>  </app-tabellone>
-<app-schede [iniziata]="this.iniziata"> </app-schede>
-<p>{{this.cinquina}}</p>
-<div *ngIf="this.cinquina">
-  <app-cinquina (click)="togliMessaggio()"> </app-cinquina>
-</div>
+  <app-tabellone>  </app-tabellone>
+  <app-schede [iniziata]="this.iniziata"> </app-schede>
+  <p>{{this.cinquina}}</p>
+  <div *ngIf="this.cinquina">
+    <app-cinquina (click)="togliMessaggio()"> </app-cinquina>
+  </div>
 
-<div *ngIf="schermataFinale">
-  <app-schermata-vittoria [risultato]="this.risultato" [vincitoreBingo]="this.vincitoreBingo" [vincitoreCinquina]="this.vincitoreCinquina"> </app-schermata-vittoria>
+  <div *ngIf="schermataFinale">
+    <app-schermata-vittoria [risultato]="this.risultato"> </app-schermata-vittoria>
+  </div>
 </div>
 
 <ion-content>
   <ion-tabs>
     <div *ngIf="this.propr.proprietario===false; then thenBlock1 else elseBlock1"></div>
     <ng-template #thenBlock1>
-    <ion-tab-bar slot="bottom">
-      <ion-tab-button [routerLink]="['/../../tabs/tab1']" (click)="this.esci(this.codice!)">
-        <ion-icon name="game-controller-outline"></ion-icon>
+      <ion-tab-bar slot="bottom">
+        <ion-tab-button [routerLink]="['/../../tabs/tab1']" (click)="this.esci(this.codice!)">
+          <ion-icon name="game-controller-outline"></ion-icon>
         <ion-label>Home Page</ion-label>
       </ion-tab-button>
   

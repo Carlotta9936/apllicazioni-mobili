@@ -4,7 +4,7 @@ import { User } from '../interfaces/User';
 import { Partita } from '../interfaces/Partita';
 import { collection, doc, docData, Firestore, query, where, getDocs} from '@angular/fire/firestore';
 import { DataServiceService } from './data-service.service';
-import { getDatabase, set, ref, onValue, remove, update, child, get, push} from "firebase/database";
+import { getDatabase, set, ref, onValue, remove, update, child, get, push, increment} from "firebase/database";
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import { PartitaData } from '../interfaces/PartitaData';
@@ -133,7 +133,11 @@ export class DatabaseService {
       datiPartita:{
         ultimoNumero: partita.datiPartita.ultimoNumero,
         cinquina: partita.datiPartita.cinquina,
-        bingo: partita.datiPartita.bingo
+        bingo: partita.datiPartita.bingo,
+        premioBingo: partita.datiPartita.premioBingo,
+        premioCinquina: partita.datiPartita.premioCinquina,
+        numeriEstratti: partita.datiPartita.numeriEstratti,
+        montepremi: partita.datiPartita.montepremi
       }
     });
   }
@@ -203,72 +207,45 @@ export class DatabaseService {
     });
   }
 
-  dichiaraCinquina(user: string, codice: string): void {
-    update(ref(this.database, 'partita/'+codice+'/datiPartita/'), {
-      cinquina: user
-    })
-  }
-  
-  ascoltaBingo(codice: string): Promise<any>{
-    const ascoltaBingo = new Promise<any>((resolve, reject) => {
-      const cod = ref(this.database);
-      get(child(cod,  'partita/'+ codice+'/datiPartita')).then((snapshot) => {
-        if(snapshot.exists()){
-          const c = snapshot.val().bingo;
-          console.log("Bingo", c);
-          resolve(c);
-        }
-      }) 
-    })
-
-   /* const ascoltaBingo = new Observable<any>((observer) => {
-      const cod = ref(this.database, 'partita/'+codice+'/datiPartita/');
-      onValue(cod, (snapshot) => {
-          const c = snapshot.val();
-          console.log("Bingo", c);
-          if(c !== null){
-            console.log("dentro l'if")
-            observer.next(c);
-          }
-      })
-    })*/
-    return ascoltaBingo;
-  }
-
-  ascoltaCinquina(codice: string): Promise<any>{
-    const ascoltaCinquina = new Promise<any>((resolve, reject) => {
-      const cod = ref(this.database);
-      get(child(cod,  'partita/'+ codice+'/datiPartita')).then((snapshot) => {
-        if(snapshot.exists()){
-          const c = snapshot.val().cinquina;
-          console.log("Bingo", c);
-          resolve(c);
-        }
-      }) 
-    })
-    return ascoltaCinquina;
-  }
-
-
-  startPartita(codice: string): void{
-    update(ref(this.database, 'partita/'+codice+'/'), {
-      iniziata: true
+  //Metodi per partita
+  incrementaGiocatori(codice: string): void {
+    update(ref(this.database, 'partita/'+codice), {
+      numPartecipanti: increment(1)
     })
   }
 
-  ascoltoInizioPartita(codice: string): Observable<any>{
-    const ascoltoInizioPartita = new Observable<any>((observer) => {
-      const cod = ref(this.database, 'partita/'+codice+'/iniziata');
-        onValue(cod, (snapshot) => {
-            const c = snapshot.val();
-            console.log("ascolto inizio partita", c);
-            if(c !== null){
-              console.log("dentro l'if")
-              observer.next(c);
-            }
-        })
+  decrementaGiocatori(codice: string): void {
+    update(ref(this.database, 'partita/'+codice), {
+      numPartecipanti: increment(-1)
     })
-    return ascoltoInizioPartita;
+  }
+
+  //Incrementa il numero di partite
+  incrementaNumeroPartite(user: string): void {
+    update(ref(this.database, 'users/'+user+'/stats/'), {
+      partiteFatte: increment(1)
+    })
+  }
+
+  //Incrementa il numero di bingo
+  incrementaNumeroBingo(user: string): void {
+    update(ref(this.database, 'users/'+user+'/stats/'), {
+      bingo: increment(1)
+    })
+  }
+
+  //Incrementa il numero di cinquine
+  incrementaNumeroCinquine(user: string): void {
+    update(ref(this.database, 'users/'+user+'/stats/'), {
+      cinquina: increment(1)
+    })
+  }
+
+  //Incrementa il numero di superbingo
+  incrementaNumeroSuperbingo(user: string): void {
+    update(ref(this.database, 'users/'+user+'/stats/'), {
+      superbingo: increment(1)
+    })
   }
 }
 

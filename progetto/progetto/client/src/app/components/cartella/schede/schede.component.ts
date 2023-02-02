@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { AlertService } from 'src/app/services/alert.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { ControlloCreditiService } from 'src/app/services/controllo-crediti.service';
 import { CreaPartitaService } from 'src/app/services/crea-partita.service';
 import { PartitaDBService } from 'src/app/services/partita-db.service';
 import { SchedaComponent } from '../scheda/scheda.component';
@@ -23,18 +25,26 @@ export class SchedeComponent implements OnInit {
 
   codice: string = this.crea.getCodiceUrl();
 
-  constructor(public partita: PartitaDBService, private Auth:AuthService, public crea: CreaPartitaService) { }
+  constructor(public partita: PartitaDBService, private Auth:AuthService, public crea: CreaPartitaService, 
+    public controlloCrediti: ControlloCreditiService, public alert: AlertService) { }
 
   ngOnInit() {
     this.compraScheda();
     this.ascoltaCinquina();
   }
 
-  compraScheda(): any{
+  async compraScheda(): Promise<any>{
     /**
      * TODO: controllo crediti per comprare la scheda
      */
-    this.numeroSchede.push(0);
+    if(this.controlloCrediti.autorizzaOperazione(1)){
+      this.numeroSchede.push(0);
+      this.partita.incrementaMontepremi(this.codice);
+    } else {
+      if(await this.alert.alertCompraCrediti()){
+        this.compraScheda();
+      }
+    }
   }
 
   abilitaBingo(value: any): void {

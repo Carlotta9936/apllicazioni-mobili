@@ -17,7 +17,6 @@ export class AuthService {
 
   public get(key: string): string{
     console.log("get", JSON.parse(localStorage.getItem(key)!));
-    
     return JSON.parse(localStorage.getItem(key)!)
   }
 

@@ -15,7 +15,6 @@ export class ControlloCreditiService {
     return +this.Auth.get("crediti");
   }
 
-
   //controllo per autorizzare la transazione
   autorizzaOperazione(prezzo: number): boolean{
     //Controllo se l'utente si può permettere l'operazione

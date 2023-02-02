@@ -11,6 +11,7 @@ export class BossoloService {
   bossolo: number[]=[];     //Bossolo solo effettivamente le palline, all'inizio contiene tutti i numeri, quando estraggo tolgo gli elementi da qui
   tabellone: boolean[]=[];  //Un array di boolean, serve per colorare il tabellone
   interval?: any;           //Timer per l'estrazione
+  codice: string = this.crea.getCodiceUrl();
 
   constructor(public partita: PartitaDBService, public crea: CreaPartitaService){
     //creo un array con tutti i numeri estraibili 
@@ -52,6 +53,7 @@ export class BossoloService {
     let num= Math.floor(Math.random() * (this.bossolo.length));
     let numeroEstratto = this.bossolo[num]
     this.bossolo.splice(num, 1);
+    this.partita.incrementaNumeriEstratti(this.crea.getCodiceUrl())
     return numeroEstratto;
   }
 
@@ -62,4 +64,6 @@ export class BossoloService {
     //Aggiorno nel DB
     this.partita.estrazioneNumero(this.crea.getCodiceUrl(), num);
   }
+
+  
 }

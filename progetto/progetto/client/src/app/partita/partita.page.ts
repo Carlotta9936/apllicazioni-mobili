@@ -5,6 +5,7 @@ import { Observable, Subscription } from 'rxjs';
 import { AlertService } from '../services/alert.service';
 import { AuthService } from '../services/auth.service';
 import { BossoloService } from '../services/bossolo.service';
+import { CalcolaPremiService } from '../services/calcola-premi.service';
 import { CreaPartitaService } from '../services/crea-partita.service';
 import { DatabaseService } from '../services/database.service';
 import { PartitaDBService } from '../services/partita-db.service';
@@ -21,7 +22,6 @@ export class PartitaPage implements OnInit {
   iniziata: boolean = false;
   chat: boolean= true;
 
-  
   //Subscruption per ascoltare eventuali vincitori
   bingoSub!: Subscription;
   cinquinaSub!: Subscription;
@@ -36,7 +36,7 @@ export class PartitaPage implements OnInit {
 
   constructor(public crea: CreaPartitaService, public database: DatabaseService, 
     public auth: AuthService, public propr: ProprietarioService, public bossolo: BossoloService,
-    public partita: PartitaDBService, private router: Router, public alert: AlertService) {  }
+    public partita: PartitaDBService, private router: Router, public calcolaPremi: CalcolaPremiService, public alert: AlertService) {  }
 
   ngOnInit() {
     this.codice=this.crea.getCodiceUrl();
@@ -53,6 +53,7 @@ export class PartitaPage implements OnInit {
 
   start2(): void{
     this.iniziata=true;
+    this.database.incrementaNumeroPartite(this.auth.get("user"));
     this.ascoltaBingo();
     this.ascoltaCinquina();
   }
@@ -80,8 +81,10 @@ export class PartitaPage implements OnInit {
   start(): void {
     //setto la partita a iniziata in modo che non sia più visibile nella pagina iniziale
     this.partita.startPartita(this.codice!);
+    this.database.incrementaNumeroPartite(this.auth.get("user"));
     this.iniziata=true;
     this.bossolo.startTimer();
+    this.calcolaPremi.calcolaPremi(this.codice!);
     this.ascoltaBingo();
     this.ascoltaCinquina();
   }
@@ -90,14 +93,12 @@ export class PartitaPage implements OnInit {
     //Stop estrazione numeri
     this.bossolo.stopTimer();
     console.log("STOOOOOOOOOOOOOOOOOOOOOP")
+    if(this.propr.proprietario){
+      this.partita.finishPartita(this.codice!);
+    }
     //Stop ascolto vincitore partita
     this.bingoSub.unsubscribe();
     this.schermataFinale = true;
-    //Stop ascolto numero estratto
-    //this.partita.spegniAscoltoNumero();
-    //this.partita.spegniAscoltoBingo();
-    //this.partita.ascoltaBingo().unsubscribe();
-
   }
 
   public annullaPartita(codice: string){
