@@ -18,7 +18,7 @@ export class CalcolaPremiService {
     this.partita.getMontepremi(this.crea.getCodiceUrl()).then((value) => {
       this.montepremi = value;
       //Aggiorna il database con i premi calcolati
-      this.partita.setPremi(this.crea.getCodiceUrl(), this.calcolaPremioBingo(), this.calcolaPremioCinquina(), 0)
+      this.partita.setPremi(this.crea.getCodiceUrl(), this.calcolaPremioBingo(), this.calcolaPremioCinquina(), this.calcolaPremioSuperbingo())
       console.log("Premio bingo", this.calcolaPremioBingo())
       console.log("Premio cinquina", this.calcolaPremioCinquina())
     });
@@ -35,7 +35,7 @@ export class CalcolaPremiService {
   }
 
   calcolaPremioSuperbingo(): number {
-    return 0;
+    return Math.ceil(this.montepremi! / 100 * 27);
   }
 
 }

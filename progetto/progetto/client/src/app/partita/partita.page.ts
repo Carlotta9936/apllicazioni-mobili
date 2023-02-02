@@ -52,6 +52,7 @@ export class PartitaPage implements OnInit {
 
   start2(): void{
     this.iniziata=true;
+    this.database.incrementaNumeroPartite(this.auth.get("user"));
     this.ascoltaBingo();
     this.ascoltaCinquina();
   }
@@ -79,6 +80,7 @@ export class PartitaPage implements OnInit {
   start(): void {
     //setto la partita a iniziata in modo che non sia più visibile nella pagina iniziale
     this.partita.startPartita(this.codice!);
+    this.database.incrementaNumeroPartite(this.auth.get("user"));
     this.iniziata=true;
     this.bossolo.startTimer();
     this.calcolaPremi.calcolaPremi(this.codice!);
@@ -100,7 +102,6 @@ export class PartitaPage implements OnInit {
 
 
   end(codice: string): void {
-  
     this.database.eliminaPartita(codice);
     this.bossolo.stopTimer();
     this.router.navigate(['/tabs/tab1']);

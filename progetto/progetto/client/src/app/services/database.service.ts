@@ -207,7 +207,6 @@ export class DatabaseService {
   }
 
   //Metodi per partita
-
   incrementaGiocatori(codice: string): void {
     update(ref(this.database, 'partita/'+codice), {
       numPartecipanti: increment(1)
@@ -220,5 +219,32 @@ export class DatabaseService {
     })
   }
 
+  //Incrementa il numero di partite
+  incrementaNumeroPartite(user: string): void {
+    update(ref(this.database, 'users/'+user+'/stats/'), {
+      partiteFatte: increment(1)
+    })
+  }
+
+  //Incrementa il numero di bingo
+  incrementaNumeroBingo(user: string): void {
+    update(ref(this.database, 'users/'+user+'/stats/'), {
+      bingo: increment(1)
+    })
+  }
+
+  //Incrementa il numero di cinquine
+  incrementaNumeroCinquine(user: string): void {
+    update(ref(this.database, 'users/'+user+'/stats/'), {
+      cinquina: increment(1)
+    })
+  }
+
+  //Incrementa il numero di superbingo
+  incrementaNumeroSuperbingo(user: string): void {
+    update(ref(this.database, 'users/'+user+'/stats/'), {
+      superbingo: increment(1)
+    })
+  }
 }
 

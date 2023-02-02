@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import { ControlloCreditiService } from './controllo-crediti.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AlertService {
 
-  constructor(private alertController: AlertController) { }
+  constructor(private alertController: AlertController, public controlloCrediti: ControlloCreditiService) { }
 
   async presentAlert(msg: string) {
     const alert = await this.alertController.create({
@@ -35,6 +36,33 @@ export class AlertService {
           role: 'confirm',
           handler: () => {
             risposta= true;
+          },
+        },
+      ],
+    });
+    await alert.present();
+    await alert.onDidDismiss();
+    return risposta;
+  }
+
+  async alertCompraCrediti(): Promise<boolean>{
+    let risposta: boolean = false;
+    const alert = await this.alertController.create({
+      header: 'Non hai crediti a sufficienza, vuoi comprare 10 crediti al volo?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+            risposta = false;
+          },
+        },
+        {
+          text: 'Sì',
+          role: 'confirm',
+          handler: () => {
+            this.controlloCrediti.aggiornaCrediti(-10);
+            risposta = true;
           },
         },
       ],

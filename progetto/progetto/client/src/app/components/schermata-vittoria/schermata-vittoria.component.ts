@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
+import { ControlloCreditiService } from 'src/app/services/controllo-crediti.service';
 import { CreaPartitaService } from 'src/app/services/crea-partita.service';
 import { DatabaseService } from 'src/app/services/database.service';
 import { EliminaPartitaService } from 'src/app/services/elimina-partita.service';
@@ -23,7 +25,8 @@ export class SchermataVittoriaComponent implements OnInit {
   codice: string = this.crea.getCodiceUrl();
 
   constructor(public partita: PartitaDBService, public crea: CreaPartitaService, public prop: ProprietarioService,
-    public elimina: EliminaPartitaService,private router: Router, public database: DatabaseService) { }
+    public elimina: EliminaPartitaService,private router: Router, public database: DatabaseService, public crediti: ControlloCreditiService,
+    public auth: AuthService ) { }
 
   ngOnInit() {
     this.partita.getRisultati(this.codice).then((value) => {
@@ -33,6 +36,16 @@ export class SchermataVittoriaComponent implements OnInit {
       this.vincitoreCinquina = value.cinquina;
       this.vincitaCinquina = value.premioCinquina;
       this.numeriEstratti = value.numeriEstratti;
+
+      if(this.auth.get("user") === value.bingo){
+        this.crediti.aggiornaCrediti(-value.premioBingo);
+        this.database.incrementaNumeroBingo(this.auth.get("user"));
+      }
+      
+      if(this.auth.get("user") === value.cinquina){
+        this.crediti.aggiornaCrediti(-value.premioCinquina);
+        this.database.incrementaNumeroCinquine(this.auth.get("user"));
+      }
     })
   }
 
