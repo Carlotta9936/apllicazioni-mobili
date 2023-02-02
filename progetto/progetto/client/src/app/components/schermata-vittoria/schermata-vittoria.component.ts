@@ -62,6 +62,7 @@ export class SchermataVittoriaComponent implements OnInit {
 
   esci(): void{
     if(this.prop.proprietario){
+      this.database.serverOffline(this.codice);
       //Elimina partita
       this.elimina.cancelPartita(this.codice);
     } else {
@@ -71,5 +72,4 @@ export class SchermataVittoriaComponent implements OnInit {
       this.router.navigate(['/tabs/tab1']);
     }
   }
-
 }
