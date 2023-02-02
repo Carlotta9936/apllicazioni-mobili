@@ -47,6 +47,7 @@ export class Tab1Page {
               'premioBingo': v.datiPartita.premioBingo,
               'premioCinquina': v.datiPartita.premioCinquina,
               'numeriEstratti': v.datiPartita.numeriEstratti,
+              'montepremi': v.datiPartita.montepremi
             }
           })
         }

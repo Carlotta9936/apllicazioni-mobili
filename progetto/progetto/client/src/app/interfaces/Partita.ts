@@ -5,4 +5,5 @@ export interface Partita {
     premioBingo: number;
     premioCinquina: number;
     numeriEstratti: number;
+    montepremi: number;
 }

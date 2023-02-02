@@ -135,7 +135,8 @@ export class DatabaseService {
         bingo: partita.datiPartita.bingo,
         premioBingo: partita.datiPartita.premioBingo,
         premioCinquina: partita.datiPartita.premioCinquina,
-        numeriEstratti: partita.datiPartita.numeriEstratti
+        numeriEstratti: partita.datiPartita.numeriEstratti,
+        montepremi: partita.datiPartita.montepremi
       }
     });
   }
