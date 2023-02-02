@@ -67,12 +67,13 @@ export class DatabaseService {
   }
 
   //legge i messaggi di una chat
-  getChat(codice: string): Promise<any>{
-    const risultato= new Promise<any>((resolve, reject)=>{
+  getChat(codice: string): Observable<any>{
+    const risultato= new Observable<any>((observer)=>{
       const partita= ref(this.database, "chat/"+codice);
       onValue(partita,(snapshot)=>{
         const messaggi= snapshot.val();
-        resolve(messaggi);
+        console.log("messaggi",messaggi);
+        observer.next(messaggi);
       });
     });
     return risultato;

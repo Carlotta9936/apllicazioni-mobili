@@ -10,21 +10,26 @@ import { DatabaseService } from 'src/app/services/database.service';
 export class ChatComponent implements OnInit {
 
   @Input() codice?: string;
-  messaggi?: any ;
+  messaggi: any[]=[] ;
   newMessage?: string;
 
 
   constructor(public database: DatabaseService, public auth: AuthService) { }
 
   ngOnInit() {
-    this.messaggi=this.database.getChat(this.codice!);
-    console.log("messaggi",this.messaggi.value);
+    //this.stampaMessaggi();
   }
 
   sendMessage(){
     let messaggio= "["+ this.auth.get("user")+"]: "+this.newMessage;
     this.database.inviaMessaggio(this.codice!, messaggio);
     this.newMessage="";
+  }
+
+  stampaMessaggi(){
+    this.database.getChat(this.codice!).subscribe((value)=>{
+      this.messaggi.push(Object.values(value)[(Object.values(value).length)-1]);
+    });
   }
 
 }

@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
+import { AlertService } from '../services/alert.service';
 import { AuthService } from '../services/auth.service';
 import { BossoloService } from '../services/bossolo.service';
 import { CreaPartitaService } from '../services/crea-partita.service';
@@ -35,7 +36,7 @@ export class PartitaPage implements OnInit {
 
   constructor(public crea: CreaPartitaService, public database: DatabaseService, 
     public auth: AuthService, public propr: ProprietarioService, public bossolo: BossoloService,
-    public partita: PartitaDBService, private router: Router) {  }
+    public partita: PartitaDBService, private router: Router, public alert: AlertService) {  }
 
   ngOnInit() {
     this.codice=this.crea.getCodiceUrl();
@@ -99,8 +100,25 @@ export class PartitaPage implements OnInit {
 
   }
 
+  public annullaPartita(codice: string){
+    //se il proprietario sono io non devo avvisarmi
+    this.database.getPartita(codice).then((promise) => {
+      try{
+        console.log("sono qui");
+        //se il proprietario sono io non devo avvisarmi
+        if(promise.proprietario!=this.auth.get("user")){ 
+          this.alert.presentAlert("il server si è disconnesso, PARTITA ANNULLATA");
+          this.router.navigate(['/tabs/tab1']);
+        }
+      }catch (e){
+        console.log("errore"+e);
+      }
+    });
+  }
+
 
   end(codice: string): void {
+    this.annullaPartita(codice);
     this.database.eliminaPartita(codice);
     this.bossolo.stopTimer();
     this.router.navigate(['/tabs/tab1']);
