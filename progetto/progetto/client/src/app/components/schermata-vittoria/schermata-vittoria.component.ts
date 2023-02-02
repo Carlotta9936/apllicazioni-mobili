@@ -25,7 +25,7 @@ export class SchermataVittoriaComponent implements OnInit {
   codice: string = this.crea.getCodiceUrl();
 
   constructor(public partita: PartitaDBService, public crea: CreaPartitaService, public prop: ProprietarioService,
-    public elimina: EliminaPartitaService,private router: Router, public database: DatabaseService, public crediti: ControlloCreditiService,
+    public elimina: EliminaPartitaService ,private router: Router, public database: DatabaseService, public crediti: ControlloCreditiService,
     public auth: AuthService ) { }
 
   ngOnInit() {

@@ -30,12 +30,8 @@ const routes: Routes = [
     loadChildren: () => import('./market/market.module').then( m => m.MarketPageModule),canActivate: [GuardiaService]
   },
   {
-    path: 'pre-partita/:codice',
-    loadChildren: () => import('./pre-partita/pre-partita.module').then( m => m.PrePartitaPageModule), canActivate: [GuardiaService]
-  },
-  {
     path: 'partita/:codice',
-    loadChildren: () => import('./partita/partita.module').then( m => m.PartitaPageModule)
+    loadChildren: () => import('./partita/partita.module').then( m => m.PartitaPageModule), canActivate: [GuardiaService]
   },
 
 
