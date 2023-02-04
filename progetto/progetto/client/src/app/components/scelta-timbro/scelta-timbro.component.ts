@@ -8,14 +8,18 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class SceltaTimbroComponent implements OnInit {
 
+  selezionato?: any;
   @Input() url?: string;
   constructor(public Auth: AuthService) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.selezionato=this.Auth.get("timbro");
+  }
 
   seleziona(): void{
     console.log("Seleziona");
     this.Auth.set("timbro", this.url)
+    window.location.reload();
   }
 
   coloraTimbro(): void {

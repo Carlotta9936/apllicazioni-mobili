@@ -1,3 +1,14 @@
-<div id="timbro" (click)="seleziona()">
-  <img src="../../../assets/timbri/{{url}}.png">
-</div>
+<p>{{this.url}} e {{this.selezionato}} e {{this.url===this.selezionato}}</p>
+
+<div *ngIf="this.url===this.selezionato; then  thenBlock else elseBlock" ></div>
+
+  <ng-template  #thenBlock>
+    <div id="selezionato" class="timbro" (click)="seleziona()">
+      <img src="../../../assets/timbri/{{url}}.png">
+    </div>
+  </ng-template>
+  <ng-template #elseBlock>
+    <div class="timbro" (click)="seleziona()">
+      <img src="../../../assets/timbri/{{url}}.png">
+    </div>
+  </ng-template>

@@ -3,11 +3,17 @@
     grid-template-columns: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%;
 }
 
-#estratto{
-    text-align: center;
-    border-color: chartreuse;
-    border-style: dotted;
-    height: 8%;
-    width: 50%;
-    margin-left: 25%;
+.estratto{
+    display: flex;
+    background-color: #e9c786;
+    border-radius: 50%;
+    border: solid 7px #a92220;
+    color: #a92220;
+    height: 20vw;
+    width: 20vw;
+    align-items: center;
+    justify-content: center;
+    font-size:xx-large;
+    font-weight: bold;
+    margin-left: 40vw;
 }
