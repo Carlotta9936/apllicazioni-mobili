@@ -5,38 +5,36 @@
       </ion-title>
     </ion-toolbar>
   </ion-header>
-  <br>
-  <div  *ngIf="this.propr.proprietario===true; then thenBlock else elseBlock"></div>
-  <ng-template #thenBlock>
-    <div class="bottoni" *ngIf="this.iniziata===false">
-      <ion-button class="control" shape="round" color="danger" (click)="this.end(this.codice!)">ANNULLA PARTITA</ion-button>
-      <ion-button class="control" id="start" shape="round" color="success" (click)="this.start()">START PARTITA</ion-button>
-      <!--manca controllo numero giocatori-->
-  </div>
-  </ng-template>
-  
 
-  <!--chat-->
-  <div *ngIf="this.iniziata===false; then thenBlock2 else elseBlock2"></div>
-  <ng-template #thenBlock2>
-    <ion-button id="chat" shape="round" (click)="this.visualizzaChat()">CHAT</ion-button>
-    <div *ngIf="this.chat===true">
-      <app-chat [codice]="this.codice!"></app-chat>
+    <br>
+    <div  *ngIf="this.propr.proprietario===true; then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock>
+      <div class="bottoni" *ngIf="this.iniziata===false">
+        <ion-button class="control" shape="round" color="danger" (click)="this.end(this.codice!)">ANNULLA PARTITA</ion-button>
+        <ion-button class="control" id="start" shape="round" color="success" (click)="this.start()">START PARTITA</ion-button>
+        <!--manca controllo numero giocatori-->
+    </div>
+    </ng-template>
+    
+    <!--chat-->
+    <div *ngIf="this.iniziata===false; then thenBlock2 else elseBlock2"></div>
+    <ng-template #thenBlock2>
+      <ion-button id="chat" shape="round" (click)="this.visualizzaChat()">CHAT</ion-button>
+      <div *ngIf="this.chat===true">
+        <app-chat [codice]="this.codice!"></app-chat>
+      </div>
+    </ng-template>
+    <ion-content>
+  <ng-template #elseBlock2>
+    <div *ngIf="this.tabellone==true">
+      <app-tabellone></app-tabellone>
+    </div>
+    <div *ngIf="this.cinquina">
+      <app-cinquina (click)="togliMessaggio()"> </app-cinquina>
     </div>
   </ng-template>
 
-  <ng-template #elseBlock2>
-    <app-tabellone></app-tabellone>
-  </ng-template>
-    
-
-  
-  <app-schede [iniziata]="this.iniziata"> </app-schede>
-  <p>{{this.cinquina}}</p>
-  <div *ngIf="this.cinquina">
-    <app-cinquina (click)="togliMessaggio()"> </app-cinquina>
-  </div>
-
+    <app-schede [iniziata]="this.iniziata" [compra]="this.compra"> </app-schede>
   <div *ngIf="schermataFinale">
     <app-schermata-vittoria [risultato]="this.risultato"> </app-schermata-vittoria>
   </div>
@@ -48,11 +46,13 @@
     <ion-button (click)="this.esci(this.codice!)">Esci</ion-button>
   </div>
 </ng-template>
+</ion-content>
 
 
-<ion-content>
-  <ion-tabs>
+ 
     <div *ngIf="this.propr.proprietario===false; then thenBlock1 else elseBlock1"></div>
+    <ion-footer>
+      <ion-tabs>
     <ng-template #thenBlock1>
       <ion-tab-bar slot="bottom">
         <ion-tab-button [routerLink]="['/../../tabs/tab1']" (click)="this.esci(this.codice!)">
@@ -89,8 +89,6 @@
         </ion-tab-button>
       </ion-tab-bar>
     </ng-template>
-  
   </ion-tabs>
-  
-</ion-content>
+</ion-footer>
 

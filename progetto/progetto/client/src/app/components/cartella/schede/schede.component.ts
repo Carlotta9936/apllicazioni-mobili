@@ -15,6 +15,7 @@ import { SchedaComponent } from '../scheda/scheda.component';
 export class SchedeComponent implements OnInit {
   @Input() iniziata?: boolean;
   @Input() finePartita: boolean = false;
+  @Input() compra?: boolean;
 
   numeroSchede: number[] = [];
   bingo: boolean = true;
@@ -78,6 +79,8 @@ export class SchedeComponent implements OnInit {
   }
 
   fineBingo(): void {
+    this.iniziata=false;
+    this.compra=false;
     console.log("FINE PARTITA")
     //Avverte il DB che è stato effettuato Bingo
     this.partita.dichiaraBingo(this.Auth.get('user'), this.codice);

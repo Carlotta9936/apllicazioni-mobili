@@ -1,9 +1,16 @@
-<h1>Schede</h1>
-<div *ngFor="let scheda of numeroSchede"> 
-    <app-scheda (abilitaBingo)="abilitaBingo($event)" (abilitaCinquina)="abilitaCinquina($event)"></app-scheda>
- </div>
- <div id="bottoni">
-     <ion-button class="control" *ngIf="this.iniziata===true "[disabled]="false" shape="round" (click)="fineBingo()"> BINGO </ion-button>
-     <ion-button class="control" *ngIf="this.iniziata===true "[disabled]="false" shape="round" (click)="fineCinquina()"> CINQUINA </ion-button>
- </div>
-<ion-button  *ngIf="this.iniziata===false" id="compra" shape="round" size="large" (click)="compraScheda()">Compra una scheda</ion-button>
+
+    <h1>Schede</h1>
+    <div *ngFor="let scheda of numeroSchede"> 
+        <ion-item id="schede">
+        <app-scheda (abilitaBingo)="abilitaBingo($event)" (abilitaCinquina)="abilitaCinquina($event)"></app-scheda>
+        </ion-item>
+    </div>
+        <ion-item>
+            <div *ngIf="this.iniziata==true" id="bottoni">
+                <ion-button class="control" *ngIf="this.iniziata===true "[disabled]="false" shape="round" (click)="fineBingo()"> BINGO </ion-button>
+                <ion-button class="control" *ngIf="this.iniziata===true "[disabled]="false" shape="round" (click)="fineCinquina()"> CINQUINA </ion-button>
+            </div>
+
+       
+    <ion-button  *ngIf="this.compra===true and this.iniziata===false" id="compra" shape="round" size="large" (click)="compraScheda()">Compra una scheda</ion-button>
+</ion-item>

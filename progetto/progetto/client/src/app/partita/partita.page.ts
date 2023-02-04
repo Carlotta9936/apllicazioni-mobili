@@ -21,6 +21,8 @@ export class PartitaPage implements OnInit {
   userProprietario?:string;
   iniziata: boolean = false;
   chat: boolean= true;
+  compra: boolean= true;
+  tabellone: boolean= false;
 
   //Subscruption per ascoltare eventuali vincitori
   bingoSub!: Subscription;
@@ -81,8 +83,10 @@ export class PartitaPage implements OnInit {
   start(): void {
     //setto la partita a iniziata in modo che non sia più visibile nella pagina iniziale
     this.partita.startPartita(this.codice!);
+    this.compra=false;
     this.database.incrementaNumeroPartite(this.auth.get("user"));
     this.iniziata=true;
+    this.tabellone= true;
     this.bossolo.startTimer();
     this.calcolaPremi.calcolaPremi(this.codice!);
     this.ascoltaBingo();
@@ -158,6 +162,7 @@ export class PartitaPage implements OnInit {
     this.bingoSub = this.partita.ascoltaBingo(this.codice!)
       .subscribe((value) => {
       if(value !== false){
+        this.tabellone= false;
         console.log("Qualcuno ha fatto bingo", value);
         if(value === this.auth.get("user")){
           this.risultato = "VITTORIA";
