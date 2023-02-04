@@ -24,6 +24,9 @@ export class PartitaPage implements OnInit {
   compra: boolean= true;
   tabellone: boolean= false;
 
+  montepremi?: number;
+  numPartecipanti?: number;
+
   //Subscruption per ascoltare eventuali vincitori
   bingoSub!: Subscription;
   cinquinaSub!: Subscription;
@@ -36,6 +39,8 @@ export class PartitaPage implements OnInit {
   risultato!: string;
   vincitoreBingo!: string;
   vincitoreCinquina!: string;
+  //Variabile per aggiornare i dati relativi alla partita prima che inizi
+  aggiornaDatiSub!: any;
 
   constructor(public crea: CreaPartitaService, public database: DatabaseService, 
     public auth: AuthService, public propr: ProprietarioService, public bossolo: BossoloService,
@@ -44,6 +49,7 @@ export class PartitaPage implements OnInit {
   ngOnInit() {
     this.codice=this.crea.getCodiceUrl();
     this.controllaProprietario();
+    this.statistiche();
     this.ascoltaStatoHost();
     this.partita.ascoltoInizioPartita(this.codice!).subscribe((value: boolean) => {
       if(value === true && !this.propr.proprietario) {
@@ -59,6 +65,7 @@ export class PartitaPage implements OnInit {
     this.ascoltaBingo();
     this.ascoltaCinquina();
   }
+
 
   public controllaProprietario():void{
     this.database.getPartita(this.codice!).then((promise) => {
@@ -91,6 +98,7 @@ export class PartitaPage implements OnInit {
     this.calcolaPremi.calcolaPremi(this.codice!);
     this.ascoltaBingo();
     this.ascoltaCinquina();
+    this.aggiornaDatiSub.unsubscribe();
   }
 
   finePartita(): void{
@@ -124,9 +132,9 @@ export class PartitaPage implements OnInit {
     //chiamata al db per prendere il numero dei partecipanti
     this.database.getPartita(codice).then((promise) => {
       try{
-        let numPartecipanti= promise.numPartecipanti;
+        this.numPartecipanti= promise.numPartecipanti;
         //aggiorno il numero dei partecipanti
-        this.database.aggiornaPartecipanti(codice, numPartecipanti-1);
+        this.database.aggiornaPartecipanti(codice, this.numPartecipanti!-1);
         this.database.inviaMessaggio(codice,"[SERVER]: "+ this.auth.get("user")+" si è scollegato");
         this.router.navigate(['/tabs/tab1']);
       }catch (e){
@@ -148,6 +156,13 @@ export class PartitaPage implements OnInit {
 
 /*  //Solo se sei il proprietario
   estrazioneNumeri(): void{*/
+  statistiche(): void{
+    this.aggiornaDatiSub= this.partita.getStatisticheOnvalue(this.codice!).subscribe((value)=>{
+      this.numPartecipanti=value.numPartecipanti;
+      this.montepremi=value.datiPartita.montepremi;
+    });
+  }
+
 
   ascoltaStatoHost():void{
     this.checkSub=this.database.checkServer(this.codice!).subscribe((value)=>{

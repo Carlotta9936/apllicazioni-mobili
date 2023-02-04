@@ -6,6 +6,12 @@
     </ion-toolbar>
   </ion-header>
 
+  <ion-card id="dati" *ngIf="this.iniziata===false">
+    <p id="codice">Codice partita: {{this.codice}}</p>
+    <p>Proprietario: {{this.userProprietario}}</p>
+    <p>Partecipanti: {{this.numPartecipanti}}</p>
+    <p>Montepremi: {{this.montepremi}}</p>
+  </ion-card>
     <br>
     <div  *ngIf="this.propr.proprietario===true; then thenBlock else elseBlock"></div>
     <ng-template #thenBlock>
