@@ -9,6 +9,7 @@ import { MarketPageRoutingModule } from './market-routing.module';
 import { MarketPage } from './market.page';
 import { AcquistoTimbroComponent } from '../components/market/acquisto-timbro/acquisto-timbro.component';
 import { AcquistoCreditiComponent } from '../components/market/acquisto-crediti/acquisto-crediti.component';
+import { CreditiComponent } from '../components/crediti/crediti.component';
 
 @NgModule({
   imports: [
@@ -17,6 +18,6 @@ import { AcquistoCreditiComponent } from '../components/market/acquisto-crediti/
     IonicModule,
     MarketPageRoutingModule
   ],
-  declarations: [MarketPage, AcquistoTimbroComponent, AcquistoCreditiComponent]
+  declarations: [MarketPage, AcquistoTimbroComponent, AcquistoCreditiComponent, CreditiComponent]
 })
 export class MarketPageModule {}
