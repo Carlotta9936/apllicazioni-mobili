@@ -22,4 +22,14 @@ export class SceltaTimbroComponent implements OnInit {
     window.location.reload();
   }
 
+  coloraTimbro(): void {
+    Array.from(document.getElementsByClassName('risposta')).forEach((elemento) => {
+        if(elemento.textContent?.trim()){
+          elemento.setAttribute('class', "timbro selezionato");
+        } else {
+          elemento.setAttribute('class', "timbro");
+        }
+      });
+  }
+
 }

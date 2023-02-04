@@ -20,12 +20,12 @@ export class Tab1Page {
   partitaCercata?: PartitaData;
   searchTerm = '';
 
-
   constructor(public crea: CreaPartitaService, public database: DatabaseService, public crediti: ControlloCreditiService, private router: Router, private alert: AlertService, public propr: ProprietarioService, public auth: AuthService) { }
 
   ngOnInit(){
     window.location.reload;
     this.caricaPartite();
+    this.caricaCrediti();
   }
 
   //Carica tutte le partite pubbliche
@@ -96,5 +96,9 @@ export class Tab1Page {
       this.alert.presentAlert('fatti un giro al market, non hai crediti per giocare');
     }
     this.propr.proprietario=false;
+  }
+
+  caricaCrediti(): void {
+
   }
 }

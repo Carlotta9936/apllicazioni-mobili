@@ -93,6 +93,18 @@ export class DatabaseService {
     return userPromise;
   } 
 
+  getCrediti(username: string): Observable<number>{
+    const creditiObs = new Observable<number>((observer) => {
+      const crediti=ref(this.database,'users/'+username+'/crediti');
+      onValue(crediti,(snapshot)=>{
+        observer.next(snapshot.val());
+      })
+    });
+    return creditiObs;
+  }
+
+
+
   //ritorna i dati di una partita dato il codice
   getPartita(codice: string): Promise<any>{    
     const codicePromise = new Promise<any>((resolve, reject) => {
