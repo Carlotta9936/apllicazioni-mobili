@@ -33,6 +33,7 @@ export class LoginPage implements OnInit {
           console.log("Trovato");
           this.Auth.set('user', promise.username);
           this.Auth.set('crediti', promise.crediti);
+          this.Auth.set('timbro',promise.timbir);
           this.router.navigate(['/tabs/tab1']);
         } else {
           console.log("Non trovato");

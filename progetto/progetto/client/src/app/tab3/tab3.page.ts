@@ -58,4 +58,11 @@ export class Tab3Page {
     }
   }
 
+  logout(){
+    this.Auth.delete("user");
+    this.Auth.delete("timbro");
+    this.Auth.delete("crediti");
+    window.location.reload();
+  }
+
 }

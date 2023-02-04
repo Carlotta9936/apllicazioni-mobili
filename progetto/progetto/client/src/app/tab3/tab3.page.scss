@@ -2,6 +2,23 @@ p {
     color: white;
 }
 
+.intestazione{
+    text-align: center;
+    font-weight: bold;
+}
+
+.contenuto{
+    font-size: large;
+}
+
 #timbri{
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;    
+}
+
+#esci{
+    margin-top:10%;
+    margin-right: 2%;
+    text-align: right;
 }

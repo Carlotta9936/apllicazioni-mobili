@@ -7,20 +7,28 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <h1>{{user?.username}}</h1>
-  <p>Nome: {{user?.nome}} </p>
-  <p>Cognome: {{user?.cognome}} </p>
-  <p>Mail: {{user?.mail}} </p>
-  <hr>
-  <h2> Statistiche </h2>
-  <p>Partite fatte: {{user?.stats?.partiteFatte}} </p>
-  <p>Bingo: {{user?.stats?.bingo}}</p>
-  <p>Cinquine: {{user?.stats?.cinquine}}</p>
-  <p>Superbingo: {{user?.stats?.superbingo}}</p>
-  <hr>
-  <h2> Cambia timbro </h2>
-  <div id="timbri">
-    <app-scelta-timbro *ngFor="let timbro of timbri" [url]="timbro.url"></app-scelta-timbro>
+  <h1 class="intestazione">{{user?.username}}</h1>
+  <ion-card class="contenuto">
+    <p>Nome: {{user?.nome}} </p>
+    <p>Cognome: {{user?.cognome}} </p>
+    <p>Mail: {{user?.mail}} </p>
+  </ion-card>
+  
+  <h2 class="intestazione"> Statistiche </h2>
+  <ion-card class="contenuto">
+    <p>Partite fatte: {{user?.stats?.partiteFatte}} </p>
+    <p>Bingo: {{user?.stats?.bingo}}</p>
+    <p>Cinquine: {{user?.stats?.cinquine}}</p>
+    <p>Superbingo: {{user?.stats?.superbingo}}</p>
+  </ion-card>
+  <h2 class="intestazione">  Cambia timbro </h2>
+  <ion-card class="contenuto">
+    <div id="timbri">
+      <app-scelta-timbro *ngFor="let timbro of timbri" [url]="timbro.url"></app-scelta-timbro>
+    </div>
+  </ion-card>
+  <div id="esci">
+    <ion-button  color="danger" (click)="this.logout()">Logout</ion-button>
   </div>
 
 </ion-content>
