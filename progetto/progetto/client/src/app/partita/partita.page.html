@@ -1,27 +1,36 @@
-<div id="content">
-  <ion-header>
-      <ion-toolbar>
-      <ion-title><p> Codice partita: {{this.codice}} </p></ion-title>
+  <ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-title>
+        <img src="../../assets/logo.png">
+      </ion-title>
     </ion-toolbar>
   </ion-header>
-  <div *ngIf="this.chat===true">
-    <app-chat [codice]="this.codice!"></app-chat>
-  </div>
-  <ion-button (click)="this.visualizzaChat()">CHAT</ion-button>
-  <div *ngIf="this.propr.proprietario===true; then thenBlock else elseBlock"></div>
+  <br>
+  <div  *ngIf="this.propr.proprietario===true; then thenBlock else elseBlock"></div>
   <ng-template #thenBlock>
-    <div *ngIf="this.iniziata===false">
-      <ion-button (click)="this.start()">START PARTITA</ion-button>
+    <div class="bottoni" *ngIf="this.iniziata===false">
+      <ion-button class="control" shape="round" color="danger" (click)="this.end(this.codice!)">ANNULLA PARTITA</ion-button>
+      <ion-button class="control" id="start" shape="round" color="success" (click)="this.start()">START PARTITA</ion-button>
       <!--manca controllo numero giocatori-->
   </div>
-  <ion-button (click)="this.end(this.codice!)">ANNULLA PARTITA</ion-button>
   </ng-template>
-  <ng-template #elseBlock>
-    <p>Proprietario: {{this.userProprietario}}</p>
-    <ion-button (click)="this.esci(this.codice!)">Esci</ion-button>
+  
+
+  <!--chat-->
+  <div *ngIf="this.iniziata===false; then thenBlock2 else elseBlock2"></div>
+  <ng-template #thenBlock2>
+    <ion-button id="chat" shape="round" (click)="this.visualizzaChat()">CHAT</ion-button>
+    <div *ngIf="this.chat===true">
+      <app-chat [codice]="this.codice!"></app-chat>
+    </div>
   </ng-template>
 
-  <app-tabellone>  </app-tabellone>
+  <ng-template #elseBlock2>
+    <app-tabellone></app-tabellone>
+  </ng-template>
+    
+
+  
   <app-schede [iniziata]="this.iniziata"> </app-schede>
   <p>{{this.cinquina}}</p>
   <div *ngIf="this.cinquina">
@@ -31,7 +40,15 @@
   <div *ngIf="schermataFinale">
     <app-schermata-vittoria [risultato]="this.risultato"> </app-schermata-vittoria>
   </div>
-</div>
+
+<ng-template #elseBlock>
+  <p>Proprietario: {{this.userProprietario}}</p>
+  <ion-title><p> Codice partita: {{this.codice}} </p></ion-title>
+  <div *ngIf="this.iniziata===false">
+    <ion-button (click)="this.esci(this.codice!)">Esci</ion-button>
+  </div>
+</ng-template>
+
 
 <ion-content>
   <ion-tabs>

@@ -1,8 +1,16 @@
-<div *ngFor="let message of this.messaggi">
-  {{this.message}}
-</div>
-<ion-item>
-  <ion-input [(ngModel)]="newMessage" placeholder="Scrivi qui il tuo messaggio" (keyup)="$event.keyCode === 13 && sendMessage()"></ion-input>
-  <button (click)="sendMessage()">Send Message</button>
-</ion-item>
+<ion-card id="chat">
+  <ion-card >
+    <div class="chat" *ngFor="let message of this.messaggi">
+      {{this.message}}
+    </div>
+  </ion-card>
+  
+  <ion-item>
+    <ion-input [(ngModel)]="newMessage" placeholder="Scrivi qui il tuo messaggio" (keyup)="$event.keyCode === 13 && sendMessage()"></ion-input>
+    <ion-button size="default" fill="clear" (click)="sendMessage()">
+      <ion-icon name="arrow-forward-circle-outline" size="large"></ion-icon>
+    </ion-button>
+  </ion-item>
+</ion-card>
+
 

@@ -2,3 +2,26 @@
     height: 100%;
     overflow: auto;
 }
+
+.control{
+    width:45%;
+}
+
+#chat{
+    width: 70%;
+    margin-left: 15%;
+}
+
+.bottoni{
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
+.esci{
+    color: white;
+    background-color: red;
+    border-style: inset;
+    border-color: black;
+}
