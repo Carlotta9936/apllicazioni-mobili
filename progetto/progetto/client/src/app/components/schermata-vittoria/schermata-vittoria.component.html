@@ -1,10 +1,13 @@
-<div id="content">
-  {{risultato}}
-  <p>Bingo: {{vincitoreBingo}}</p>
-  <p>Vincita: {{vincitaBingo}}</p>
-  <p>Cinquina: {{vincitoreCinquina}}</p>
-  <p>Vincita: {{vincitaCinquina}}</p>
-  <p>Numeri estratti: {{numeriEstratti}}</p>
-  <ion-button shape="round" color="danger"(click)="esci()"> Esci </ion-button>
-  <ion-button shape="round" color="success" (click)="continua()"> Continua </ion-button>
-</div>
+
+  <ion-card>
+  <p id="risultato">- {{risultato}} -</p>
+  <p class="dati">Bingo: {{vincitoreBingo}}</p>
+  <p class="dati">Vincita: {{vincitaBingo}}</p>
+  <p class="dati">Cinquina: {{vincitoreCinquina}}</p>
+  <p class="dati">Vincita: {{vincitaCinquina}}</p>
+  <p class="dati">Numeri estratti: {{numeriEstratti}}</p>
+  </ion-card>
+  <div id="bottoni">
+    <ion-button shape="round" color="danger"(click)="esci()"> Esci </ion-button>
+    <ion-button shape="round" color="success" (click)="continua()"> Continua </ion-button>
+  </div>

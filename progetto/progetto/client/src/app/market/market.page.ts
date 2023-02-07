@@ -20,7 +20,7 @@ export class MarketPage implements OnInit {
 
   constructor(public database: DatabaseService, public timbri: TimbriService, public controlloCrediti: ControlloCreditiService, private alert: AlertService, public auth: AuthService) {
     //+ converte in int, ! non è null
-    this.crediti = +localStorage.getItem('crediti')!
+    this.crediti = Number(this.auth.get('crediti'));
   }
 
   ngOnInit() {
@@ -32,7 +32,6 @@ export class MarketPage implements OnInit {
     if(this.controlloCrediti.autorizzaOperazione(crediti)){
         //Aggiungi timbra a lista timbri
         this.timbri.aggiungiTimbro(this.auth.get("user"), idTimbro)
-        //window.alert("Nuovo timbro acquistato");
         window.location.reload();
       } else {
         this.alert.presentAlert("Mi dispiace ma non ti puoi permettere questo timbro");

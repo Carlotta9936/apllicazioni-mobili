@@ -7,6 +7,7 @@ export const environment = {
     storageBucket: "bingo-bce96.appspot.com",
     messagingSenderId: "592520733548",
     appId: "1:592520733548:web:f41ac5dd570ec33cfac949",
-    measurementId: "G-2DM0JRQTPY"
+    measurementId: "G-2DM0JRQTPY",
+    databaseURL: "https://bingo-bce96-default-rtdb.europe-west1.firebasedatabase.app"
   }
 };
