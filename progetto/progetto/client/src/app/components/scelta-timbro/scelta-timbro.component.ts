@@ -18,8 +18,10 @@ export class SceltaTimbroComponent implements OnInit {
 
   seleziona(): void{
     console.log("Seleziona");
+    //Aggiorno localstorage
     this.Auth.set("timbro", this.url)
-    window.location.reload();
+    //Aggiorno DB
+    this.database.setTimbro(this.id!, this.Auth.get("user"))    window.location.reload();
   }
 
   coloraTimbro(): void {
