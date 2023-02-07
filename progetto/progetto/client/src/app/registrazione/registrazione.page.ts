@@ -20,6 +20,7 @@ export class RegistrazionePage implements OnInit {
     this.database.creaUtente(value.username, value.password, value.nome, value.cognome, value.mail);
     this.Auth.set('user', value.username);
     this.Auth.set('crediti', 50);
+    this.Auth.set('timbro', "black");
     this.router.navigate(['/tabs/tab1']);
   }
 
