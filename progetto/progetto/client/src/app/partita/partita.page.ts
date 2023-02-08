@@ -125,7 +125,6 @@ export class PartitaPage implements OnInit {
     this.database.serverOffline(codice);
     this.database.eliminaPartita(codice);
     this.bossolo.stopTimer();
-    this.router.navigate(['/tabs/tab1']);
   }
 
   public esci(codice: string):void{
@@ -136,7 +135,6 @@ export class PartitaPage implements OnInit {
         //aggiorno il numero dei partecipanti
         this.database.aggiornaPartecipanti(codice, this.numPartecipanti!-1);
         this.database.inviaMessaggio(codice,"[SERVER]: "+ this.auth.get("user")+" si è scollegato");
-        this.router.navigate(['/tabs/tab1']);
       }catch (e){
         console.log("errore"+e);
       }
