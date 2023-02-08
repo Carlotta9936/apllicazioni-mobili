@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import { DatabaseService } from 'src/app/services/database.service';
 
 @Component({
   selector: 'app-scelta-timbro',
@@ -10,7 +11,8 @@ export class SceltaTimbroComponent implements OnInit {
 
   selezionato?: any;
   @Input() url?: string;
-  constructor(public Auth: AuthService) { }
+  @Input() id?: number;
+  constructor(public Auth: AuthService, public database: DatabaseService) { }
 
   ngOnInit() {
     this.selezionato=this.Auth.get("timbro");
@@ -21,7 +23,8 @@ export class SceltaTimbroComponent implements OnInit {
     //Aggiorno localstorage
     this.Auth.set("timbro", this.url)
     //Aggiorno DB
-    this.database.setTimbro(this.id!, this.Auth.get("user"))    window.location.reload();
+    this.database.setTimbro(this.id!, this.Auth.get("user"));
+    window.location.reload();
   }
 
   coloraTimbro(): void {

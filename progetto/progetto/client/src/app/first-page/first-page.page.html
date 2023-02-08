@@ -1,11 +1,12 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>BINGO!</ion-title>
+    <ion-title id="titolo">
+      <img src="../../assets/logo.png">
+    </ion-title>
   </ion-toolbar>
 </ion-header>
-
+<hr>
 <ion-content>
-  <img src="../../assets/logo.png">
-  <ion-button expand="block" [routerLink]="['../login']">Log in</ion-button>
-  <ion-button expand="block" color="danger" [routerLink]="['../registrazione']">Sign-up</ion-button>
+  <ion-button class="bottoni" expand="block" [routerLink]="['../login']">Log in</ion-button>
+  <ion-button class="bottoni" expand="block" color="danger" [routerLink]="['../registrazione']">Sign-up</ion-button>
 </ion-content>
