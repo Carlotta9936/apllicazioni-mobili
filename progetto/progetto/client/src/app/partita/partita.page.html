@@ -16,7 +16,7 @@
     <div  *ngIf="this.propr.proprietario===true; then thenBlock else elseBlock"></div>
     <ng-template #thenBlock>
       <div class="bottoni" *ngIf="this.iniziata===false">
-        <ion-button class="control" shape="round" color="danger" (click)="this.end(this.codice!)">ANNULLA PARTITA</ion-button>
+        <ion-button class="control" shape="round" color="danger" (click)="this.end(this.codice!)" [routerLink]="['/../../tabs/tab1']">ANNULLA PARTITA</ion-button>
         <ion-button class="control" id="start" shape="round" color="success" (click)="this.start()">START PARTITA</ion-button>
         <!--manca controllo numero giocatori-->
     </div>
@@ -46,10 +46,10 @@
   </div>
 
 <ng-template #elseBlock>
-  <p>Proprietario: {{this.userProprietario}}</p>
-  <ion-title><p> Codice partita: {{this.codice}} </p></ion-title>
   <div *ngIf="this.iniziata===false">
-    <ion-button (click)="this.esci(this.codice!)">Esci</ion-button>
+    <div id="esci">
+      <ion-button class="control" shape="round" color="danger" (click)="this.esci(this.codice!)" [routerLink]="['/../../tabs/tab1']">Esci</ion-button>
+    </div>
   </div>
 </ng-template>
 </ion-content>

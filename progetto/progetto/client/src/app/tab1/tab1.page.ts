@@ -67,6 +67,7 @@ export class Tab1Page {
 
   //Cerca partita tramite codice
   public async cercaPartita(){
+    this.searchTerm=this.searchTerm.toUpperCase();
     this.database.getPartite().then((value) => {
       Object.values(value).forEach((v: any) => {
         if(v.codice===this.searchTerm && v.iniziata===false){

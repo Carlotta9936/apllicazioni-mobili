@@ -134,6 +134,7 @@ export class PartitaPage implements OnInit {
   }
 
   public esci(codice: string):void{
+    this.checkSub.unsubscribe();
     //chiamata al db per prendere il numero dei partecipanti
     this.database.getPartita(codice).then((promise) => {
       try{

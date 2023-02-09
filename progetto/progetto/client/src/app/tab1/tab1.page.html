@@ -10,6 +10,24 @@
 
 <ion-content [fullscreen]="true">
   <app-crediti [routerLink]="['/../../tabs/tab2']"> </app-crediti>
+
+  <ion-card id="privata">
+    <p id="cerca">Cerca una partita</p>
+    <ion-searchbar animated="true" placeholder="Inserisci qui il codice della partita" [(ngModel)]="searchTerm" (keydown.enter)="cercaPartita()"></ion-searchbar>
+    <ion-grid [fixed]="true" *ngIf="partitaCercata !== undefined">
+      <ion-row id="intestazione">
+        <ion-col>nome partita</ion-col>
+        <ion-col>numero partecipanti</ion-col>
+        <ion-col>entra</ion-col>
+      </ion-row>
+      <ion-row class="righe">
+        <ion-col>{{this.partitaCercata.codice}}</ion-col>
+        <ion-col>{{this.partitaCercata.numPartecipanti}}</ion-col>
+        <ion-col><ion-button (click)="this.entra(this.partitaCercata.codice)">entra</ion-button></ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+  <br>
   <ion-button id="crea" shape="round" (click)="this.creaPartita()">Crea Partita</ion-button>
   <br>
   <br>
@@ -36,22 +54,7 @@
   <br>
   <br>
   
-  <ion-card id="privata">
-    <p id="cerca">Cerca una partita</p>
-    <ion-searchbar animated="true" placeholder="Inserisci qui il codice della partita" [(ngModel)]="searchTerm" (keydown.enter)="cercaPartita()"></ion-searchbar>
-    <ion-grid [fixed]="true" *ngIf="partitaCercata !== undefined">
-      <ion-row id="intestazione">
-        <ion-col>nome partita</ion-col>
-        <ion-col>numero partecipanti</ion-col>
-        <ion-col>entra</ion-col>
-      </ion-row>
-      <ion-row class="righe">
-        <ion-col>{{this.partitaCercata.codice}}</ion-col>
-        <ion-col>{{this.partitaCercata.numPartecipanti}}</ion-col>
-        <ion-col><ion-button (click)="this.entra(this.partitaCercata.codice)">entra</ion-button></ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-card>
+  
 </ion-content>
 
 
