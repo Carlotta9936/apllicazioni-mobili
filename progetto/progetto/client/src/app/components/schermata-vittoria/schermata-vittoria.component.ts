@@ -22,6 +22,8 @@ export class SchermataVittoriaComponent implements OnInit {
   vincitaCinquina: number = 0;
   numeriEstratti: number = 0;
 
+  superbingo: boolean = false;
+
   codice: string = this.crea.getCodiceUrl();
 
   constructor(public partita: PartitaDBService, public crea: CreaPartitaService, public prop: ProprietarioService,
@@ -39,12 +41,19 @@ export class SchermataVittoriaComponent implements OnInit {
 
       if(this.auth.get("user") === value.bingo){
         this.crediti.aggiornaCrediti(-value.premioBingo);
+        if(this.numeriEstratti < 49){
+          this.crediti.aggiornaCrediti(-100);
+          this.database.incrementaNumeroSuperbingo(this.auth.get("user"));
+          this.superbingo = true;
+        }
         this.database.incrementaNumeroBingo(this.auth.get("user"));
       }
       
       if(this.auth.get("user") === value.cinquina){
+        console.log("CINQUINA");
         this.crediti.aggiornaCrediti(-value.premioCinquina);
         this.database.incrementaNumeroCinquine(this.auth.get("user"));
+
       }
     })
   }
