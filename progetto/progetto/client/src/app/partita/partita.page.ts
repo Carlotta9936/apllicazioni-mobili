@@ -81,6 +81,7 @@ export class PartitaPage implements OnInit {
 
   start2(): void{
     this.iniziata=true;
+    this.compra=false;
     this.database.incrementaNumeroPartite(this.auth.get("user"));
     this.ascoltaBingo();
     this.ascoltaCinquina();

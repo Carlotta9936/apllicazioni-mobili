@@ -27,7 +27,7 @@
     <ng-template #thenBlock2>
       <ion-button id="chat" shape="round" (click)="this.visualizzaChat()">CHAT</ion-button>
       <div *ngIf="this.chat===true">
-        <app-chat [codice]="this.codice!"></app-chat>
+        <app-chat [codice]="this.codice!" [chat]="this.chat!"></app-chat>
       </div>
     </ng-template>
     <ion-content>
@@ -59,24 +59,26 @@
     <div *ngIf="this.propr.proprietario===false; then thenBlock1 else elseBlock1"></div>
     <ion-footer>
       <ion-tabs>
-    <ng-template #thenBlock1>
-      <ion-tab-bar slot="bottom">
-        <ion-tab-button [routerLink]="['/../../tabs/tab1']" (click)="this.esci(this.codice!)">
-          <ion-icon name="game-controller-outline"></ion-icon>
-        <ion-label>Home Page</ion-label>
-      </ion-tab-button>
-  
-      <ion-tab-button [routerLink]="['/../../tabs/tab2']" (click)="this.esci(this.codice!)">
-        <ion-icon name="wallet-outline"></ion-icon>
-        <ion-label>Market</ion-label>
-      </ion-tab-button>
-  
-      <ion-tab-button [routerLink]="['/../../tabs/tab3']" (click)="this.esci(this.codice!)">
-        <ion-icon name="person-outline"></ion-icon>
-        <ion-label>Profilo</ion-label>
-      </ion-tab-button>
-    </ion-tab-bar>
-    </ng-template>
+      <ng-template #thenBlock1>
+        <ion-tab-bar slot="bottom">
+          <ion-tab-button [routerLink]="['/../../tabs/tab1']" (click)="this.esci(this.codice!)">
+            <ion-icon name="game-controller-outline"></ion-icon>
+          <ion-label>Home Page</ion-label>
+        </ion-tab-button>
+    
+        <ion-tab-button [routerLink]="['/../../tabs/tab2']" (click)="this.esci(this.codice!)">
+          <ion-icon name="wallet-outline"></ion-icon>
+          <ion-label>Market</ion-label>
+        </ion-tab-button>
+    
+        <ion-tab-button [routerLink]="['/../../tabs/tab3']" (click)="this.esci(this.codice!)">
+          <ion-icon name="person-outline"></ion-icon>
+          <ion-label>Profilo</ion-label>
+        </ion-tab-button>
+      </ion-tab-bar>
+      </ng-template>
+
+
     <ng-template #elseBlock1>
       <ion-tab-bar slot="bottom">
         <ion-tab-button [routerLink]="['/../../tabs/tab1']" (click)="this.end(this.codice!)">
