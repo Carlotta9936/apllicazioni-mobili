@@ -14,5 +14,7 @@
                 <ion-button class="control" *ngIf="this.iniziata===true "[disabled]="bingo" shape="round" (click)="fineBingo()"> BINGO </ion-button>
                 <ion-button class="control" *ngIf="this.iniziata===true "[disabled]="cinquina" shape="round" (click)="fineCinquina()"> CINQUINA </ion-button>
             </div>     
-    <ion-button  *ngIf="this.compra===true && this.iniziata===false" id="compra" shape="round" size="large" (click)="compraScheda()">Compra una scheda</ion-button>
+    <div *ngIf="this.ns">
+        <ion-button  *ngIf="this.compra===true and this.iniziata===false" id="compra" shape="round" size="large" (click)="compraScheda()">Compra una scheda</ion-button>
+    </div>
 </ion-item>

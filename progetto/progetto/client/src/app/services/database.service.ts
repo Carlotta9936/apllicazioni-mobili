@@ -157,6 +157,7 @@ export class DatabaseService {
     });
   }
 
+  /*
   controllaGiocatori(codice: string): any{    
     let ritorno;
     const cod = ref(this.database, 'partita/'+ codice);
@@ -170,7 +171,7 @@ export class DatabaseService {
       }
     }); 
     return ritorno;
-  } 
+  } */
 
   /* ~~ Timbro ~~ */
 

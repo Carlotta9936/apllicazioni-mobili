@@ -116,6 +116,18 @@ export class PartitaDBService {
     return ascoltaCinquina;
   }
 
+  getNumParteicpanti(codice:string): Promise<any>{
+    const numPromise = new Promise<any>((resolve, reject) => {
+      const cod = ref(this.database);
+      get(child(cod, 'partita/'+ codice+'/numPartecipanti')).then((snapshot) => {
+        const c = snapshot.val();
+        console.log(c);
+        resolve(c);
+      });
+    });
+    return numPromise;
+  }
+
   getStatisticheOnvalue(codice: string): Observable<any>{
     const ascoltaStatistiche= new Observable<any>((observer)=>{
       const partita= ref (this.database,'partita/'+codice);

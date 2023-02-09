@@ -18,6 +18,7 @@ export class SchedeComponent implements OnInit {
   @Input() compra?: boolean;
 
   numeroSchede: number[] = [];
+  ns: boolean= true;
   bingo: boolean = true;
   cinquina: boolean = true;
 
@@ -43,6 +44,9 @@ export class SchedeComponent implements OnInit {
     if(this.controlloCrediti.autorizzaOperazione(1)){
       this.numeroSchede.push(0);
       this.partita.incrementaMontepremi(this.codice);
+      if(this.numeroSchede.length==3){
+        this.ns= false;
+      }
     } else {
       if(await this.alert.alertCompraCrediti()){
         this.compraScheda();
