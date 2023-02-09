@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { rejects } from 'assert';
 import { Timbro } from '../interfaces/Timbro';
 import { AuthService } from './auth.service';
 import { DatabaseService } from './database.service';
@@ -24,13 +23,17 @@ export class TimbriService {
     const appartienePromise = new Promise<Timbro[]>((resolve, reject) => {
       this.getAllTimbri().then((value: Timbro[]) => {
           let timbri: Timbro[] = [];
-          value.forEach((timbro) => {
-            console.log("codUtente", this.codUtente);
-            if(this.codUtente % timbro.id === 0){
-              timbri.push(timbro);
-            }
-          })
-          resolve (timbri);
+          this.getCodiceTimbriUtente(this.auth.get("user")).then((cod: number) => {
+            this.codUtente = cod;
+            value.forEach((timbro) => {
+              console.log("TT", timbro.id);
+              console.log("codUtente", this.codUtente);
+              if(this.codUtente % timbro.id === 0){
+                timbri.push(timbro);
+              }
+            })
+            resolve (timbri);
+          });
         });
         
     })
@@ -42,14 +45,17 @@ export class TimbriService {
     const nonAppartienePromise = new Promise<Timbro[]>((resolve, reject) => {
       this.getAllTimbri().then((value: Timbro[]) => {
           let timbri: Timbro[] = [];
-          value.forEach((timbro) => {
-            console.log("M", this.codUtente, timbro.id, this.codUtente % timbro.id);
-            console.log("Modulo", this.codUtente % timbro.id !== 0);
-            if(this.codUtente % timbro.id !== 0){
-              timbri.push(timbro);
-            }
+          this.getCodiceTimbriUtente(this.auth.get("user")).then((cod: number) => {
+            this.codUtente = cod;
+            value.forEach((timbro) => {
+              console.log("M", this.codUtente, timbro.id, this.codUtente % timbro.id);
+              console.log("Modulo", this.codUtente % timbro.id !== 0);
+              if(this.codUtente % timbro.id !== 0){
+                timbri.push(timbro);
+              }
+            })
+            resolve (timbri);
           })
-          resolve (timbri);
         });
         
     })
@@ -69,9 +75,6 @@ export class TimbriService {
 
         resolve (timbri);
       })
-
-      //console.log("TWt", this.timbri);
-
     });
 
     return getAllTimbri;
@@ -85,12 +88,18 @@ export class TimbriService {
         resolve (+value.codiceTimbri);
       })
     })
-
     return codUtentePromise;
   }
 
   aggiungiTimbro(user: string, timbro: number): void {
     console.log("T1", this.getCodiceTimbriUtente(user));
     this.database.aggiungiTimbro(user, this.codUtente * timbro);
+  }
+
+  getUrlTimbro(id: number): any {
+    this.database.getUrlTimbro(id).then((value) => {
+      console.log("getUrl timrbo", value);
+      return value;
+    })
   }
 }

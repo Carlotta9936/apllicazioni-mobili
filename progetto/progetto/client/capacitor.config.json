@@ -1,0 +1,11 @@
+{
+    "appId": "com.example.app",
+    "appName": "BINGO",
+    "bundledWebRuntime": false,
+    "npmClient": "npm",
+    "plugins": {},
+    "cordova": {},
+    "icon": {
+      "android": "./assets/icon/30icon.png"
+    }
+  }

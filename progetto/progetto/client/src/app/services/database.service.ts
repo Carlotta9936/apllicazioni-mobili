@@ -1,16 +1,12 @@
 import { BootstrapOptions, Injectable } from '@angular/core';
-import { list } from '@angular/fire/database';
 import { User } from '../interfaces/User';
-import { Partita } from '../interfaces/Partita';
 import { collection, doc, docData, Firestore, query, where, getDocs} from '@angular/fire/firestore';
 import { DataServiceService } from './data-service.service';
 import { getDatabase, set, ref, onValue, remove, update, child, get, push, increment} from "firebase/database";
-import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import { PartitaData } from '../interfaces/PartitaData';
 import { Timbro } from '../interfaces/Timbro';
 import { observable, Observable } from 'rxjs';
-import { rejects } from 'assert';
 
 
 @Injectable({
@@ -25,6 +21,8 @@ export class DatabaseService {
     this.database = getDatabase();
   }
 
+  /* ~~ Utente ~~ */
+
   //Metodo per creare un utente nel DB
   creaUtente(username: string, password: string, nome: string, cognome: string, mail: string): User{
     //Creo un oggetto User
@@ -36,7 +34,7 @@ export class DatabaseService {
       mail: mail,
       crediti: 50,
       timbri: 2,
-      codiceTimbri: 1, 
+      codiceTimbri: 2, 
       stats: { 
         partiteFatte: 0,
         bingo: 0,
@@ -53,6 +51,22 @@ export class DatabaseService {
     return u;
   }
 
+  
+  //Ritorna tutti gli utenti per il login
+  async getUser(username: string): Promise<any>{   
+    const userPromise = new Promise<any>((resolve, reject) => {
+      console.log("Username", username);
+      const user = ref(this.database, );
+      get(child(user, 'users/'+ username)).then((snapshot) => {
+        const u = snapshot.val();
+        resolve(u);
+      }); 
+    })
+    return userPromise;
+  } 
+
+
+  /* ~~ Chat ~~ */
   //crea chat
   chat(codice: string, proprietario: string): void{
     console.log("creato");
@@ -80,18 +94,6 @@ export class DatabaseService {
     return risultato;
   }
 
-  //Ritorna tutti gli utenti per il login
-  async getUser(username: string): Promise<any>{    
-    const userPromise = new Promise<any>((resolve, reject) => {
-      console.log("Username", username);
-      const user = ref(this.database, 'users/'+ username);
-      onValue(user, (snapshot) => {
-        const u = snapshot.val();
-        resolve(u);
-      }); 
-    })
-    return userPromise;
-  } 
 
   getCrediti(username: string): Observable<number>{
     const creditiObs = new Observable<number>((observer) => {
@@ -170,6 +172,46 @@ export class DatabaseService {
     return ritorno;
   } 
 
+  /* ~~ Timbro ~~ */
+
+  getUrlTimbro(id: number){
+    const timbriPromise = new Promise<Timbro>((resolve, reject) => {
+      const db = ref(this.database);
+      get(child(db, 'timbri/'+id )).then((snapshot) => {
+        if(snapshot.exists()){
+          const c = snapshot.val().url;
+          console.log("T",c);
+          resolve(c);
+        }
+      })
+    })
+    return timbriPromise
+  }
+
+  //Selezionare timbro per giocare
+  setTimbro(id: number, user: string){
+    update(ref(this.database, 'users/'+user), {
+      timbri: id
+    });
+  }
+  
+  //Metodo per acquistare un timbro nuovo
+  aggiungiTimbro(user: string, timbro: number): void {
+    update(ref(this.database, 'users/'+user), {
+      codiceTimbri: timbro
+    });
+  }
+
+  public async getTimbri(): Promise<Timbro[]> {
+    const timbriPromise = new Promise<Timbro[]>((resolve, reject) => {
+      const timbri = ref(this.database, 'timbri/');
+      onValue(timbri, (snapshot) => {
+        resolve(snapshot.val());
+      })
+    })
+
+    return timbriPromise;
+  } 
 
   serverOffline(codice: string){
     update(ref(this.database, 'partita/'+codice), {
@@ -220,22 +262,8 @@ export class DatabaseService {
     } );
   }
 
-  public async getTimbri(): Promise<Timbro[]> {
-    const timbriPromise = new Promise<Timbro[]>((resolve, reject) => {
-      const timbri = ref(this.database, 'timbri/');
-      onValue(timbri, (snapshot) => {
-        resolve(snapshot.val());
-      })
-    })
 
-    return timbriPromise;
-  } 
   
-  aggiungiTimbro(user: string, timbro: number): void {
-    update(ref(this.database, 'users/'+user), {
-      codiceTimbri: timbro
-    });
-  }
 
   //Metodi per partita
   incrementaGiocatori(codice: string): void {

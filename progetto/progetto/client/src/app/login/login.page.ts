@@ -5,7 +5,6 @@ import { getDatabase, set, ref, onValue } from "firebase/database";
 import { response } from 'express';
 import { HttpClient } from '@angular/common/http';
 import { User } from 'firebase/auth';
-//import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { AlertService } from '../services/alert.service';
@@ -27,13 +26,14 @@ export class LoginPage implements OnInit {
 
   async login(value: any){
     this.database.getUser(value.username).then((promise) => {
-      //console.log("V", promise);
       try{
         if(promise.password === value.password){
           console.log("Trovato");
           this.Auth.set('user', promise.username);
-          this.Auth.set('crediti', promise.crediti);
-          this.Auth.set('timbro',promise.timbir);
+          this.Auth.set('crediti', promise.crediti);        
+          this.database.getUrlTimbro(promise.timbri).then((value) => {
+            this.Auth.set('timbro', value);
+          })
           this.router.navigate(['/tabs/tab1']);
         } else {
           console.log("Non trovato");
