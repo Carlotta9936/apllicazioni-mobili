@@ -27,7 +27,6 @@ export class BossoloService {
       this.bossolo.push(i);
       this.tabellone.push(false);
     }
-    console.log("Tab", this.tabellone)
   }
 
   //Timer per l'estrazione di un numero
