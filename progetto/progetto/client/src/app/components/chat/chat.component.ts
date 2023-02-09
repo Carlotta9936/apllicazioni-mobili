@@ -12,7 +12,6 @@ export class ChatComponent implements OnInit {
   stampaSub!: Subscription;
   stampatuttiSub!:Subscription;
   @Input() codice?: string;
-  @Input() chat?: boolean;
   messaggi: any[]=[] ;
   newMessage?: string;
 
@@ -30,6 +29,7 @@ export class ChatComponent implements OnInit {
     this.newMessage="";
   }
 
+  //metodo per prendere dal db tutti i messaggi della chat
   stampaTutti(){
     this.stampatuttiSub=this.database.getChat(this.codice!).subscribe((value)=>{
       for(let i=0;i<(Object.values(value).length-1);i++){
@@ -42,6 +42,7 @@ export class ChatComponent implements OnInit {
 
   }
 
+  //metodo per aggiungere messaggi alla chat quando questa è aperta
   stampaMessaggi(){
     this.stampaSub=this.database.getChat(this.codice!).subscribe((value)=>{
       this.messaggi.push(Object.values(value)[(Object.values(value).length)-1]);
