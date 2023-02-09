@@ -46,8 +46,7 @@
   </div>
 
 <ng-template #elseBlock>
-  <p>Proprietario: {{this.userProprietario}}</p>
-  <ion-title><p> Codice partita: {{this.codice}} </p></ion-title>
+
   <div *ngIf="this.iniziata===false">
     <ion-button (click)="this.esci(this.codice!)">Esci</ion-button>
   </div>

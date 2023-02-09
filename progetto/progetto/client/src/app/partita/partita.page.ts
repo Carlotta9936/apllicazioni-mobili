@@ -59,11 +59,32 @@ export class PartitaPage implements OnInit {
     });
   }
 
+  async start(): Promise<void> {
+    //controllo se ci sono abbastanza giocatori per iniziare la partita
+    let num=this.partita.getNumParteicpanti(this.codice!);
+    if(await num>=2){
+      //setto la partita a iniziata in modo che non sia più visibile nella pagina iniziale
+      this.partita.startPartita(this.codice!);
+      this.compra=false;
+      this.database.incrementaNumeroPartite(this.auth.get("user"));
+      this.iniziata=true;
+      this.tabellone = true;
+      this.bossolo.startTimer();
+      this.calcolaPremi.calcolaPremi(this.codice!);
+      this.ascoltaBingo();
+      this.ascoltaCinquina();
+      this.aggiornaDatiSub.unsubscribe();
+    }else{
+      this.alert.presentAlert("Non ci sono abbastanza giocatori. Dovete essere almeno in 2");
+    }
+  }
+
   start2(): void{
     this.iniziata=true;
     this.database.incrementaNumeroPartite(this.auth.get("user"));
     this.ascoltaBingo();
     this.ascoltaCinquina();
+    this.tabellone = true;
   }
 
 
@@ -87,25 +108,7 @@ export class PartitaPage implements OnInit {
     });
   };
 
-  async start(): Promise<void> {
-    //controllo se ci sono abbastanza giocatori per iniziare la partita
-    let num=this.partita.getNumParteicpanti(this.codice!);
-    if(await num>=2){
-      //setto la partita a iniziata in modo che non sia più visibile nella pagina iniziale
-      this.partita.startPartita(this.codice!);
-      this.compra=false;
-      this.database.incrementaNumeroPartite(this.auth.get("user"));
-      this.iniziata=true;
-      this.tabellone= true;
-      this.bossolo.startTimer();
-      this.calcolaPremi.calcolaPremi(this.codice!);
-      this.ascoltaBingo();
-      this.ascoltaCinquina();
-      this.aggiornaDatiSub.unsubscribe();
-    }else{
-      this.alert.presentAlert("Non ci sono abbastanza giocatori. Dovete essere almeno in 2");
-    }
-  }
+  
 
   finePartita(): void{
     //Stop estrazione numeri
@@ -157,9 +160,6 @@ export class PartitaPage implements OnInit {
   }
 
   //Tabellone
-
-/*  //Solo se sei il proprietario
-  estrazioneNumeri(): void{*/
   statistiche(): void{
     this.aggiornaDatiSub= this.partita.getStatisticheOnvalue(this.codice!).subscribe((value)=>{
       this.numPartecipanti=value.numPartecipanti;

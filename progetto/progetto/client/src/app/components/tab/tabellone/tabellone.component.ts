@@ -30,7 +30,7 @@ export class TabelloneComponent implements OnInit, OnDestroy {
   bingoSub!: Subscription;
 
   constructor(public bossolo: BossoloService, public partita: PartitaDBService, public crea: CreaPartitaService, public database: DatabaseService) { 
-    for(let i=1;i<91;i++){
+    for(let i=1;i<=91;i++){
       this.numeri.push(i);
       this.estratti.push(false);
     }
