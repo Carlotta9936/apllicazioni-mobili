@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnDestroy, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { Casella } from 'src/app/interfaces/Casella';
 import { Partita } from 'src/app/interfaces/Partita';
 import { BossoloService } from 'src/app/services/bossolo.service';
@@ -35,6 +35,8 @@ export class SchedaComponent implements OnInit, OnDestroy {
 
   numSub!: Subscription;
   bingoSub!: Subscription;
+
+  @Input() aiuti?: boolean;
 
   constructor(public generatore: GeneratoreCartellaService, public database: DatabaseService, 
     public bossolo: BossoloService, public partita: PartitaDBService, public crea: CreaPartitaService) {
@@ -92,10 +94,18 @@ export class SchedaComponent implements OnInit, OnDestroy {
     this.numeri = data[0];
     console.log(this.numeri);
     this.numeri.forEach(n => {
-      let casella: Casella = {
+      let casella : Casella;
+      if(n === 0){
+        casella = {
+        numero: undefined, 
+        stato: "numero"
+        };
+      } else {
+        casella = {
         numero: n, 
         stato: "numero"
       };
+    }
       this.caselle.push(casella);
     });
 

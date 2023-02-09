@@ -1,4 +1,4 @@
 export interface Casella {
-    numero: number;
+    numero: number | undefined;
     stato: "vuota" | "numero" | "estratta" | "segnata";
 }

@@ -1,4 +1,4 @@
 <div id="cartella">
-    <app-casella *ngFor="let casella of caselle" [numero]="casella.numero" [stato]="casella.stato" (segnato)="onCasellaSegnata($event)"></app-casella>
+    <app-casella *ngFor="let casella of caselle" [numero]="casella.numero" [stato]="casella.stato" (segnato)="onCasellaSegnata($event)" [aiuti]="this.aiuti"></app-casella>
 </div>
 <hr>

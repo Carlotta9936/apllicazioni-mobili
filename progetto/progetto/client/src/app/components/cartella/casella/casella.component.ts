@@ -10,6 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class CasellaComponent implements OnInit {
   @Input() numero?: number;
   @Input() stato?: "vuota" | "numero" | "estratta" | "segnata";
+  @Input() aiuti?: boolean;
 
   @Output() segnato = new EventEmitter<number>()
 

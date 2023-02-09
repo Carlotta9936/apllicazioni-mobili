@@ -26,6 +26,8 @@ export class SchedeComponent implements OnInit {
 
   codice: string = this.crea.getCodiceUrl();
 
+  aiutiBool: boolean = false;
+
   constructor(public partita: PartitaDBService, private Auth:AuthService, public crea: CreaPartitaService, 
     public controlloCrediti: ControlloCreditiService, public alert: AlertService) { }
 
@@ -86,4 +88,8 @@ export class SchedeComponent implements OnInit {
     this.partita.dichiaraBingo(this.Auth.get('user'), this.codice);
   }
 
+
+  aiuti(event: any){
+    this.aiutiBool = event.detail.checked;
+  }
 }

@@ -1,4 +1,10 @@
 <div class="casella vuota" *ngIf="stato === 'vuota'"> {{numero}} </div>
 <div class="casella numero" *ngIf="stato === 'numero'"> {{numero}} </div>
-<div class="casella estratta" *ngIf="stato === 'estratta'" (click)="segna()"> {{numero}} </div>
+<div *ngIf="this.aiuti; then thenBlock else elseBlock"> </div>
+<ng-template #thenBlock>
+    <div class="casella estratta aiuti" *ngIf="stato === 'estratta'" (click)="segna()"> {{numero}} </div>    
+</ng-template>
+<ng-template #elseBlock>
+    <div class="casella estratta" *ngIf="stato === 'estratta'" (click)="segna()"> {{numero}} </div>
+</ng-template>
 <div class="casella segnata" *ngIf="stato === 'segnata'"> {{numero}} <img src="../../../assets/timbri/{{timbro}}.png"> </div>
