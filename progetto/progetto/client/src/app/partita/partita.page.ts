@@ -87,18 +87,24 @@ export class PartitaPage implements OnInit {
     });
   };
 
-  start(): void {
-    //setto la partita a iniziata in modo che non sia più visibile nella pagina iniziale
-    this.partita.startPartita(this.codice!);
-    this.compra=false;
-    this.database.incrementaNumeroPartite(this.auth.get("user"));
-    this.iniziata=true;
-    this.tabellone= true;
-    this.bossolo.startTimer();
-    this.calcolaPremi.calcolaPremi(this.codice!);
-    this.ascoltaBingo();
-    this.ascoltaCinquina();
-    this.aggiornaDatiSub.unsubscribe();
+  async start(): Promise<void> {
+    //controllo se ci sono abbastanza giocatori per iniziare la partita
+    let num=this.partita.getNumParteicpanti(this.codice!);
+    if(await num>=2){
+      //setto la partita a iniziata in modo che non sia più visibile nella pagina iniziale
+      this.partita.startPartita(this.codice!);
+      this.compra=false;
+      this.database.incrementaNumeroPartite(this.auth.get("user"));
+      this.iniziata=true;
+      this.tabellone= true;
+      this.bossolo.startTimer();
+      this.calcolaPremi.calcolaPremi(this.codice!);
+      this.ascoltaBingo();
+      this.ascoltaCinquina();
+      this.aggiornaDatiSub.unsubscribe();
+    }else{
+      this.alert.presentAlert("Non ci sono abbastanza giocatori. Dovete essere almeno in 2");
+    }
   }
 
   finePartita(): void{
