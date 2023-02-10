@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { DatabaseService } from 'src/app/services/database.service';
@@ -8,12 +8,13 @@ import { DatabaseService } from 'src/app/services/database.service';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnDestroy {
   stampaSub!: Subscription;
   stampatuttiSub!:Subscription;
   @Input() codice?: string;
   messaggi: any[]=[] ;
   newMessage?: string;
+  stampaFlag: boolean = false;
 
 
   constructor(public database: DatabaseService, public auth: AuthService) { }
@@ -22,6 +23,12 @@ export class ChatComponent implements OnInit {
     this.stampaTutti();
     //this.stampaMessaggi();
   }
+
+ ngOnDestroy(): void {
+     if(this.stampaFlag){
+      this.stampaSub.unsubscribe();
+     }
+ }
 
   sendMessage(){
     let messaggio= "["+ this.auth.get("user")+"]: "+this.newMessage;
@@ -44,6 +51,7 @@ export class ChatComponent implements OnInit {
 
   //metodo per aggiungere messaggi alla chat quando questa è aperta
   stampaMessaggi(){
+    this.stampaFlag = true;
     this.stampaSub=this.database.getChat(this.codice!).subscribe((value)=>{
       this.messaggi.push(Object.values(value)[(Object.values(value).length)-1]);
     });
