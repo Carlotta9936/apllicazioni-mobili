@@ -117,6 +117,7 @@ export class GeneratoreCartellaService {
         numeriConZero.push(0)
       }
     }
+    console.log("con zeri", numeriConZero)
     return numeriConZero;
   } 
 
