@@ -18,7 +18,8 @@ export class MarketPage implements OnInit {
   crediti: number;
   timbriAcq: Timbro[] = [];
 
-  constructor(public database: DatabaseService, public timbri: TimbriService, public controlloCrediti: ControlloCreditiService, private alert: AlertService, public auth: AuthService) {
+  constructor(public database: DatabaseService, public timbri: TimbriService, public controlloCrediti: ControlloCreditiService, 
+    private alert: AlertService, public auth: AuthService) {
     //+ converte in int, ! non è null
     this.crediti = Number(this.auth.get('crediti'));
   }
@@ -30,7 +31,7 @@ export class MarketPage implements OnInit {
   compraTimbro(idTimbro: number, crediti: number):void{
     //Controllo se l'utente si può permettere il timbro
     if(this.controlloCrediti.autorizzaOperazione(crediti)){
-        //Aggiungi timbra a lista timbri
+        //Aggiungi timbro a lista timbri
         this.timbri.aggiungiTimbro(this.auth.get("user"), idTimbro)
         window.location.reload();
       } else {
@@ -40,6 +41,7 @@ export class MarketPage implements OnInit {
 
   async compraCrediti(quantita: number):Promise<void>{
     //Fare transazione con paypal con paypal
+    //essendo una transizione di soldi quindi più delicata chiedo la conferma
     let risposta= this.alert.alertConferma(this.risp);
     console.log("risposta", (await risposta).valueOf());
     if(await (await risposta).valueOf()==true){
@@ -48,8 +50,9 @@ export class MarketPage implements OnInit {
     }
   }
 
+  //metodo per stampare i timbri che l'utente non possiede
   getTimbri(): any{
-    this.timbri.nonAppartiene("Alsi").then((value: Timbro[]) => {
+    this.timbri.nonAppartiene(this.auth.get("user")!).then((value: Timbro[]) => {
       console.log("Value", value);
       this.timbriAcq = value;
       console.log("Timbri", this.timbriAcq);

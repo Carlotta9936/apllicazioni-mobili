@@ -16,19 +16,19 @@ import { AuthService } from '../services/auth.service';
 })
 export class Tab1Page {
 
-  partite: PartitaData[] = []
+  partite: PartitaData[] = [];
   partitaCercata?: PartitaData;
-  searchTerm = '';
+  searchTerm = ''; //variabile che prende il valore dal form
 
-  constructor(public crea: CreaPartitaService, public database: DatabaseService, public crediti: ControlloCreditiService, private router: Router, private alert: AlertService, public propr: ProprietarioService, public auth: AuthService) { }
+  constructor(public crea: CreaPartitaService, public database: DatabaseService, public crediti: ControlloCreditiService,
+     private router: Router, private alert: AlertService, public propr: ProprietarioService, public auth: AuthService) { }
 
   ngOnInit(){
     window.location.reload;
     this.caricaPartite();
-    this.caricaCrediti();
   }
 
-  //Carica tutte le partite pubbliche
+  //Carica tutte le partite pubbliche non ancora iniziate
   public caricaPartite(): void{
     this.database.getPartite().then((value) => {
       Object.values(value).forEach((v: any) => {
@@ -56,7 +56,7 @@ export class Tab1Page {
     this.propr.proprietario=true;
   }
 
-  //metodo che manda alla stanza prepartita 
+  //metodo che manda alla pagina per settare la tipologia di partita
   public creaPartita():void{
     if(+this.auth.get("crediti")>=1){
       this.router.navigate(['crea-partita']);
@@ -65,7 +65,7 @@ export class Tab1Page {
     }
   }
 
-  //Cerca partita tramite codice
+  //Cerca partita non ancora iniziate tramite codice
   public async cercaPartita(){
     this.searchTerm=this.searchTerm.toUpperCase();
     this.database.getPartite().then((value) => {
@@ -79,7 +79,7 @@ export class Tab1Page {
 
   public entra(codice: string): void{
     //controllo se ha i crediti per comprare una scheda
-    if(this.crediti.autorizzaOperazione(1)==true){
+    if(+this.auth.get("crediti")>=1){
       //chiamata al db per prendere il numero dei partecipanti
       this.database.getPartita(codice).then((promise) => {
         try{
@@ -97,9 +97,5 @@ export class Tab1Page {
       this.alert.presentAlert('fatti un giro al market, non hai crediti per giocare');
     }
     this.propr.proprietario=false;
-  }
-
-  caricaCrediti(): void {
-
   }
 }

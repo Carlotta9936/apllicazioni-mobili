@@ -40,7 +40,7 @@
     </div>
   </ng-template>
 
-    <app-schede [iniziata]="this.iniziata" [compra]="this.compra"> </app-schede>
+    <app-schede [iniziata]="this.iniziata" [compra]="this.compra" (schede)="numeroSchede($event)"> </app-schede>
   <div *ngIf="schermataFinale">
     <app-schermata-vittoria [risultato]="this.risultato"> </app-schermata-vittoria>
   </div>

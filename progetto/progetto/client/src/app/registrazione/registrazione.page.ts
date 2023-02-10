@@ -21,6 +21,7 @@ export class RegistrazionePage implements OnInit {
     //controllo i campi siano stati riempiti
     if(value.username!="" && value.password!="" && value.nome!="" && value.cognome!="" && value.mail!=""){
       this.database.getUser(value.username).then((promise) => {
+        //controllo che l'user scelto non sia già in uso
         try{
           if(promise.username === value.username){
             this.alert.presentAlert("Username già in uso.");
@@ -31,6 +32,8 @@ export class RegistrazionePage implements OnInit {
             this.Auth.set('timbro', "black");
             this.router.navigate(['/tabs/tab1']);
           }
+          //metto il salvataggio anche nel catch perché se è il primo utente che si registra la chiamata al db 
+          //genererà un errore
         }catch{
           this.database.creaUtente(value.username, value.password, value.nome, value.cognome, value.mail);
           this.Auth.set('user', value.username);
@@ -38,11 +41,9 @@ export class RegistrazionePage implements OnInit {
           this.Auth.set('timbro', "black");
           this.router.navigate(['/tabs/tab1']);
         }
-        
       });
     }else{
       this.alert.presentAlert("Non hai compilato tutti i campi");
     }
   }
-
 }

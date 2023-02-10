@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AlertService } from 'src/app/services/alert.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -16,6 +16,9 @@ export class SchedeComponent implements OnInit {
   @Input() iniziata?: boolean;
   @Input() finePartita: boolean = false;
   @Input() compra?: boolean;
+
+  @Output() schede = new EventEmitter<number>()
+
 
   numeroSchede: number[] = [];
   ns: boolean= true;
@@ -52,6 +55,7 @@ export class SchedeComponent implements OnInit {
         this.compraScheda();
       }
     }
+    this.schede.emit(this.numeroSchede.length);
   }
 
   abilitaBingo(value: any): void {
