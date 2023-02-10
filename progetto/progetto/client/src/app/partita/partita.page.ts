@@ -137,6 +137,7 @@ export class PartitaPage implements OnInit {
   //avvisa i giocatori che non siano il proprietario tramite un alert che il proprietario si è disconnesso
   public annullaPartita():void{
     if(!this.propr.proprietario){
+      //controllo di non essermi già scollegato
       if(this.elimina.staccaServer==false){
         this.checkSub.unsubscribe();
       }else{

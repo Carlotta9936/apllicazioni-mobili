@@ -21,6 +21,7 @@ export class EliminaPartitaService {
     this.router.navigate(['/tabs/tab1']);
   }
 
+  //metodo che permette di far uscire i giocatori finita una partita senza dare il rimborso
   esciPartita(): void{
     this.staccaServer=false;
   }
