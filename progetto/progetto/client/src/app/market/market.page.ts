@@ -44,6 +44,7 @@ export class MarketPage implements OnInit {
     console.log("risposta", (await risposta).valueOf());
     if(await (await risposta).valueOf()==true){
       this.controlloCrediti.aggiornaCrediti(quantita*(-1));
+      window.location.reload();
     }
   }
 

@@ -81,6 +81,7 @@ export class PartitaPage implements OnInit {
 
   start2(): void{
     this.iniziata=true;
+    this.compra=false;
     this.database.incrementaNumeroPartite(this.auth.get("user"));
     this.ascoltaBingo();
     this.ascoltaCinquina();
@@ -137,6 +138,7 @@ export class PartitaPage implements OnInit {
   }
 
   public esci(codice: string):void{
+    this.checkSub.unsubscribe();
     //chiamata al db per prendere il numero dei partecipanti
     this.database.getPartita(codice).then((promise) => {
       try{
