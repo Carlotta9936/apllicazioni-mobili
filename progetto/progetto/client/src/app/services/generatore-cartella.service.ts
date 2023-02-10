@@ -162,7 +162,7 @@ export class GeneratoreCartellaService {
 
   /*
     * Sistemo l'ultima riga, facendo in modo che abbia 4 caselle bianche (e di conseguenza 5 con numero)
-    * Estraggo un numero a caso che è la riga su cui andiamo a lavorare, se l'ultima riga a quall'indice
+    * Estraggo un numero a caso che è la colonna su cui andiamo a lavorare, se l'ultima riga in quell'indice
     * ha zero proviamo a scambiarlo con il numero della riga sopra (matrice[1]), se anche quello è zero proviamo 
     * con la prima, se anche quella è vuota aggiungiamo un giro al for, perché questo è andato a vuoto
   */    
