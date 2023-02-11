@@ -116,9 +116,12 @@ export class DatabaseService {
           const c = snapshot.val();
           console.log(c);
           resolve(c);
+        }else{
+          resolve("vuoto");
         }
       })
     })
+    console.log("partita",codicePromise);
     return codicePromise;
   } 
 

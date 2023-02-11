@@ -180,11 +180,18 @@ export class PartitaPage implements OnInit {
         if(this.iniziata==false){
           //se la partita non è iniziata rimborso i crediti
           this.crediti.rimborsaCrediti(this.numSchede);
+          //ricalcolo il montepremi
+          this.aggiornaMontepremi(this.numSchede);
         }
       }catch (e){
         console.log("errore"+e);
       }
     });
+  }
+
+  public aggiornaMontepremi(schede: number):void{
+    this.montepremi=this.montepremi!-schede;
+    this.partita.setMontepremi(this.codice!,this.montepremi);
   }
 
   public visualizzaChat():void{
@@ -193,7 +200,6 @@ export class PartitaPage implements OnInit {
     }else{
       this.chat=true;
     }
-
   }
 
   statistiche(): void{

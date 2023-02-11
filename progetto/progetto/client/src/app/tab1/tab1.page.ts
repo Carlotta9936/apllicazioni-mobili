@@ -81,18 +81,24 @@ export class Tab1Page {
   public entra(codice: string): void{
     //controllo se ha i crediti per comprare una scheda
     if(+this.auth.get("crediti")>=1){
-      //chiamata al db per prendere il numero dei partecipanti
-      this.database.getPartita(codice).then((promise) => {
-        try{
-          let numPartecipanti= promise.numPartecipanti;
-          //aggiorno il numero dei partecipanti
-          this.database.aggiornaPartecipanti(codice, numPartecipanti+1);
-          this.database.inviaMessaggio(codice,"[SERVER]: "+ this.auth.get("user")+" si è aggiunto alla partita");
-          
-          this.router.navigate(['partita/'+codice]);
-        }catch (e){
-          console.log("errore"+e);
+      this.database.getPartita(codice).then((promise)=> {
+        //controllo che la partita esista ancora
+        if(promise=="vuoto"){
+          this.alert.presentAlert("Ci dispiace si è verificato un inconveniente, ricarica le partite.");
+        }else{
+          //controllo che la partita non sia già iniziata
+          //controllo necessario perché potrebbe non refresharsi
+          if(promise.iniziata !==true && promise.iniziata!==undefined){
+            let numPartecipanti= promise.numPartecipanti;
+            //aggiorno il numero dei partecipanti
+            this.database.aggiornaPartecipanti(codice, numPartecipanti+1);
+            this.database.inviaMessaggio(codice,"[SERVER]: "+ this.auth.get("user")+" si è aggiunto alla partita");
+            this.router.navigate(['partita/'+codice]);
+          }else{
+            this.alert.presentAlert('Ci dispiace la partita è già inziata, ricarica le partite per vedere quelle non ancora iniziate');
+          }
         }
+        console.log("we");
       });
     }else{
       this.alert.presentAlert('fatti un giro al market, non hai crediti per giocare');
