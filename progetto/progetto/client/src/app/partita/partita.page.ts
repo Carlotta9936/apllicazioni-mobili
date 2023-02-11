@@ -49,7 +49,6 @@ export class PartitaPage implements OnInit {
   tabellone: boolean= false;
   //variabile per gestire più component
   iniziata: boolean = false;
-
   //Variabile per aggiornare i dati relativi alla partita prima che inizi
   aggiornaDatiSub!: any;
 

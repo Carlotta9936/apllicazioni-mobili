@@ -1,11 +1,7 @@
 import { Injectable } from '@angular/core';
-import { resolve } from 'dns';
 import { getDatabase, set, ref, onValue, remove, update, child, get, push, increment} from "firebase/database";
 import { Observable, Subscription } from 'rxjs';
 import { Partita } from '../interfaces/Partita';
-import { PartitaData } from '../interfaces/PartitaData';
-import { DataServiceService } from './data-service.service';
-import { DatabaseService } from './database.service';
 
 @Injectable({
   providedIn: 'root'

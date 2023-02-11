@@ -41,9 +41,6 @@ export class SchedeComponent implements OnInit {
   }
 
   async compraScheda(): Promise<any>{
-    /**
-     * TODO: controllo crediti per comprare la scheda
-     */
     if(this.controlloCrediti.autorizzaOperazione(1)){
       this.numeroSchede.push(0);
       this.partita.incrementaMontepremi(this.codice);
