@@ -52,17 +52,15 @@ export class BossoloService {
     let num= Math.floor(Math.random() * (this.bossolo.length));
     let numeroEstratto = this.bossolo[num]
     this.bossolo.splice(num, 1);
-    this.partita.incrementaNumeriEstratti(this.crea.getCodiceUrl())
     return numeroEstratto;
   }
-
+  
   //Comunica l'estrazione a tutti
   estrazione(): void{
     //Si occupa dell'estrazione del numero dal bossolo
     let num=this.estraiNumero();
     //Aggiorno nel DB
     this.partita.estrazioneNumero(this.crea.getCodiceUrl(), num);
+    //this.partita.incrementaNumeriEstratti(this.crea.getCodiceUrl())
   }
-
-  
 }

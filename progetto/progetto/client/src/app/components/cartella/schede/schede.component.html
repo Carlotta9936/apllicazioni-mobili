@@ -4,7 +4,6 @@
         <ion-label>Evidenzia caselle chiamate</ion-label>
         <ion-toggle (ionChange)="aiuti($event)" slot="end"></ion-toggle>
     </ion-item>
-
     <div *ngFor="let scheda of numeroSchede"> 
         <ion-item id="schede">
         <app-scheda (abilitaBingo)="abilitaBingo($event)" (abilitaCinquina)="abilitaCinquina($event)" [aiuti]="this.aiutiBool"></app-scheda>

@@ -96,7 +96,7 @@ export class SchedeComponent implements OnInit {
     this.partita.dichiaraBingo(this.Auth.get('user'), this.codice);
   }
 
-
+  //Metodo per abilitare gli aiuti
   aiuti(event: any){
     this.aiutiBool = event.detail.checked;
   }

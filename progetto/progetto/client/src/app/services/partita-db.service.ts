@@ -36,6 +36,7 @@ export class PartitaDBService {
   public estrazioneNumero(codice: string, numero: number): void{
     update(ref(this.database, 'partita/'+codice+'/datiPartita'), {
       ultimoNumero: numero,
+      numeriEstratti: increment(1)
     })
   }
 
