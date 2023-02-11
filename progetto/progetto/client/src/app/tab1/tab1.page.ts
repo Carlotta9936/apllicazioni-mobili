@@ -84,12 +84,17 @@ export class Tab1Page {
       //chiamata al db per prendere il numero dei partecipanti
       this.database.getPartita(codice).then((promise) => {
         try{
-          let numPartecipanti= promise.numPartecipanti;
-          //aggiorno il numero dei partecipanti
-          this.database.aggiornaPartecipanti(codice, numPartecipanti+1);
-          this.database.inviaMessaggio(codice,"[SERVER]: "+ this.auth.get("user")+" si è aggiunto alla partita");
-          
-          this.router.navigate(['partita/'+codice]);
+          //controllo che la partita non sia già iniziata
+          //controllo necessario perché potrebbe non refresharsi
+          if(promise.iniziata==true){
+            this.alert.presentAlert('Ci dispiace la partita è già inziata, ricarica le partite per vedere quelle non ancora iniziate');
+          }else{
+            let numPartecipanti= promise.numPartecipanti;
+            //aggiorno il numero dei partecipanti
+            this.database.aggiornaPartecipanti(codice, numPartecipanti+1);
+            this.database.inviaMessaggio(codice,"[SERVER]: "+ this.auth.get("user")+" si è aggiunto alla partita");
+            this.router.navigate(['partita/'+codice]);
+          }
         }catch (e){
           console.log("errore"+e);
         }
