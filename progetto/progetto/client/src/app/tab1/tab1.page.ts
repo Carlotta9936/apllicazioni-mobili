@@ -30,6 +30,7 @@ export class Tab1Page {
 
   //Carica tutte le partite pubbliche
   public caricaPartite(): void{
+    this.partite = [];
     this.database.getPartite().then((value) => {
       Object.values(value).forEach((v: any) => {
         if(v.pubblica===true && v.iniziata===false){
