@@ -10,6 +10,8 @@ import { AlertService } from './alert.service';
 })
 export class EliminaPartitaService {
 
+  staccaServer= true;
+
   constructor(public database: DatabaseService, private router: Router, public auth: AuthService, public bossolo: BossoloService, public alert: AlertService) { }
 
   //metodo che permette di annullare una partita
@@ -19,7 +21,8 @@ export class EliminaPartitaService {
     this.router.navigate(['/tabs/tab1']);
   }
 
-  esciPartita(codice: string): void{
-    
+  //metodo che permette di far uscire i giocatori finita una partita senza dare il rimborso
+  esciPartita(): void{
+    this.staccaServer=false;
   }
 }

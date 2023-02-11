@@ -6,8 +6,10 @@ import { AlertService } from '../services/alert.service';
 import { AuthService } from '../services/auth.service';
 import { BossoloService } from '../services/bossolo.service';
 import { CalcolaPremiService } from '../services/calcola-premi.service';
+import { ControlloCreditiService } from '../services/controllo-crediti.service';
 import { CreaPartitaService } from '../services/crea-partita.service';
 import { DatabaseService } from '../services/database.service';
+import { EliminaPartitaService } from '../services/elimina-partita.service';
 import { PartitaDBService } from '../services/partita-db.service';
 import { ProprietarioService } from '../services/proprietario.service';
 
@@ -19,32 +21,42 @@ import { ProprietarioService } from '../services/proprietario.service';
 export class PartitaPage implements OnInit {
   codice?: string;
   userProprietario?:string;
-  iniziata: boolean = false;
-  chat: boolean= true;
-  compra: boolean= true;
-  tabellone: boolean= false;
-
   montepremi?: number;
   numPartecipanti?: number;
+  numSchede= 1; //inizializzato a 1 perché la partita inizia che ne ha già 1
 
   //Subscruption per ascoltare eventuali vincitori
   bingoSub!: Subscription;
   cinquinaSub!: Subscription;
   checkSub!: Subscription;
+
   //Variabile per chiamare il component della cinquina
   cinquina: boolean = false;
+
   //Variabile per chiamare il component del bingo
   schermataFinale: boolean = false;
+
   //Variabili che vanno passate alle schermate della vincita
   risultato!: string;
   vincitoreBingo!: string;
   vincitoreCinquina!: string;
+
+  //Variabile per mostrare il bottone compra scheda
+  compra: boolean= true;
+  //Variabile per mostrare il componetn chat
+  chat: boolean= true;
+  //variabile per mostrare il compoenent del tabellone
+  tabellone: boolean= false;
+  //variabile per gestire più component
+  iniziata: boolean = false;
+
   //Variabile per aggiornare i dati relativi alla partita prima che inizi
   aggiornaDatiSub!: any;
 
   constructor(public crea: CreaPartitaService, public database: DatabaseService, 
     public auth: AuthService, public propr: ProprietarioService, public bossolo: BossoloService,
-    public partita: PartitaDBService, private router: Router, public calcolaPremi: CalcolaPremiService, public alert: AlertService) {  }
+    public partita: PartitaDBService, private router: Router, public calcolaPremi: CalcolaPremiService,
+     public alert: AlertService,public crediti: ControlloCreditiService, public elimina: EliminaPartitaService) {  }
 
   ngOnInit() {
     this.codice=this.crea.getCodiceUrl();
@@ -59,6 +71,7 @@ export class PartitaPage implements OnInit {
     });
   }
 
+  //metodo che avvia la partita
   async start(): Promise<void> {
     //controllo se ci sono abbastanza giocatori per iniziare la partita
     let num=this.partita.getNumParteicpanti(this.codice!);
@@ -100,6 +113,7 @@ export class PartitaPage implements OnInit {
           if(promise.proprietario==this.auth.get("user")){ 
             this.propr.proprietario=true;
           }else{
+            this.chat=false;
             this.propr.proprietario=false;
           }
         }
@@ -108,8 +122,6 @@ export class PartitaPage implements OnInit {
       }
     });
   };
-
-  
 
   finePartita(): void{
     //Stop estrazione numeri
@@ -123,21 +135,40 @@ export class PartitaPage implements OnInit {
     this.schermataFinale = true;
   }
 
+  //avvisa i giocatori che non siano il proprietario tramite un alert che il proprietario si è disconnesso
   public annullaPartita():void{
     if(!this.propr.proprietario){
-      this.alert.presentAlert("il server si è disconnesso, PARTITA ANNULLATA");
-      this.router.navigate(['/tabs/tab1']);
+      //controllo di non essermi già scollegato
+      if(this.elimina.staccaServer==false){
+        this.checkSub.unsubscribe();
+      }else{
+        //essendo finita la partita perché il server si è scollegato rimborso i crediti
+        this.crediti.rimborsaCrediti(this.numSchede!);
+        this.alert.presentAlert("il server si è disconnesso, PARTITA ANNULLATA");
+        this.router.navigate(['/tabs/tab1']);
+      }
     }
   }
 
-
+  //uscita dalla partita da parte del proprietario
   end(codice: string): void {
+    //se la partita non era ancora iniziata rimborso
+    if(this.iniziata==false){
+      this.crediti.rimborsaCrediti(this.numSchede!);
+    }
     this.database.serverOffline(codice);
     this.database.eliminaPartita(codice);
     this.bossolo.stopTimer();
   }
 
+  //metodo che prende in input il numero delle schede da parte del component schede
+  numeroSchede(value: any):void{
+    this.numSchede=value;
+  }
+
+  //uscita dalla partita da parte di un giocatore
   public esci(codice: string):void{
+    this.checkSub.unsubscribe();
     //chiamata al db per prendere il numero dei partecipanti
     this.database.getPartita(codice).then((promise) => {
       try{
@@ -145,6 +176,11 @@ export class PartitaPage implements OnInit {
         //aggiorno il numero dei partecipanti
         this.database.aggiornaPartecipanti(codice, this.numPartecipanti!-1);
         this.database.inviaMessaggio(codice,"[SERVER]: "+ this.auth.get("user")+" si è scollegato");
+      
+        if(this.iniziata==false){
+          //se la partita non è iniziata rimborso i crediti
+          this.crediti.rimborsaCrediti(this.numSchede);
+        }
       }catch (e){
         console.log("errore"+e);
       }
@@ -160,7 +196,6 @@ export class PartitaPage implements OnInit {
 
   }
 
-  //Tabellone
   statistiche(): void{
     this.aggiornaDatiSub= this.partita.getStatisticheOnvalue(this.codice!).subscribe((value)=>{
       this.numPartecipanti=value.numPartecipanti;
@@ -168,7 +203,8 @@ export class PartitaPage implements OnInit {
     });
   }
 
-
+  //permette di mettere in ascolto i giocatori per essere "avvisati" 
+  //nel caso in cui il server abbandoni la partita
   ascoltaStatoHost():void{
     this.checkSub=this.database.checkServer(this.codice!).subscribe((value)=>{
       if(value==false){
@@ -177,6 +213,7 @@ export class PartitaPage implements OnInit {
       }
     })
   }
+
 
   ascoltaBingo(): void {
     this.bingoSub = this.partita.ascoltaBingo(this.codice!)

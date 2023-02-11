@@ -12,7 +12,7 @@ export class CasellaComponent implements OnInit {
   @Input() stato?: "vuota" | "numero" | "estratta" | "segnata";
   @Input() aiuti?: boolean;
 
-  @Output() segnato = new EventEmitter<number>()
+  @Output() segnato = new EventEmitter<number>() //informo la casella che il numero è stato segnato
 
   timbro: string;
   
@@ -27,6 +27,7 @@ export class CasellaComponent implements OnInit {
     this.mandaSegnato();
   }
 
+  //metodo iniviare alla scheda il cambio di stato di una cella
   mandaSegnato(){
     this.segnato.emit(this.numero);
   }

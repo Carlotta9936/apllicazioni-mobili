@@ -137,6 +137,7 @@ export class SchedaComponent implements OnInit, OnDestroy {
 
   controlloVincita(value: number): any{
     //Controllo per il bingo
+    //controllo quanti numeri mancano per il bingo
     this.numeriBingo.forEach((numero: number, index: number) => {
       if(numero === value){
         this.numeriBingo.splice(index, 1);
@@ -148,12 +149,14 @@ export class SchedaComponent implements OnInit, OnDestroy {
     })
 
     //Controllo cinquine
+    //controllo in che riga si trova il numero estratto
     if(this.prima?.includes(value)) this.controlloCinquina(this.prima, value);
     else if(this.seconda?.includes(value)) this.controlloCinquina(this.seconda, value);
     else this.controlloCinquina(this.terza!, value);
 
   }
 
+  //metodo che controlla quanti numeri restano da segnare nella riga del numero segnato
   controlloCinquina(riga: number[], value: number): any{
     console.log("Controllo cinquina")
     riga.forEach((n:number, index: number) => {
@@ -169,15 +172,13 @@ export class SchedaComponent implements OnInit, OnDestroy {
 
   bingo(): void {
     console.log("BINGOOOOOO");
-    //Abilità il bottone bingo nel component 'Schede'
+    //Abilita il bottone bingo nel component 'Schede'
     this.abilitaBingo.emit(false);
   }
   
   cinquina(): void {
     console.log("CINQUINAAAAA");
-    //Abilità il bottone cinquina nel component 'Schede'
+    //Abilita il bottone cinquina nel component 'Schede'
     this.abilitaCinquina.emit(false);
   }
-
-  
 }

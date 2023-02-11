@@ -28,7 +28,7 @@ export class SchermataVittoriaComponent implements OnInit {
 
   constructor(public partita: PartitaDBService, public crea: CreaPartitaService, public prop: ProprietarioService,
     public elimina: EliminaPartitaService ,private router: Router, public database: DatabaseService, public crediti: ControlloCreditiService,
-    public auth: AuthService ) { }
+    public auth: AuthService, public fine: EliminaPartitaService ) { }
 
   ngOnInit() {
     this.partita.getRisultati(this.codice).then((value) => {
@@ -64,8 +64,6 @@ export class SchermataVittoriaComponent implements OnInit {
       this.partita.resetDatiPartita(this.codice)
     }
     console.log("fratm");
-    //Vai alla stanza della partita
-    //this.router.navigate(['partita/'+this.codice])
     window.location.reload();
   }
 
@@ -77,7 +75,7 @@ export class SchermataVittoriaComponent implements OnInit {
     } else {
       //Decrementa numero di giocatori
       this.database.decrementaGiocatori(this.codice);
-      //Esci dalla partita
+      this.elimina.esciPartita();
       this.router.navigate(['/tabs/tab1']);
     }
   }

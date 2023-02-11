@@ -35,5 +35,13 @@ export class ControlloCreditiService {
     //localStorage.setItem("crediti", ""+newCrediti);
   }
 
+  rimborsaCrediti(val: number): void{
+    let newCrediti = this.prendiCrediti() + val;
+    //Aggiornare DB
+    this.database.aggiornaCrediti(this.Auth.get("user"), newCrediti);
+    //Aggiornare local data
+    this.Auth.set("crediti", ""+newCrediti);
+  }
+
 
 }

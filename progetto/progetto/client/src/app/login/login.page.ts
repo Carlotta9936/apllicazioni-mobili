@@ -27,10 +27,12 @@ export class LoginPage implements OnInit {
   async login(value: any){
     this.database.getUser(value.username).then((promise) => {
       try{
+        //controllo che la password conbaci
         if(promise.password === value.password){
           console.log("Trovato");
           this.Auth.set('user', promise.username);
-          this.Auth.set('crediti', promise.crediti);        
+          this.Auth.set('crediti', promise.crediti);     
+          //prendo dal db il tibro in uso   
           this.database.getUrlTimbro(promise.timbri).then((value) => {
             this.Auth.set('timbro', value);
           })

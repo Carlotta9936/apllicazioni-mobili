@@ -46,7 +46,6 @@ export class ChatComponent implements OnInit, OnDestroy {
       this.stampaMessaggi();
     });
     this.stampatuttiSub.unsubscribe();
-
   }
 
   //metodo per aggiungere messaggi alla chat quando questa è aperta
