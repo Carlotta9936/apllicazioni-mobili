@@ -113,6 +113,7 @@ export class PartitaPage implements OnInit {
           if(promise.proprietario==this.auth.get("user")){ 
             this.propr.proprietario=true;
           }else{
+            this.chat=false;
             this.propr.proprietario=false;
           }
         }
