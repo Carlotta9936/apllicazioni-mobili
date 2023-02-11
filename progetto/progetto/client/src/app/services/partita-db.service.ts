@@ -193,6 +193,12 @@ export class PartitaDBService {
     return montepremiPromise;
   }
 
+  setMontepremi(codice: string, montepremi: number):void{
+    update(ref(this.database,'partita/'+codice+'/datiPartita'),{
+      montepremi:montepremi
+    })
+  }
+
   //getPremi(codice: string): Promise<any>
 
   setPremi(codice: string, premioBingo: number, premioCinquina: number, premioSuperBingo: number): void {
