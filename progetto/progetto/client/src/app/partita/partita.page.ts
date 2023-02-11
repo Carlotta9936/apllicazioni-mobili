@@ -180,6 +180,7 @@ export class PartitaPage implements OnInit {
         if(this.iniziata==false){
           //se la partita non è iniziata rimborso i crediti
           this.crediti.rimborsaCrediti(this.numSchede);
+          //ricalcolo il montepremi
           this.aggiornaMontepremi(this.numSchede);
         }
       }catch (e){
