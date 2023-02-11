@@ -10,7 +10,6 @@
     <img src="../../../assets/coin.png"  id="coin">
   </p>
   <h1> Aquista timbri nuovi </h1>
-
   <div id="timbri" >
     <app-acquisto-timbro *ngFor="let timbro of timbriAcq" [titolo]="timbro.nome" [img]="timbro.url" [prezzo]="10" (click)="compraTimbro(timbro.id, 10)"></app-acquisto-timbro>
   </div>

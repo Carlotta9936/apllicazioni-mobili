@@ -63,6 +63,7 @@ export class PartitaPage implements OnInit {
     this.statistiche();
     this.ascoltaStatoHost();
     this.partita.ascoltoInizioPartita(this.codice!).subscribe((value: boolean) => {
+     // this.iniziata = value;
       if(value === true && !this.propr.proprietario) {
         console.log("STart 2")
         this.start2();
@@ -127,7 +128,8 @@ export class PartitaPage implements OnInit {
     this.bossolo.stopTimer();
     console.log("STOOOOOOOOOOOOOOOOOOOOOP")
     if(this.propr.proprietario){
-      this.partita.finishPartita(this.codice!);
+      //this.partita.finishPartita(this.codice!);
+      //this.iniziata = false;
     }
     //Stop ascolto vincitore partita
     this.bingoSub.unsubscribe();

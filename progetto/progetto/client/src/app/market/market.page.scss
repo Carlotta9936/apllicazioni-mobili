@@ -1,17 +1,33 @@
 #timbri{
     display: flex;
     flex-wrap: wrap;
+    align-content: space-around;
+    margin-left: 4vw;
+    gap: 1.5vw;
 }
 
 #bingo{
     text-align: center;
 }
+h1{
+    margin-left: 5vw;
+}
 
 #crediti{
     display: flex;
+    flex-wrap: wrap;
+    align-content: space-around;
+    margin-left: 5vw;
+    gap: 1.5vw;
 }
 
 #coin{
     width: 7vw;
     height: 7vw;
+}
+
+#content{
+    background-color: red;
+    display: flex;
+    justify-content: center;
 }

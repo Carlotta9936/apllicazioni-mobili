@@ -196,8 +196,6 @@ export class PartitaDBService {
     })
   }
 
-  //getPremi(codice: string): Promise<any>
-
   setPremi(codice: string, premioBingo: number, premioCinquina: number, premioSuperBingo: number): void {
     update(ref(this.database, 'partita/'+codice+'/datiPartita'), {
       premioBingo: premioBingo,
@@ -205,9 +203,4 @@ export class PartitaDBService {
       premioSuperBingo: premioSuperBingo
     })
   }
-
-  distribuisciPremi(codice: string, datiPartita: Partita): void {
-
-  }
-
 }

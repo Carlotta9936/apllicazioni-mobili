@@ -39,7 +39,6 @@
       <app-cinquina (click)="togliMessaggio()"> </app-cinquina>
     </div>
   </ng-template>
-
     <app-schede [iniziata]="this.iniziata" [compra]="this.compra" (schede)="numeroSchede($event)"> </app-schede>
   <div *ngIf="schermataFinale">
     <app-schermata-vittoria [risultato]="this.risultato"> </app-schermata-vittoria>
@@ -52,10 +51,8 @@
     </div>
   </div>
 </ng-template>
-</ion-content>
-
-
- 
+<!-- Tabs -->
+</ion-content> 
     <div *ngIf="this.propr.proprietario===false; then thenBlock1 else elseBlock1"></div>
     <ion-footer>
       <ion-tabs>

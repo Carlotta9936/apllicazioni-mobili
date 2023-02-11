@@ -10,5 +10,5 @@
   </ion-card>
   <div id="bottoni">
     <ion-button shape="round" color="danger"(click)="esci()"> Esci </ion-button>
-    <ion-button shape="round" color="success" (click)="continua()"> Continua </ion-button>
+    <ion-button shape="round" color="success" [disabled]="this.bloccoBottone && !this.prop.proprietario" (click)="continua()"> Continua </ion-button>
   </div>

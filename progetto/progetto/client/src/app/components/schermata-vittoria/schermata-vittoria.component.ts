@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { ControlloCreditiService } from 'src/app/services/controllo-crediti.service';
 import { CreaPartitaService } from 'src/app/services/crea-partita.service';
@@ -25,6 +26,10 @@ export class SchermataVittoriaComponent implements OnInit {
   superbingo: boolean = false;
 
   codice: string = this.crea.getCodiceUrl();
+
+  bloccoBottone: boolean = false;;
+
+  ascoltoPartitaSub!: Subscription;
 
   constructor(public partita: PartitaDBService, public crea: CreaPartitaService, public prop: ProprietarioService,
     public elimina: EliminaPartitaService ,private router: Router, public database: DatabaseService, public crediti: ControlloCreditiService,
@@ -56,14 +61,19 @@ export class SchermataVittoriaComponent implements OnInit {
 
       }
     })
+
+    this.ascoltoPartitaSub = this.partita.ascoltoInizioPartita(this.codice).subscribe((value) => {
+      console.log("Blocco bototne", value);
+      this.bloccoBottone = value;
+    })
   }
 
   continua(): void {
     if(this.prop.proprietario){
       //Reset partita
-      this.partita.resetDatiPartita(this.codice)
+      this.partita.resetDatiPartita(this.codice);
+      this.partita.finishPartita(this.codice!);
     }
-    console.log("fratm");
     window.location.reload();
   }
 
