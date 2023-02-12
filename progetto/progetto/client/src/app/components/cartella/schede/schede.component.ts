@@ -5,7 +5,6 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ControlloCreditiService } from 'src/app/services/controllo-crediti.service';
 import { CreaPartitaService } from 'src/app/services/crea-partita.service';
 import { PartitaDBService } from 'src/app/services/partita-db.service';
-import { SchedaComponent } from '../scheda/scheda.component';
 
 @Component({
   selector: 'app-schede',
@@ -19,13 +18,12 @@ export class SchedeComponent implements OnInit {
 
   @Output() schede = new EventEmitter<number>()
 
-
   numeroSchede: number[] = [];
-  ns: boolean= true;
+  ns: boolean= true;  //se è false vuol dire che si è raggiunto il numero massimo di schede comprabili
   bingo: boolean = true;
   cinquina: boolean = true;
 
-  cinquinaDichiarata: boolean = false;
+  cinquinaDichiarata: boolean = false; //quando qualcuno dichiara cinquina questa viene settata a true
   cinquinaSub!: Subscription;
 
   codice: string = this.crea.getCodiceUrl();
@@ -57,7 +55,6 @@ export class SchedeComponent implements OnInit {
 
   abilitaBingo(value: any): void {
     console.log("Bingo abilitato")
-    //console.log("VV", value)
     this.bingo = value;
   }
 
@@ -70,7 +67,6 @@ export class SchedeComponent implements OnInit {
 
   ascoltaCinquina(): void {
     this.cinquinaSub = this.partita.ascoltaCinquina(this.codice).subscribe((value) => {
-      //console.log("value!=false", value!=false)
       if(value!=false){
         this.cinquinaDichiarata = true;
         this.cinquina = true;

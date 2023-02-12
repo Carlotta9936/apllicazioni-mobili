@@ -6,6 +6,7 @@ import { PartitaDBService } from './partita-db.service';
   providedIn: 'root'
 })
 export class CalcolaPremiService {
+  //variabili per salvare i premi
   montepremi!: number;
   premioCinquina?: number;
   premioBingo?: number;
@@ -14,13 +15,13 @@ export class CalcolaPremiService {
   constructor(public partita: PartitaDBService, public crea: CreaPartitaService) { 
   }
   
-  calcolaPremi(codice: string): void{
+  calcolaPremi(): void{
+    //prendo l'ammontare del montepremi dal db
     this.partita.getMontepremi(this.crea.getCodiceUrl()).then((value) => {
       this.montepremi = value;
       //Aggiorna il database con i premi calcolati
-      this.partita.setPremi(this.crea.getCodiceUrl(), this.calcolaPremioBingo(), this.calcolaPremioCinquina(), this.calcolaPremioSuperbingo())
-      console.log("Premio bingo", this.calcolaPremioBingo())
-      console.log("Premio cinquina", this.calcolaPremioCinquina())
+      this.partita.setPremi(this.crea.getCodiceUrl(), this.calcolaPremioBingo(),
+       this.calcolaPremioCinquina());
     });
   }
 
@@ -33,9 +34,4 @@ export class CalcolaPremiService {
   calcolaPremioCinquina(): number{
     return Math.ceil(this.montepremi! / 100 * 6);
   }
-
-  calcolaPremioSuperbingo(): number {
-    return Math.ceil(this.montepremi! / 100 * 27);
-  }
-
 }

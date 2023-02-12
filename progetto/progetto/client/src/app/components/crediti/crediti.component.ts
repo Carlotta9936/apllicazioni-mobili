@@ -18,6 +18,7 @@ export class CreditiComponent implements OnInit {
     this.setCrediti();
   }
 
+  //metodo per ascoltare le modifiche ai crediti
   setCrediti() {
     this.database.getCrediti(this.Auth.get("user")).subscribe((value) => {
       this.crediti = value;

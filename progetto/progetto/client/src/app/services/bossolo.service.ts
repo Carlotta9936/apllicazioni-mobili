@@ -8,7 +8,7 @@ import { PartitaDBService } from './partita-db.service';
 export class BossoloService {
 
   estratto?: string;
-  bossolo: number[]=[];     //Bossolo solo effettivamente le palline, all'inizio contiene tutti i numeri, quando estraggo tolgo gli elementi da qui
+  bossolo: number[]=[];     //Bossolo sono effettivamente le palline, all'inizio contiene tutti i numeri, quando estraggo tolgo gli elementi da qui
   tabellone: boolean[]=[];  //Un array di boolean, serve per colorare il tabellone
   interval?: any;           //Timer per l'estrazione
   codice: string = this.crea.getCodiceUrl();
@@ -38,7 +38,7 @@ export class BossoloService {
       }else{
         this.stopTimer();
       }
-    },1000)
+    },1500)
   }
 
   //Stoppa l'Interval per l'estrazione del numero
@@ -61,6 +61,5 @@ export class BossoloService {
     let num=this.estraiNumero();
     //Aggiorno nel DB
     this.partita.estrazioneNumero(this.crea.getCodiceUrl(), num);
-    //this.partita.incrementaNumeriEstratti(this.crea.getCodiceUrl())
   }
 }

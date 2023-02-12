@@ -19,22 +19,10 @@ export class SceltaTimbroComponent implements OnInit {
   }
 
   seleziona(): void{
-    console.log("Seleziona");
     //Aggiorno localstorage
     this.Auth.set("timbro", this.url)
     //Aggiorno DB
     this.database.setTimbro(this.id!, this.Auth.get("user"));
     window.location.reload();
   }
-
-  coloraTimbro(): void {
-    Array.from(document.getElementsByClassName('risposta')).forEach((elemento) => {
-        if(elemento.textContent?.trim()){
-          elemento.setAttribute('class', "timbro selezionato");
-        } else {
-          elemento.setAttribute('class', "timbro");
-        }
-      });
-  }
-
 }

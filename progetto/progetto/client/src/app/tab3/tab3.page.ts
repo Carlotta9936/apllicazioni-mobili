@@ -17,6 +17,7 @@ export class Tab3Page {
 
   constructor(public Auth: AuthService, public database: DatabaseService, public timbro: TimbriService, public auth: AuthService) {
     let username = this.auth.get("user");
+    //carico dati dell'utente
     database.getUser(username).then((value) => {
       let u: User = {
         username: value.username,
@@ -36,14 +37,11 @@ export class Tab3Page {
         codiceTimbri: value.codiceTimbri,
       }
       this.user = u;
-
-
     })
-
+    //prendo i timbri dell'utente
     timbro.appartiene().then((value: any) => {
       this.timbri = value;
     })
-
   }
   
   ngOnInit() {

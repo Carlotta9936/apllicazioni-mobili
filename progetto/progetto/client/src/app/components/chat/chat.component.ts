@@ -11,24 +11,24 @@ import { DatabaseService } from 'src/app/services/database.service';
 export class ChatComponent implements OnInit, OnDestroy {
   stampaSub!: Subscription;
   stampatuttiSub!:Subscription;
+
   @Input() codice?: string;
+
   messaggi: any[]=[] ;
   newMessage?: string;
-  stampaFlag: boolean = false;
-
+  stampaFlag: boolean = false; //serve per evitare che si faccia un unsubscribe() su un observer che non è mai stato chiamato
 
   constructor(public database: DatabaseService, public auth: AuthService) { }
 
   ngOnInit() {
     this.stampaTutti();
-    //this.stampaMessaggi();
   }
 
- ngOnDestroy(): void {
-     if(this.stampaFlag){
+  ngOnDestroy(): void {
+    if(this.stampaFlag){
       this.stampaSub.unsubscribe();
-     }
- }
+    }
+  }
 
   sendMessage(){
     let messaggio= "["+ this.auth.get("user")+"]: "+this.newMessage;

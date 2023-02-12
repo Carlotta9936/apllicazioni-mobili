@@ -63,42 +63,43 @@ export class PartitaPage implements OnInit {
     this.statistiche();
     this.ascoltaStatoHost();
     this.partita.ascoltoInizioPartita(this.codice!).subscribe((value: boolean) => {
-     // this.iniziata = value;
       if(value === true && !this.propr.proprietario) {
-        console.log("STart 2")
         this.start2();
       }
     });
   }
 
-  //metodo che avvia la partita
+  //metodo che avvia la partita 
   async start(): Promise<void> {
     //controllo se ci sono abbastanza giocatori per iniziare la partita
     let num=this.partita.getNumParteicpanti(this.codice!);
     if(await num>=2){
       //setto la partita a iniziata in modo che non sia più visibile nella pagina iniziale
       this.partita.startPartita(this.codice!);
-      this.compra=false;
-      this.database.incrementaNumeroPartite(this.auth.get("user"));
-      this.iniziata=true;
-      this.tabellone = true;
+      //this.compra=false;
+      //this.database.incrementaNumeroPartite(this.auth.get("user"));
+      //this.iniziata=true;
+      //this.tabellone = true;
       this.bossolo.startTimer();
-      this.calcolaPremi.calcolaPremi(this.codice!);
-      this.ascoltaBingo();
-      this.ascoltaCinquina();
-      this.aggiornaDatiSub.unsubscribe();
+      this.calcolaPremi.calcolaPremi();
+      //this.ascoltaBingo();
+      //this.ascoltaCinquina();
+      //this.aggiornaDatiSub.unsubscribe();
+      this.start2();
     }else{
       this.alert.presentAlert("Non ci sono abbastanza giocatori. Dovete essere almeno in 2");
     }
   }
 
+  //start per i giocatori
   start2(): void{
     this.iniziata=true;
+    this.compra=false;
+    this.tabellone = true;
     this.database.incrementaNumeroPartite(this.auth.get("user"));
     this.ascoltaBingo();
     this.ascoltaCinquina();
     this.aggiornaDatiSub.unsubscribe();
-    this.tabellone = true;
   }
 
 
@@ -123,14 +124,10 @@ export class PartitaPage implements OnInit {
     });
   };
 
+  //chiamato quando viene dichiarato bingo
   finePartita(): void{
     //Stop estrazione numeri
     this.bossolo.stopTimer();
-    console.log("STOOOOOOOOOOOOOOOOOOOOOP")
-    if(this.propr.proprietario){
-      //this.partita.finishPartita(this.codice!);
-      //this.iniziata = false;
-    }
     //Stop ascolto vincitore partita
     this.bingoSub.unsubscribe();
     this.schermataFinale = true;
@@ -175,9 +172,8 @@ export class PartitaPage implements OnInit {
       try{
         this.numPartecipanti= promise.numPartecipanti;
         //aggiorno il numero dei partecipanti
-        this.database.aggiornaPartecipanti(codice, this.numPartecipanti!-1);
+        this.database.decrementaGiocatori(codice);
         this.database.inviaMessaggio(codice,"[SERVER]: "+ this.auth.get("user")+" si è scollegato");
-      
         if(this.iniziata==false){
           //se la partita non è iniziata rimborso i crediti
           this.crediti.rimborsaCrediti(this.numSchede);
@@ -221,7 +217,6 @@ export class PartitaPage implements OnInit {
     })
   }
 
-
   ascoltaBingo(): void {
     this.bingoSub = this.partita.ascoltaBingo(this.codice!)
       .subscribe((value) => {
@@ -251,6 +246,7 @@ export class PartitaPage implements OnInit {
     })
   }
 
+  //serve per togliere il fumetto della cinquina
   togliMessaggio(): void{
     console.log("Togli");
     this.cinquina = false

@@ -9,6 +9,7 @@ export class GuardiaService implements CanActivate {
 
   constructor(private router:Router, public Auth: AuthService) { }
 
+  //meotdo di guardia per accesso alle pagine
   canActivate(): boolean{
     let user = this.Auth.get("user");
     console.log("UU", user);
@@ -18,7 +19,5 @@ export class GuardiaService implements CanActivate {
       this.router.navigate(['first-page']);
       return false;
     }
-
-
   }
 }

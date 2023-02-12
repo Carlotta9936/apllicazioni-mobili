@@ -1,13 +1,10 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnDestroy, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { Casella } from 'src/app/interfaces/Casella';
-import { Partita } from 'src/app/interfaces/Partita';
 import { BossoloService } from 'src/app/services/bossolo.service';
 import { DatabaseService } from 'src/app/services/database.service';
 import { GeneratoreCartellaService } from 'src/app/services/generatore-cartella.service';
 import { Observable, Subscriber, Subscription } from 'rxjs';
 import { PartitaDBService } from 'src/app/services/partita-db.service';
-import { ECDH } from 'crypto';
 import { CreaPartitaService } from 'src/app/services/crea-partita.service';
 
 @Component({
@@ -69,7 +66,6 @@ export class SchedaComponent implements OnInit, OnDestroy {
     console.log("Stop listener")
     this.numSub.unsubscribe();
     this.bingoSub.unsubscribe();
-    //this.partita.spegniAscoltoBingo();
   }
 
   ascoltoBingo(): void{

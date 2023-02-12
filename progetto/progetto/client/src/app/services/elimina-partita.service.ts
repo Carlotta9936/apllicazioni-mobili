@@ -10,7 +10,7 @@ import { AlertService } from './alert.service';
 })
 export class EliminaPartitaService {
 
-  staccaServer= true;
+  staccaServer= true; //variabile per controlare se si è già usciti nel post partita
 
   constructor(public database: DatabaseService, private router: Router, public auth: AuthService, public bossolo: BossoloService, public alert: AlertService) { }
 

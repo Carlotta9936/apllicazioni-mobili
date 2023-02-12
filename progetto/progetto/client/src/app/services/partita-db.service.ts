@@ -50,7 +50,6 @@ export class PartitaDBService {
     })
   }
 
-
   // OBSERVABLE: tutti le funzioni che leggono dal DB con onValue, ad ogni modifica aggiornano gli iscritti
   //Ascolto inizio partita
   ascoltoInizioPartita(codice: string): Observable<any>{
@@ -196,11 +195,10 @@ export class PartitaDBService {
     })
   }
 
-  setPremi(codice: string, premioBingo: number, premioCinquina: number, premioSuperBingo: number): void {
+  setPremi(codice: string, premioBingo: number, premioCinquina: number): void {
     update(ref(this.database, 'partita/'+codice+'/datiPartita'), {
       premioBingo: premioBingo,
       premioCinquina: premioCinquina,
-      premioSuperBingo: premioSuperBingo
     })
   }
 }

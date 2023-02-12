@@ -1,23 +1,19 @@
-import { BootstrapOptions, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { User } from '../interfaces/User';
-import { collection, doc, docData, Firestore, query, where, getDocs} from '@angular/fire/firestore';
-import { DataServiceService } from './data-service.service';
 import { getDatabase, set, ref, onValue, remove, update, child, get, push, increment} from "firebase/database";
 import 'firebase/auth';
 import { PartitaData } from '../interfaces/PartitaData';
 import { Timbro } from '../interfaces/Timbro';
-import { observable, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class DatabaseService {
-
-  users?: User[];
   database;
 
-  constructor(private firestore: Firestore, private dataService: DataServiceService) { 
+  constructor() { 
     this.database = getDatabase();
   }
 
@@ -43,14 +39,11 @@ export class DatabaseService {
         maxVincita: 0
       }
     };
-
     //Aggiunge al DB
     set(ref(this.database, 'users/'+username), u );
-
     //Ritorno l'oggetto utente appena creato
     return u;
   }
-
   
   //Ritorna tutti gli utenti per il login
   async getUser(username: string): Promise<any>{   
@@ -64,7 +57,34 @@ export class DatabaseService {
     })
     return userPromise;
   } 
+  
+  //Incrementa il numero di partite
+  incrementaNumeroPartite(user: string): void {
+    update(ref(this.database, 'users/'+user+'/stats/'), {
+      partiteFatte: increment(1)
+    })
+  }
 
+  //Incrementa il numero di bingo
+  incrementaNumeroBingo(user: string): void {
+    update(ref(this.database, 'users/'+user+'/stats/'), {
+      bingo: increment(1)
+    })
+  }
+
+  //Incrementa il numero di cinquine
+  incrementaNumeroCinquine(user: string): void {
+    update(ref(this.database, 'users/'+user+'/stats/'), {
+      cinquina: increment(1)
+    })
+  }
+
+  //Incrementa il numero di superbingo
+  incrementaNumeroSuperbingo(user: string): void {
+    update(ref(this.database, 'users/'+user+'/stats/'), {
+      superbingo: increment(1)
+    })
+  }
 
   /* ~~ Chat ~~ */
   //crea chat
@@ -73,7 +93,6 @@ export class DatabaseService {
     set(ref(this.database, "chat/"+codice),codice);  
     this.inviaMessaggio(codice,"[Server]: "+ proprietario+" ha creato la partita");
   }
-
 
   inviaMessaggio(codice: string, messaggio: string):void{
     const chat=ref(this.database, "chat/"+codice);
@@ -94,7 +113,17 @@ export class DatabaseService {
     return risultato;
   }
 
+  public eliminaChat(cod: string){
+    const partita= ref(this.database, 'chat/'+ cod);
+    remove(partita).then(()=>{
+      console.log("eliminato: "+cod);
+    }).catch((error) => {
+      console.log("errore");
+    });
+  }
 
+
+  /* ~~ Crediti ~~ */
   getCrediti(username: string): Observable<number>{
     const creditiObs = new Observable<number>((observer) => {
       const crediti=ref(this.database,'users/'+username+'/crediti');
@@ -105,8 +134,14 @@ export class DatabaseService {
     return creditiObs;
   }
 
+  aggiornaCrediti(username: string, val: number): void{
+    update(ref(this.database, 'users/'+username), {
+      crediti: val
+    } );
+  }
 
 
+  /* ~~ Partita ~~ */
   //ritorna i dati di una partita dato il codice
   getPartita(codice: string): Promise<any>{    
     const codicePromise = new Promise<any>((resolve, reject) => {
@@ -160,24 +195,49 @@ export class DatabaseService {
     });
   }
 
-  /*
-  controllaGiocatori(codice: string): any{    
-    let ritorno;
-    const cod = ref(this.database, 'partita/'+ codice);
-    onValue(cod, (snapshot) => {
-      console.log("codice" + cod);
-      if(snapshot.val().numPartecipanti>=3){
-        console.log("TRUE");
-        ritorno = true;
-      }else{
-        ritorno = false;
-      }
-    }); 
-    return ritorno;
-  } */
+  //Incrementa numero giocatori
+  incrementaGiocatori(codice: string): void {
+    update(ref(this.database, 'partita/'+codice), {
+      numPartecipanti: increment(1)
+    })
+  }
 
+  //Decrementa numero giocatori
+  decrementaGiocatori(codice: string): void {
+    update(ref(this.database, 'partita/'+codice), {
+      numPartecipanti: increment(-1)
+    })
+  }
+
+  //setta il valore di serveronline a false e serve per indicare che il server è uscito
+  serverOffline(codice: string){
+    update(ref(this.database, 'partita/'+codice), {
+      serverOnline: false
+    } );
+  }
+
+  // controlla se il server è online
+  checkServer(codice: string): Observable<boolean>{
+    const checkStato= new Observable<boolean>((observer)=>{
+      const stato=ref(this.database,'partita/'+codice+'/serverOnline');
+      onValue(stato,(snapshot)=>{
+        observer.next(snapshot.val());
+      })
+    })
+    return checkStato;
+  }
+
+  public eliminaPartita(cod: string){
+    const partitaRef = ref(this.database, 'partita/'+cod);
+    remove(partitaRef).then(() => {
+      this.eliminaChat(cod);
+      console.log("eliminato: "+cod);
+    }).catch((error) => {
+      console.log("errore");
+    });
+  }
+  
   /* ~~ Timbro ~~ */
-
   getUrlTimbro(id: number){
     const timbriPromise = new Promise<Timbro>((resolve, reject) => {
       const db = ref(this.database);
@@ -206,6 +266,7 @@ export class DatabaseService {
     });
   }
 
+  //timbri che possiedi
   public async getTimbri(): Promise<Timbro[]> {
     const timbriPromise = new Promise<Timbro[]>((resolve, reject) => {
       const timbri = ref(this.database, 'timbri/');
@@ -213,101 +274,7 @@ export class DatabaseService {
         resolve(snapshot.val());
       })
     })
-
     return timbriPromise;
   } 
-
-  serverOffline(codice: string){
-    update(ref(this.database, 'partita/'+codice), {
-      serverOnline: false
-    } );
-  }
-
-  public checkServer(codice: string): Observable<boolean>{
-    const checkStato= new Observable<boolean>((observer)=>{
-      const stato=ref(this.database,'partita/'+codice+'/serverOnline');
-      onValue(stato,(snapshot)=>{
-        observer.next(snapshot.val());
-      })
-    })
-    return checkStato;
-  }
-
-
-  public eliminaPartita(cod: string){
-    const partitaRef = ref(this.database, 'partita/'+cod);
-    remove(partitaRef).then(() => {
-      this.eliminaChat(cod);
-      console.log("eliminato: "+cod);
-    }).catch((error) => {
-      console.log("errore");
-    });
-  }
-
-  public eliminaChat(cod: string){
-    const partita= ref(this.database, 'chat/'+ cod);
-    remove(partita).then(()=>{
-      console.log("eliminato: "+cod);
-    }).catch((error) => {
-      console.log("errore");
-    });
-  }
-
-
-  aggiornaCrediti(username: string, val: number): void{
-    update(ref(this.database, 'users/'+username), {
-      crediti: val
-    } );
-  }
-
-  aggiornaPartecipanti(codice: string, particpanti: number): void{
-    update(ref(this.database, 'partita/'+codice), {
-      numPartecipanti: particpanti
-    } );
-  }
-
-
-  
-
-  //Metodi per partita
-  incrementaGiocatori(codice: string): void {
-    update(ref(this.database, 'partita/'+codice), {
-      numPartecipanti: increment(1)
-    })
-  }
-
-  decrementaGiocatori(codice: string): void {
-    update(ref(this.database, 'partita/'+codice), {
-      numPartecipanti: increment(-1)
-    })
-  }
-
-  //Incrementa il numero di partite
-  incrementaNumeroPartite(user: string): void {
-    update(ref(this.database, 'users/'+user+'/stats/'), {
-      partiteFatte: increment(1)
-    })
-  }
-
-  //Incrementa il numero di bingo
-  incrementaNumeroBingo(user: string): void {
-    update(ref(this.database, 'users/'+user+'/stats/'), {
-      bingo: increment(1)
-    })
-  }
-
-  //Incrementa il numero di cinquine
-  incrementaNumeroCinquine(user: string): void {
-    update(ref(this.database, 'users/'+user+'/stats/'), {
-      cinquina: increment(1)
-    })
-  }
-
-  //Incrementa il numero di superbingo
-  incrementaNumeroSuperbingo(user: string): void {
-    update(ref(this.database, 'users/'+user+'/stats/'), {
-      superbingo: increment(1)
-    })
-  }
 }
 

@@ -7,7 +7,6 @@ export class GeneratoreCartellaService {
 
   constructor() { }
 
-
   //Get numeri zero compresi
   getNumeri(): any{
     return this.getNumeriCasuali();
@@ -75,12 +74,9 @@ export class GeneratoreCartellaService {
           indexMinore = index;
         }
       })
-      
       numeriOrdinati.push(minore);
       numeri.splice(indexMinore, 1);
     }
-    
-    console.log("N", numeriOrdinati);
     return numeriOrdinati;
   }
 
@@ -128,7 +124,6 @@ export class GeneratoreCartellaService {
     matrice[0] = []
     matrice[1] = []
     matrice[2] = []
-
     let index: number = 0;
     //Sistemo tutti i numeri in una matrice 9x3, che è la grandezza della cartella
     for(let j = 0; j < 9; j++){
@@ -137,7 +132,6 @@ export class GeneratoreCartellaService {
         index++;
       }
     }
-
     return matrice;
   }
 
@@ -157,10 +151,8 @@ export class GeneratoreCartellaService {
     //Sistemo la seconda riga, per gli umani è la terza
     let contaBianche = 0;
     let colonne: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-
     //Controllo quanti zeri ha l'ultima riga
     contaBianche = this.contaBianche(matrice[2]);
-
   /*
     * Sistemo l'ultima riga, facendo in modo che abbia 4 caselle bianche (e di conseguenza 5 con numero)
     * Estraggo un numero a caso che è la colonna su cui andiamo a lavorare, se l'ultima riga in quell'indice
@@ -186,11 +178,9 @@ export class GeneratoreCartellaService {
         i++;
       }
     }
-
     //Sistemo la riga al centro, matrice[1]
     contaBianche = this.contaBianche(matrice[1]);
     colonne = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-
     for(let i = contaBianche; i > 4; i--){
       let index = Math.floor(Math.random() * (colonne.length));
       if(matrice[1][colonne[index]] === 0){
@@ -205,7 +195,6 @@ export class GeneratoreCartellaService {
         i++;
       }
     }
-
     return matrice;
   }
 
@@ -217,7 +206,6 @@ export class GeneratoreCartellaService {
         bianche++;
       }
     })
-
     return bianche;
   }
 
@@ -239,5 +227,4 @@ export class GeneratoreCartellaService {
     //Ritorna tutti i numeri per la cartella, i numeri senza gli zeri per il bingo, e le tre cinquine
     return [this.transformaArray(matrice), numeri, this.estrazioneCinquine(matrice[0]), this.estrazioneCinquine(matrice[1]), this.estrazioneCinquine(matrice[2])];
   }
-
 }

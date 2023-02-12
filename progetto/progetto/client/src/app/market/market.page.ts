@@ -5,7 +5,6 @@ import { DatabaseService } from '../services/database.service';
 import { TimbriService } from '../services/timbri.service';
 import { AlertService } from '../services/alert.service';
 import { AuthService } from '../services/auth.service';
-import { rejects } from 'assert';
 
 @Component({
   selector: 'app-market',
@@ -14,7 +13,7 @@ import { rejects } from 'assert';
 })
 export class MarketPage implements OnInit {
 
-  risp?: any;
+  risp?: any; //serve per salvare la risposta nell'alert del compra crediti
   crediti: number;
   timbriAcq: Timbro[] = [];
 
@@ -52,7 +51,7 @@ export class MarketPage implements OnInit {
 
   //metodo per stampare i timbri che l'utente non possiede
   getTimbri(): any{
-    this.timbri.nonAppartiene(this.auth.get("user")!).then((value: Timbro[]) => {
+    this.timbri.nonAppartiene().then((value: Timbro[]) => {
       console.log("Value", value);
       this.timbriAcq = value;
       console.log("Timbri", this.timbriAcq);

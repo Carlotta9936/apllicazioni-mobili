@@ -21,12 +21,14 @@ export class RegistrazionePage implements OnInit {
     //controllo i campi siano stati riempiti
     if(value.username!="" && value.password!="" && value.nome!="" && value.cognome!="" && value.mail!=""){
       this.database.getUser(value.username).then((promise) => {
-        //controllo che l'user scelto non sia già in uso
         try{
+          //controllo che l'user scelto non sia già in uso
           if(promise.username === value.username){
             this.alert.presentAlert("Username già in uso.");
           }else{
+            //salvo l'utente nel db
             this.database.creaUtente(value.username, value.password, value.nome, value.cognome, value.mail);
+            //setto le variabili nel local storage
             this.Auth.set('user', value.username);
             this.Auth.set('crediti', 50);
             this.Auth.set('timbro', "black");

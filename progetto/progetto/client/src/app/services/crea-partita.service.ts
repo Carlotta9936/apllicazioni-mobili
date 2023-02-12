@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
 import { DatabaseService } from '../services/database.service';
 import { PartitaData } from '../interfaces/PartitaData';
-
-import { getDatabase, set, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue } from "firebase/database";
 import { ActivatedRoute, Router } from '@angular/router';
-import { stringify } from 'querystring';
 import { AuthService } from './auth.service';
-import { Partita } from '../interfaces/Partita';
 
 
 @Injectable({
@@ -14,16 +11,14 @@ import { Partita } from '../interfaces/Partita';
 })
 export class CreaPartitaService {
   db;
-  pubblica?: boolean;
   codice: any= "";
   username = JSON.parse(localStorage.getItem('user')!);
 
-  constructor(public database: DatabaseService, private route: ActivatedRoute, private router: Router, private Auth:AuthService ) {
+  constructor(public database: DatabaseService, private router: Router ) {
     this.db = getDatabase();
   }
 
-  public creaPartita(proprietario: string, pubblica: boolean, cod: string): any{
-    //let codice= this.route.snapshot.paramMap.get('codice'); 
+  public creaPartitaDB(proprietario: string, pubblica: boolean, cod: string): any{
     let partita: PartitaData ={
       codice: cod,
       proprietario: proprietario,
@@ -42,15 +37,15 @@ export class CreaPartitaService {
       }
     }
     this.database.creaPartita(partita);
+    //creo anche già la chat della partita
     this.database.chat(cod, proprietario);
   }
 
 
-  //Crea partita del DB
-  async creaPartitaDB(partita: boolean): Promise<void> {
-    console.log("1");
+  //Creo codice e lo passo per la creazione della partite nel db
+  async creaPartita(partita: boolean): Promise<void> {
     this.codice=this.creaCodice();
-    this.creaPartita(this.username,partita,this.codice);
+    this.creaPartitaDB(this.username,partita,this.codice);
   }
 
   
@@ -62,58 +57,39 @@ export class CreaPartitaService {
     }
     //controllo sul db che il codice generato non sia già stato salvato nel db
     //il controllo serve perché se no sovrascrive i dati dell'altra partita
-    //this.database.getPartita(result).then((value) => {
-
-      const partita = ref(this.db, 'partita/'+ result);
-      onValue(partita, (snapshot) => {
-        try{
-          let p = snapshot.val();
-          if(p != null){
-            console.log("Trovato");
-            return this.creaCodice();
-          } else {
-            console.log("NOn trovato");
-          }
-        } catch(e){
-          console.log("alternativa");
+    const partita = ref(this.db, 'partita/'+ result);
+    onValue(partita, (snapshot) => {
+      try{
+        let p = snapshot.val();
+        if(p != null){
+          console.log("Trovato");
+          return this.creaCodice();
+        } else {
+          console.log("NOn trovato");
         }
-      });
-      return result;
-    //});
+      } catch(e){
+        console.log("alternativa");
+      }
+    });
+    return result;
   }
 
-      
-
-
-    /*
-    console.log("Partita", value);
-      if(value===null || value === undefined){
-        console.log("we"+ result);
-        return result;
-      } else 
-        return this.creaCodice();
-    })
-    */
-
-
+  //restituisce lettera randomica per creare il codice
   getRandomChar(): string {
     const code = Math.floor(Math.random() * (90 - 65 + 1)) + 65;
     return String.fromCharCode(code);
   }
 
-
   //Setta la partita in modalità pubblica
   setPublic():void {
-    this.pubblica = true;
-    this.creaPartitaDB(true);
+    this.creaPartita(true);
     this.router.navigate(['partita/'+this.codice]);
   }
   
   //Setta la partita in modalità privata
   setPrivate(): void{
+    this.creaPartita(false);
     this.router.navigate(['partita/'+this.codice]);
-    this.pubblica = false;
-    this.creaPartitaDB(false);
   }
 
   //metodo per prendere il codice della partita da params
@@ -121,7 +97,6 @@ export class CreaPartitaService {
     let url=("url"+this.router.parseUrl(this.router.url));
     let arrayUrl:string[];
     arrayUrl=url.split('/');
-    //return this.route.snapshot.paramMap.get('codice');
     return arrayUrl[2];
   }
 }

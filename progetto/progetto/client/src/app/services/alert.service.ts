@@ -9,6 +9,7 @@ export class AlertService {
 
   constructor(private alertController: AlertController, public controlloCrediti: ControlloCreditiService) { }
 
+  //alert normale
   async presentAlert(msg: string) {
     const alert = await this.alertController.create({
       header: 'Alert',
@@ -19,8 +20,8 @@ export class AlertService {
     await alert.present();
   }
 
+  //alert che richiede una scelta
   async alertConferma(risposta: any):Promise<boolean> {
-
     const alert = await this.alertController.create({
       header: 'Sicuro di voler comprare nuovi crediti?',
       buttons: [
@@ -45,6 +46,7 @@ export class AlertService {
     return risposta;
   }
 
+  //alert per acquisto scheda aggiuntiva nel pre-partia in mancanza di crediti
   async alertCompraCrediti(): Promise<boolean>{
     let risposta: boolean = false;
     const alert = await this.alertController.create({

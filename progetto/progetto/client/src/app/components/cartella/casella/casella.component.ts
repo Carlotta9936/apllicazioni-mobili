@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Casella } from 'src/app/interfaces/Casella';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({

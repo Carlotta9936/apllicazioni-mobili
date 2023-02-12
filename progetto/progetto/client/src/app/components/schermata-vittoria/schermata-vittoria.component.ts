@@ -43,27 +43,25 @@ export class SchermataVittoriaComponent implements OnInit {
       this.vincitoreCinquina = value.cinquina;
       this.vincitaCinquina = value.premioCinquina;
       this.numeriEstratti = value.numeriEstratti;
-
+      //controlli per distribuire le vincite
       if(this.auth.get("user") === value.bingo){
-        this.crediti.aggiornaCrediti(-value.premioBingo);
+        this.crediti.rimborsaCrediti(value.premioBingo);
+        //controllo superbingo
         if(this.numeriEstratti < 49){
-          this.crediti.aggiornaCrediti(-100);
+          this.crediti.rimborsaCrediti(100);
           this.database.incrementaNumeroSuperbingo(this.auth.get("user"));
           this.superbingo = true;
         }
         this.database.incrementaNumeroBingo(this.auth.get("user"));
       }
-      
       if(this.auth.get("user") === value.cinquina){
         console.log("CINQUINA");
-        this.crediti.aggiornaCrediti(-value.premioCinquina);
+        this.crediti.rimborsaCrediti(value.premioCinquina);
         this.database.incrementaNumeroCinquine(this.auth.get("user"));
-
       }
     })
-
+    //serve per ascoltare quando iniziata torna a false
     this.ascoltoPartitaSub = this.partita.ascoltoInizioPartita(this.codice).subscribe((value) => {
-      console.log("Blocco bototne", value);
       this.bloccoBottone = value;
     })
   }

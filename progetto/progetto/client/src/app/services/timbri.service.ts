@@ -26,8 +26,6 @@ export class TimbriService {
           this.getCodiceTimbriUtente(this.auth.get("user")).then((cod: number) => {
             this.codUtente = cod;
             value.forEach((timbro) => {
-              console.log("TT", timbro.id);
-              console.log("codUtente", this.codUtente);
               if(this.codUtente % timbro.id === 0){
                 timbri.push(timbro);
               }
@@ -35,13 +33,12 @@ export class TimbriService {
             resolve (timbri);
           });
         });
-        
     })
     return appartienePromise;
   }
 
   //Resituisce un array di timbri che l'utente non possiede
-  async nonAppartiene(user: string): Promise<any>{
+  async nonAppartiene(): Promise<any>{
     const nonAppartienePromise = new Promise<Timbro[]>((resolve, reject) => {
       this.getAllTimbri().then((value: Timbro[]) => {
           let timbri: Timbro[] = [];
@@ -57,7 +54,6 @@ export class TimbriService {
             resolve (timbri);
           })
         });
-        
     })
     return nonAppartienePromise;
   }
@@ -72,30 +68,27 @@ export class TimbriService {
           let timbro = {id: t.id, nome: t.nome, url: t.url};
           timbri.push(timbro);
         })
-
         resolve (timbri);
       })
     });
-
     return getAllTimbri;
   }
 
   public async getCodiceTimbriUtente(user: string): Promise<number>{
     const codUtentePromise = new Promise<number>((resolve, rejects) => {
-      console.log("U", "");
       this.database.getUser(user).then((value) => {
-        console.log("t2", value);
         resolve (+value.codiceTimbri);
       })
     })
     return codUtentePromise;
   }
 
+  //aggiungo al db il timbro comprato
   aggiungiTimbro(user: string, timbro: number): void {
-    console.log("T1", this.getCodiceTimbriUtente(user));
     this.database.aggiungiTimbro(user, this.codUtente * timbro);
   }
 
+  //prendo url timbro ovvero il nome dell'immagine tra i file
   getUrlTimbro(id: number): any {
     this.database.getUrlTimbro(id).then((value) => {
       console.log("getUrl timrbo", value);
