@@ -36,7 +36,6 @@ export class DatabaseService {
         bingo: 0,
         cinquine: 0,
         superbingo: 0,
-        maxVincita: 0
       }
     };
     //Aggiunge al DB

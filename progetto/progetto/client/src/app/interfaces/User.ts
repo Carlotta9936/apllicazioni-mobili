@@ -12,6 +12,5 @@ export interface User {
         bingo: number;
         cinquine: number;
         superbingo: number;
-        maxVincita: number;
     }
 }

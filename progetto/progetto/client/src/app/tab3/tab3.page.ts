@@ -32,7 +32,6 @@ export class Tab3Page {
           bingo: this.isZero(value.stats.bingo),
           cinquine: this.isZero(value.stats.cinquina),
           superbingo: this.isZero(value.stats.superbingo),
-          maxVincita: this.isZero(value.stats.maxVincita)
         },
         codiceTimbri: value.codiceTimbri,
       }
