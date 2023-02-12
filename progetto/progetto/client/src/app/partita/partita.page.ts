@@ -76,15 +76,8 @@ export class PartitaPage implements OnInit {
     if(await num>=2){
       //setto la partita a iniziata in modo che non sia più visibile nella pagina iniziale
       this.partita.startPartita(this.codice!);
-      //this.compra=false;
-      //this.database.incrementaNumeroPartite(this.auth.get("user"));
-      //this.iniziata=true;
-      //this.tabellone = true;
       this.bossolo.startTimer();
       this.calcolaPremi.calcolaPremi();
-      //this.ascoltaBingo();
-      //this.ascoltaCinquina();
-      //this.aggiornaDatiSub.unsubscribe();
       this.start2();
     }else{
       this.alert.presentAlert("Non ci sono abbastanza giocatori. Dovete essere almeno in 2");

@@ -5,6 +5,7 @@ import 'firebase/auth';
 import { PartitaData } from '../interfaces/PartitaData';
 import { Timbro } from '../interfaces/Timbro';
 import { Observable } from 'rxjs';
+import { Firestore } from '@angular/fire/firestore';
 
 
 @Injectable({
@@ -13,7 +14,7 @@ import { Observable } from 'rxjs';
 export class DatabaseService {
   database;
 
-  constructor() { 
+  constructor(private firestore: Firestore) { 
     this.database = getDatabase();
   }
 
